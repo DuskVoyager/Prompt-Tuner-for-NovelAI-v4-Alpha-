@@ -34,6 +34,7 @@ h1 {
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-rows: auto;
   gap: 16px;
+  align-items: start; /* 各列の高さを揃えず、上寄せ */
 }
 
 /* 左2列をまたいで配置するクラス */
@@ -97,6 +98,15 @@ h1 {
 }
 
 /* ── 補完スペース用スタイル ───────────────────────────────────────── */
+.extra-section {
+  /* 右上に固定表示するために、グリッド行・列を指定 */
+  grid-row: 1 / 2;       /* 1行目のみに表示 */
+  grid-column: 3 / 4;    /* 3列目に表示 */
+  align-self: start;     /* 他と高さを揃えず上寄せ */
+  max-height: 600px;     /* 必要に応じて縦の高さを制限 */
+  overflow-y: auto;      /* 中身が多い場合スクロール */
+}
+
 .extra-section .section-header {
   margin-bottom: 0.5em;
 }
@@ -450,15 +460,4 @@ body.dark-mode ::-webkit-scrollbar {
 }
 body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
-}
-/* 補完スペースの位置を固定＆独立スクロール化 */
-.extra-section {
-  grid-row: 1 / 2;        /* 最上段1行目に限定 */
-  align-self: start;
-  max-height: 500px;      /* 最大高さを指定して */
-  overflow-y: auto;       /* 独立スクロールにする */
-}
-
-.grid-wrapper {
-  align-items: start;     /* 全体に高さを揃えない */
 }
