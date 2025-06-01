@@ -8,6 +8,7 @@ body {
   background: #f0f0f5;
   color: #000000;
   padding: 20px;
+  margin: 0;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -28,18 +29,35 @@ h1 {
   padding: 0.3em;
 }
 
-/* ── グリッド：3列 × 自動行 ─────────────────────────────────── */
-.grid-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: auto;
+/* ── 全体レイアウト: Flexboxで左右2カラム ───────────────────────── */
+.layout {
+  display: flex;
   gap: 16px;
-  align-items: start; /* 高さを右列に引っ張られないよう揃えを解除 */
+  align-items: flex-start;
 }
 
-/* 左2列をまたいで配置するクラス */
-.span-two-columns {
-  grid-column: 1 / 3;
+/* 左カラム（メインコンテンツ） */
+.main-content {
+  flex: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 16px;
+}
+
+/* 左カラム 内部で 2列に跨る要素 */
+.main-content .span-two-columns {
+  grid-column: 1 / span 2;
+}
+
+/* 右カラム（サイドバー） */
+.sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 /* ── 各セクション共通スタイル ───────────────────────────────────────── */
@@ -49,8 +67,8 @@ h1 {
   padding: 1em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: background 0.3s, box-shadow 0.3s;
-  height: auto;       /* 高さ自動 */
-  max-height: none;   /* 固定なし */
+  height: auto;
+  max-height: none;
 }
 
 /* details をセクションとして使う場合 */
@@ -81,7 +99,6 @@ details > summary {
   margin-bottom: 0.5em;
 }
 
-/* テンプレート名入力欄 */
 #template-name-input {
   padding: 0.5em;
   border-radius: 5px;
@@ -119,8 +136,6 @@ details > summary {
 
 /* ── 補完スペース用スタイル ───────────────────────────────────────── */
 .extra-section {
-  grid-column: 3;
-  grid-row: 1 / span 3;
   display: flex;
   flex-direction: column;
   height: 100%;
