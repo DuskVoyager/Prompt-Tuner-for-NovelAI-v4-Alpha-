@@ -12,7 +12,9 @@
   <meta property="og:url" content="https://prompt-tuner-for-novelai-v4-alpha.vercel.app/" />
   <meta property="og:type" content="website" />
 
+  <!-- CSSをリンク（下記の CSS を styles.css として保存してください） -->
   <link rel="stylesheet" href="styles.css" />
+
   <!-- Drag&Drop 用に Sortable.js（CDN）を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
@@ -22,10 +24,10 @@
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
-  <!-- グリッドレイアウト：3列 × 自動行 -->
+  <!-- グリッドレイアウト：3列 × 3行を明示 -->
   <div class="grid-wrapper">
     <!-- ─── 1行目 ─── -->
-    <!-- カラム1：テンプレート管理 -->
+    <!-- カラム1：テンプレート管理（row:1/col:1） -->
     <div class="template-section section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
@@ -48,7 +50,7 @@
       </div>
     </div>
 
-    <!-- カラム2：タグ検索（準備中） -->
+    <!-- カラム2：タグ検索（準備中）（row:1/col:2） -->
     <div class="search-section section">
       <div class="section-header">
         <span>🔎 タグ検索（準備中）</span>
@@ -71,7 +73,7 @@
       </div>
     </div>
 
-    <!-- カラム3：補完スペース（右上に固定） -->
+    <!-- カラム3：補完スペース（右上に固定, row:1/col:3） -->
     <div class="extra-section section">
       <div class="section-header">
         <span>📌 補完スペース</span>
@@ -86,7 +88,7 @@
     </div>
 
     <!-- ─── 2行目 ─── -->
-    <!-- カラム1～2をまたいで：タグ読み込み -->
+    <!-- カラム1～2をまたいで：タグ読み込み（row:2/col:1-2） -->
     <div class="tag-loading section span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
@@ -100,10 +102,12 @@
       <select id="target-section"></select>
       <button onclick="loadTags()">読み込む</button>
     </div>
-    <div></div> <!-- カラム3 は空白（補完スペースを上行に固定） -->
+
+    <!-- カラム3：空白（補完スペースが縦に伸びても影響させないため） -->
+    <div></div>
 
     <!-- ─── 3行目以降 ─── -->
-    <!-- カラム1～2をまたいで：ベース～ネガティブまで -->
+    <!-- カラム1～2をまたいで：ベース～ネガティブまで（row:3/col:1-2） -->
     <div class="span-two-columns">
       <!-- ベースプロンプト欄 -->
       <div class="section">
@@ -139,9 +143,12 @@
         </div>
       </div>
     </div>
-    <div></div> <!-- カラム3 は空白 -->
+
+    <!-- カラム3は空白 -->
+    <div></div>
   </div>
 
+  <!-- JavaScript を読み込む（変更不要） -->
   <script src="script.js"></script>
 </body>
 </html>
