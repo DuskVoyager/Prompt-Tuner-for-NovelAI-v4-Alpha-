@@ -1,3 +1,4 @@
+/* styles.css */
 /* ============================= */
 /* ======== ベーススタイル ======== */
 /* ============================= */
@@ -27,23 +28,64 @@ h1 {
   padding: 0.3em;
 }
 
-/* ── グリッド：3列 × 3行 ─────────────────────────────────── */
+/* ── グリッド：3列 × 自動行 ─────────────────────────────────── */
 .grid-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-auto-rows: auto;
   gap: 16px;
-}
-
-/* 3列目を縦にぶち抜く設定は extra-section に直接付与 */
-.extra-section {
-  grid-column: 3;
-  grid-row: 1 / span 3;
 }
 
 /* 左2列をまたいで配置するクラス */
 .span-two-columns {
-  grid-column: 1 / span 2;
+  grid-column: 1 / 3;
+}
+
+/* "タグ読み込み" を3列フルにまたがらせる */
+.tag-loading {
+  grid-column: 1 / 4;
+}
+
+/* ── <details> / <summary> のスタイル調整 ─────────────────────────────────── */
+details.section {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0; /* 内部はsummary+子要素で余白調整 */
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* summary 部分 */
+details.section summary.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 1em;
+  margin: 0;
+  list-style: none; /* デフォルトの三角アイコンを消す */
+}
+
+/* summary 折りたたみ時のデフォルトマーカー無効化 */
+details.section summary::-webkit-details-marker {
+  display: none;
+}
+
+/* summary にホバー効果 */
+details.section summary.section-header:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* details がopen状態の時の調整 */
+details.section[open] {
+  padding-bottom: 1em;
+}
+
+/* details本文部分 */
+details.section .template-controls,
+details.section .template-controls + .template-controls {
+  padding: 0 1em 1em 1em;
 }
 
 /* ── 各セクション共通スタイル ───────────────────────────────────────── */
@@ -68,38 +110,26 @@ h1 {
   margin-left: 0.5em;
 }
 
-/* ── テンプレート管理用コントロール ───────────────────────────────────── */
-.template-controls {
+/* ── テンプレート管理用 & タグ検索用コントロール ───────────────────────────── */
+.template-controls,
+.search-section .template-controls {
   display: flex;
   gap: 0.5em;
   flex-wrap: wrap;
   margin-bottom: 0.5em;
 }
 
-#template-name-input {
-  flex: 1;
+#template-name-input,
+#tag-search-input {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-/* ── タグ検索（準備中）入力欄 ───────────────────────────────────────── */
+/* タグ検索（準備中）入力欄 */
 #tag-search-input {
-  flex: 1;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
   background: #f9f9ff;
   color: #888;
-}
-
-/* ── タグ読み込みセクション ─────────────────────────────────────────── */
-.tag-loading input,
-.tag-loading select {
-  margin-bottom: 0.5em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
 }
 
 /* ── 補完スペース用スタイル ───────────────────────────────────────── */
@@ -107,21 +137,23 @@ h1 {
   margin-bottom: 0.5em;
 }
 
-/* 右カラムを縦いっぱい使うための設定 */
-.extra-section {
+.extra-list {
   display: flex;
   flex-direction: column;
-  background: #ffffff; /* section と同じ背景色 */
-}
-
-/* タグ一覧部分はスクロールエリアとして縦に伸縮 */
-.extra-list {
-  flex-grow: 1;
-  overflow-y: auto;
+  gap: 0.5em;
   margin-bottom: 0.5em;
 }
 
-/* ボタン群は最後に詰める */
+.extra-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.extra-item label {
+  font-size: 0.9em;
+}
+
 .extra-controls {
   display: flex;
   flex-direction: column;
@@ -140,7 +172,7 @@ h1 {
   background-color: #2563eb;
   color: white;
   border: none;
-  padding: 0.5em;
+  padding: 0.4em;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
@@ -192,27 +224,32 @@ h1 {
   transition: background 0.3s, border-color 0.3s;
 }
 
+/* 括弧強調（positive） */
 .tag.positive {
   background: #c7eaff;
   border-color: #3b82f6;
 }
 
+/* 括弧抑制（negative） */
 .tag.negative {
   background: #ffe0e0;
   border-color: #dc2626;
 }
 
+/* コロン形式 */
 .tag.colon {
   background: #e6ffcc;
   border-color: #84cc16;
   color: #000000;
 }
 
+/* plain（通常タグ）はデフォルトの青系背景 */
 .tag.plain {
   background: #e0e7ff;
   border-color: transparent;
 }
 
+/* タグ内の入力フィールド */
 .tag input {
   border: none;
   background: transparent;
@@ -221,6 +258,7 @@ h1 {
   color: inherit;
 }
 
+/* weight 数値表示（表示モードと編集モード） */
 .tag .weight {
   font-size: 0.8em;
   margin-left: 0.5em;
@@ -239,6 +277,7 @@ h1 {
   display: none;
 }
 
+/* タグ内のボタン（+ - ×） */
 .tag button {
   margin-left: 0.3em;
   background: #ef4444;
@@ -259,6 +298,7 @@ h1 {
   background: #c53030;
 }
 
+/* ── ドラッグハンドル用スタイル ───────────────────────────────────────── */
 .drag-handle {
   cursor: grab;
   margin-right: 0.4em;
@@ -334,7 +374,9 @@ body.dark-mode .prompt-output-box {
   border-color: #555;
 }
 
-/* ── ダークモード設定 ───────────────────────────────────────── */
+/* ============================= */
+/* ======== ダークモード ========= */
+/* ============================= */
 body.dark-mode {
   background: #1e1e2e;
   color: #e5e5e5;
@@ -347,7 +389,8 @@ body.dark-mode input[type="text"] {
   color: #e5e5e5;
 }
 
-body.dark-mode .section {
+body.dark-mode .section,
+body.dark-mode details.section {
   background: #2a2a3a;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
