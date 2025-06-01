@@ -451,8 +451,14 @@ body.dark-mode ::-webkit-scrollbar {
 body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
 }
-/* 補完スペース位置ずれ防止：明示的に上2行分を占有させる */
+/* 補完スペースの位置を固定＆独立スクロール化 */
 .extra-section {
-  grid-row: 1 / span 2; /* 上から2行分を使う */
+  grid-row: 1 / 2;        /* 最上段1行目に限定 */
   align-self: start;
+  max-height: 500px;      /* 最大高さを指定して */
+  overflow-y: auto;       /* 独立スクロールにする */
+}
+
+.grid-wrapper {
+  align-items: start;     /* 全体に高さを揃えない */
 }
