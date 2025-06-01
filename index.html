@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 NovelAI v4 プロンプト調整器（α）</title>
   <link rel="stylesheet" href="styles.css" />
+
   <!-- Drag&Drop 用に Sortable.js（CDN）を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
@@ -14,10 +15,9 @@
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
-  <!-- グリッドレイアウト：3列構成 -->
+  <!-- グリッドレイアウト：3列 × 3行 -->
   <div class="grid-wrapper">
-    <!-- ─── 1行目 ─── -->
-    <!-- カラム1：テンプレート管理 -->
+    <!-- Row 1, Col 1：テンプレート管理 -->
     <div class="section template-section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
@@ -27,7 +27,6 @@
           type="text"
           id="template-name-input"
           placeholder="テンプレート名を入力"
-          style="flex: 1;"
         />
         <button onclick="saveTemplate()">💾 保存</button>
       </div>
@@ -40,7 +39,7 @@
       </div>
     </div>
 
-    <!-- カラム2：タグ検索（準備中） -->
+    <!-- Row 1, Col 2：タグ検索（準備中） -->
     <div class="section search-section">
       <div class="section-header">
         <span>🔎 タグ検索（準備中）</span>
@@ -51,7 +50,6 @@
           id="tag-search-input"
           placeholder="タグを検索（※現在使用できません）"
           disabled
-          style="flex: 1;"
         />
         <select id="tag-search-target">
           <option value="base">ベースプロンプト</option>
@@ -63,12 +61,14 @@
       </div>
     </div>
 
-    <!-- カラム3：補完スペース -->
+    <!-- Row 1～3, Col 3（縦３行ぶち抜き）：補完スペース -->
     <div class="section extra-section">
       <div class="section-header">
         <span>📌 補完スペース</span>
       </div>
+      <!-- タグ一覧（スクロールエリア） -->
       <div id="extra-list" class="extra-list"></div>
+      <!-- 操作ボタン群 -->
       <div class="extra-controls">
         <select id="extra-target" class="extra-select"></select>
         <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
@@ -77,8 +77,7 @@
       </div>
     </div>
 
-    <!-- ─── 2行目 ─── -->
-    <!-- カラム1～2をまたいで：タグ読み込み -->
+    <!-- Row 2, Col 1～2：タグ読み込み -->
     <div class="section tag-loading span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
@@ -87,16 +86,13 @@
         type="text"
         id="tag-input"
         placeholder="カンマ区切りのタグを入力"
-        style="width: 100%;"
       />
       <select id="target-section"></select>
       <button onclick="loadTags()">読み込む</button>
     </div>
-    <div></div> <!-- カラム3 は空白（補完スペースを続けて表示） -->
 
-    <!-- ─── 3行目以降 ─── -->
-    <!-- カラム1～2をまたいで：ベース～ネガティブまで -->
-    <div class="span-two-columns">
+    <!-- Row 3, Col 1～2：ベース～ネガティブ欄一括 -->
+    <div class="section main-prompts span-two-columns">
       <!-- ベースプロンプト欄 -->
       <div class="section">
         <div class="section-header">
@@ -112,7 +108,7 @@
         </div>
       </div>
 
-      <!-- キャラクタープロンプト欄（項目1 を初期表示） -->
+      <!-- キャラクタープロンプト欄 -->
       <div id="character-sections"></div>
       <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
 
@@ -131,7 +127,6 @@
         </div>
       </div>
     </div>
-    <div></div> <!-- カラム3 は空白 -->
   </div>
 
   <script src="script.js"></script>
