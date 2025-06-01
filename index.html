@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 Prompt Tuner for NovelAI v4 (Alpha)</title>
+
+  <!-- このCSSを読み込んでください -->
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Drag&Drop 用に Sortable.js を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -13,7 +17,8 @@
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
-  <!-- 右端に固定追従する補完スペース -->
+  <!-- -------------------------------------------------- -->
+  <!-- 補完スペース：右下に固定表示（スクロール追従） -->
   <div class="extra-section section">
     <div class="section-header">
       <span>📌 補完スペース</span>
@@ -26,15 +31,22 @@
       <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
     </div>
   </div>
+  <!-- -------------------------------------------------- -->
 
-  <!-- 通常のメインUI -->
+  <!-- メインUI：グリッド2列構成 -->
   <div class="grid-wrapper">
+    <!-- カラム1：テンプレート管理 -->
     <div class="template-section section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
       </div>
       <div class="template-controls">
-        <input type="text" id="template-name-input" placeholder="テンプレート名を入力" style="flex: 1;" />
+        <input
+          type="text"
+          id="template-name-input"
+          placeholder="テンプレート名を入力"
+          style="flex: 1;"
+        />
         <button onclick="saveTemplate()">💾 保存</button>
       </div>
       <div class="template-controls">
@@ -46,12 +58,19 @@
       </div>
     </div>
 
+    <!-- カラム2：タグ検索（準備中） -->
     <div class="search-section section">
       <div class="section-header">
         <span>🔎 タグ検索（準備中）</span>
       </div>
       <div class="template-controls">
-        <input type="text" id="tag-search-input" placeholder="タグを検索（※現在使用できません）" disabled style="flex: 1;" />
+        <input
+          type="text"
+          id="tag-search-input"
+          placeholder="タグを検索（※現在使用できません）"
+          disabled
+          style="flex: 1;"
+        />
         <select id="tag-search-target">
           <option value="base">ベースプロンプト</option>
           <option value="character-0">キャラクタープロンプト 1</option>
@@ -62,16 +81,24 @@
       </div>
     </div>
 
-    <div class="tag-loading section span-two-columns">
-      <div class="section-header">
-        <span>タグ読み込み</span>
-      </div>
-      <input type="text" id="tag-input" placeholder="カンマ区切りのタグを入力" style="width: 100%;" />
-      <select id="target-section"></select>
-      <button onclick="loadTags()">読み込む</button>
-    </div>
-
+    <!-- タグ読み込み＆ベース～ネガティブ欄を2列分で配置 -->
     <div class="span-two-columns">
+      <!-- タグ読み込み -->
+      <div class="tag-loading section">
+        <div class="section-header">
+          <span>タグ読み込み</span>
+        </div>
+        <input
+          type="text"
+          id="tag-input"
+          placeholder="カンマ区切りのタグを入力"
+          style="width: 100%;"
+        />
+        <select id="target-section"></select>
+        <button onclick="loadTags()">読み込む</button>
+      </div>
+
+      <!-- ベースプロンプト欄 -->
       <div class="section">
         <div class="section-header">
           <span>ベースプロンプト</span>
@@ -81,12 +108,16 @@
           </div>
         </div>
         <div id="base" class="tag-container"></div>
-        <div class="prompt-output-box"><p id="output-base"></p></div>
+        <div class="prompt-output-box">
+          <p id="output-base"></p>
+        </div>
       </div>
 
+      <!-- キャラクタープロンプト欄（項目1 を初期表示） -->
       <div id="character-sections"></div>
       <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
 
+      <!-- ネガティブプロンプト欄 -->
       <div class="section">
         <div class="section-header">
           <span>ネガティブプロンプト</span>
@@ -96,11 +127,14 @@
           </div>
         </div>
         <div id="negative" class="tag-container"></div>
-        <div class="prompt-output-box"><p id="output-negative"></p></div>
+        <div class="prompt-output-box">
+          <p id="output-negative"></p>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- JavaScriptを読み込む（変更不要） -->
   <script src="script.js"></script>
 </body>
 </html>
