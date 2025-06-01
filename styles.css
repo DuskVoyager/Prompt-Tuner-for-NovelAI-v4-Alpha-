@@ -1,5 +1,4 @@
 /* styles.css */
-
 /* ============================= */
 /* ======== ベーススタイル ======== */
 /* ============================= */
@@ -275,6 +274,13 @@ body.dark-mode .drag-handle {
   color: #aaa;
 }
 
+/* コロン形式タグ：ダークモードでも濃い緑背景＋明るい文字色 */
+body.dark-mode .tag.colon {
+  background: #335533 !important;
+  border-color: #84cc16 !important;
+  color: #eaffea !important;
+}
+
 /* ── 共通ボタン／入力欄スタイル ───────────────────────────────────────── */
 button,
 select,
@@ -327,10 +333,8 @@ button:hover {
   font-size: 0.85em;
 }
 
-/* ── ダークモード時の出力欄（プロンプト表示）配色 ───────────────────────── */
 body.dark-mode .prompt-output-box {
   background: #2a2a3a;
-  color: #e5e5e5;
   border-color: #555;
 }
 
@@ -444,7 +448,6 @@ body.dark-mode #tag-search-input {
 body.dark-mode ::-webkit-scrollbar {
   background: #444;
 }
-
 body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
 }
