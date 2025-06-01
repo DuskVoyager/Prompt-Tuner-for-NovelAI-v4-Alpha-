@@ -101,6 +101,12 @@ h1 {
   margin-bottom: 0.5em;
 }
 
+/* 補完スペース本体：高さを制限し、縦に伸びたら中だけスクロールする */
+.extra-section {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .extra-list {
   display: flex;
   flex-direction: column;
@@ -302,7 +308,7 @@ button:hover {
   background-color: #22c55e;
   color: white;
   border: none;
-  margin-top: 0.5em;
+  margin-top: 0.5em;  
 }
 
 .add-button:hover {
