@@ -1,4 +1,3 @@
-/* styles.css */
 /* ============================= */
 /* ======== ベーススタイル ======== */
 /* ============================= */
@@ -20,7 +19,7 @@ h1 {
 }
 
 /* テーマ切替ボタン */
-.theme-toggle {
+#theme-toggle {
   background: transparent;
   border: none;
   font-size: 1em;
@@ -28,17 +27,23 @@ h1 {
   padding: 0.3em;
 }
 
-/* ── グリッド：3列 × 自動行 ─────────────────────────────────── */
+/* ── グリッド：3列 × 3行 ─────────────────────────────────── */
 .grid-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: auto;
+  grid-template-rows: auto auto 1fr;
   gap: 16px;
+}
+
+/* 3列目を縦にぶち抜く設定は extra-section に直接付与 */
+.extra-section {
+  grid-column: 3;
+  grid-row: 1 / span 3;
 }
 
 /* 左2列をまたいで配置するクラス */
 .span-two-columns {
-  grid-column: 1 / 3;
+  grid-column: 1 / span 2;
 }
 
 /* ── 各セクション共通スタイル ───────────────────────────────────────── */
@@ -71,8 +76,8 @@ h1 {
   margin-bottom: 0.5em;
 }
 
-/* テンプレート名入力欄 */
 #template-name-input {
+  flex: 1;
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -80,6 +85,7 @@ h1 {
 
 /* ── タグ検索（準備中）入力欄 ───────────────────────────────────────── */
 #tag-search-input {
+  flex: 1;
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -101,32 +107,21 @@ h1 {
   margin-bottom: 0.5em;
 }
 
-/* 補完スペース：常に縦長 */
+/* 右カラムを縦いっぱい使うための設定 */
 .extra-section {
-  height: 500px;           /* 最初から縦に長い */
-  overflow-y: auto;        /* タグが増えても自分の中でスクロール */
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  background: #ffffff; /* section と同じ背景色 */
 }
 
+/* タグ一覧部分はスクロールエリアとして縦に伸縮 */
 .extra-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
+  flex-grow: 1;
+  overflow-y: auto;
   margin-bottom: 0.5em;
 }
 
-.extra-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.extra-item label {
-  font-size: 0.9em;
-}
-
+/* ボタン群は最後に詰める */
 .extra-controls {
   display: flex;
   flex-direction: column;
@@ -145,7 +140,7 @@ h1 {
   background-color: #2563eb;
   color: white;
   border: none;
-  padding: 0.4em;
+  padding: 0.5em;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
@@ -197,32 +192,27 @@ h1 {
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* 括弧強調（positive） */
 .tag.positive {
   background: #c7eaff;
   border-color: #3b82f6;
 }
 
-/* 括弧抑制（negative） */
 .tag.negative {
   background: #ffe0e0;
   border-color: #dc2626;
 }
 
-/* コロン形式 */
 .tag.colon {
   background: #e6ffcc;
   border-color: #84cc16;
   color: #000000;
 }
 
-/* plain（通常タグ）はデフォルトの青系背景 */
 .tag.plain {
   background: #e0e7ff;
   border-color: transparent;
 }
 
-/* タグ内の入力フィールド */
 .tag input {
   border: none;
   background: transparent;
@@ -231,7 +221,6 @@ h1 {
   color: inherit;
 }
 
-/* weight 数値表示（表示モードと編集モード） */
 .tag .weight {
   font-size: 0.8em;
   margin-left: 0.5em;
@@ -250,7 +239,6 @@ h1 {
   display: none;
 }
 
-/* タグ内のボタン（+ - ×） */
 .tag button {
   margin-left: 0.3em;
   background: #ef4444;
@@ -271,7 +259,6 @@ h1 {
   background: #c53030;
 }
 
-/* ── ドラッグハンドル用スタイル ───────────────────────────────────────── */
 .drag-handle {
   cursor: grab;
   margin-right: 0.4em;
@@ -347,9 +334,7 @@ body.dark-mode .prompt-output-box {
   border-color: #555;
 }
 
-/* ============================= */
-/* ======== ダークモード ========= */
-/* ============================= */
+/* ── ダークモード設定 ───────────────────────────────────────── */
 body.dark-mode {
   background: #1e1e2e;
   color: #e5e5e5;
