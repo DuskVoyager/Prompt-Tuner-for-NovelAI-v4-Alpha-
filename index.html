@@ -4,11 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 Prompt Tuner for NovelAI v4 (Alpha)</title>
-
-  <!-- 新しい styles.css を読み込む -->
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Drag&Drop 用に Sortable.js を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -17,13 +13,17 @@
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
-  <!-- -------------------------------------------------- -->
-  <!-- 補完スペース：右下に固定表示（スクロール追従） -->
+  <!-- 補完スペース：右下に固定 -->
   <div class="extra-section section">
     <div class="section-header">
       <span>📌 補完スペース</span>
     </div>
-    <div id="extra-list" class="extra-list"></div>
+    <!-- ここにタグ一覧のチェックボックスを復元 -->
+    <div id="extra-list" class="extra-list">
+      <!-- 例：チェックボックス付きタグを JS が追加します -->
+      <!-- <div class="extra-item"><input type="checkbox" id="extra-0" value="tag1"><label for="extra-0">タグ1</label></div> -->
+      <!-- ... -->
+    </div>
     <div class="extra-controls">
       <select id="extra-target" class="extra-select"></select>
       <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
@@ -31,11 +31,10 @@
       <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
     </div>
   </div>
-  <!-- -------------------------------------------------- -->
 
-  <!-- メインUI：グリッド3列構成（ただし補完スペース用の隙間を右に確保） -->
+  <!-- メイン UI -->
   <div class="grid-wrapper">
-    <!-- カラム1：テンプレート管理 -->
+    <!-- テンプレート管理 -->
     <div class="template-section section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
@@ -58,7 +57,7 @@
       </div>
     </div>
 
-    <!-- カラム2：タグ検索（準備中） -->
+    <!-- タグ検索（準備中） -->
     <div class="search-section section">
       <div class="section-header">
         <span>🔎 タグ検索（準備中）</span>
@@ -81,10 +80,10 @@
       </div>
     </div>
 
-    <!-- カラム3 は空白（補完スペース用余白） -->
+    <!-- 空のカラム：補完スペース分の余白 -->
     <div></div>
 
-    <!-- タグ読み込み：左2列をまたいで配置 -->
+    <!-- タグ読み込み欄 -->
     <div class="tag-loading section span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
@@ -98,11 +97,11 @@
       <select id="target-section"></select>
       <button onclick="loadTags()">読み込む</button>
     </div>
-    <div></div> <!-- 右端は空白 -->
+    <div></div>
 
-    <!-- ベース～ネガティブ欄：左2列をまたいで配置 -->
+    <!-- ベース・キャラクター・ネガティブプロンプト欄 -->
     <div class="span-two-columns">
-      <!-- ベースプロンプト欄 -->
+      <!-- ベースプロンプト -->
       <div class="section">
         <div class="section-header">
           <span>ベースプロンプト</span>
@@ -112,16 +111,14 @@
           </div>
         </div>
         <div id="base" class="tag-container"></div>
-        <div class="prompt-output-box">
-          <p id="output-base"></p>
-        </div>
+        <div class="prompt-output-box"><p id="output-base"></p></div>
       </div>
 
-      <!-- キャラクタープロンプト欄（項目1 を初期表示） -->
+      <!-- キャラクタープロンプト欄 -->
       <div id="character-sections"></div>
       <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
 
-      <!-- ネガティブプロンプト欄 -->
+      <!-- ネガティブプロンプト -->
       <div class="section">
         <div class="section-header">
           <span>ネガティブプロンプト</span>
@@ -131,16 +128,13 @@
           </div>
         </div>
         <div id="negative" class="tag-container"></div>
-        <div class="prompt-output-box">
-          <p id="output-negative"></p>
-        </div>
+        <div class="prompt-output-box"><p id="output-negative"></p></div>
       </div>
     </div>
 
-    <div></div> <!-- 右端は空白 -->
+    <div></div>
   </div>
 
-  <!-- JavaScriptを読み込む（変更不要） -->
   <script src="script.js"></script>
 </body>
 </html>
