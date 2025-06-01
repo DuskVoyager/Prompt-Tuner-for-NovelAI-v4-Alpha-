@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 NovelAI v4 プロンプト調整器（α）</title>
   <link rel="stylesheet" href="styles.css" />
-  <!-- Drag&Drop 用に Sortable.js（CDN）を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -91,7 +89,7 @@
           </div>
         </div>
 
-        <!-- キャラクタープロンプト欄（項目1 を初期表示） -->
+        <!-- キャラクタープロンプト欄 -->
         <div id="character-sections"></div>
         <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
 
@@ -118,13 +116,17 @@
         <div class="section-header">
           <span>📌 補完スペース</span>
         </div>
-        <div id="extra-list" class="extra-list"></div>
+
+        <!-- ボタン（読み込み・削除など）を先に配置 -->
         <div class="extra-controls">
           <select id="extra-target" class="extra-select"></select>
           <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
           <button class="delete-extra-button" onclick="deleteSelectedExtras()">🗑️ 削除</button>
           <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
         </div>
+
+        <!-- タグリスト部分だけスクロール -->
+        <div id="extra-list" class="extra-list"></div>
       </div>
     </div>
   </div>
