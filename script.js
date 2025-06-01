@@ -1,7 +1,4 @@
-// script.js
-
 // ─── データ構造の初期化 ─────────────────────────────────────────
-let characterCount = 1;
 const state = {
   base: [],        // ベースプロンプトのタグ配列
   negative: [],    // ネガティブプロンプトのタグ配列
@@ -439,80 +436,31 @@ function clearPrompt(type) {
 
 // ─── キャラクタープロンプト欄を追加（最大6つまで） ─────────────────────────────────
 function addCharacterPrompt() {
-  if (characterCount >= 6) {
+  if (state.characters.length >= 6) {
     return alert('キャラクタープロンプトは最大6つまでです。');
   }
-  const container = document.getElementById('character-sections');
-  const index = characterCount;
+  // 新しい配列を追加
   state.characters.push([]);
 
-  // ─── 新しいキャラクタープロンプト欄を生成 ───────────────────────────
-  const div = document.createElement('div');
-  div.className = 'section';
-  div.innerHTML = `
-    <div class="section-header">
-      <span>キャラクタープロンプト ${index + 1}</span>
-      <div class="header-buttons">
-        <button onclick="copyPrompt('output-character-${index}')">📋 コピー</button>
-        ${index > 0 ? `<button class="remove-button" onclick="removeCharacterPrompt(${index})">削除欄</button>` : ''}
-        <button onclick="clearPrompt('character-${index}')">🗑️ 全削除</button>
-      </div>
-    </div>
-    <div id="character-${index}" class="tag-container"></div>
-    <div class="prompt-output-box">
-      <p id="output-character-${index}"></p>
-    </div>
-  `;
-  container.appendChild(div);
-
-  // セレクト欄に新しいキャラ項目を追加
-  ['target-section', 'extra-target'].forEach(selectId => {
-    const select = document.getElementById(selectId);
-    if (select) {
-      const option = document.createElement('option');
-      option.value = `character-${index}`;
-      option.textContent = `キャラクタープロンプト ${index + 1}`;
-      select.appendChild(option);
-    }
-  });
-
-  characterCount++;
+  // UIを再構築
+  resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── キャラクタープロンプト欄を削除 ───────────────────────────────────────────
 function removeCharacterPrompt(index) {
-  const section = document.getElementById(`character-${index}`)?.parentElement;
-  if (section) section.remove();
-  state.characters[index] = [];
-  ['target-section', 'extra-target'].forEach(selectId => {
-    const select = document.getElementById(selectId);
-    if (select) {
-      const opt = Array.from(select.options).find(o => o.value === `character-${index}`);
-      if (opt) opt.remove();
-    }
-  });
+  // 配列から該当インデックスを削除
+  state.characters.splice(index, 1);
+
+  // UIを再構築
+  resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── 最初のキャラクタープロンプト（1番目）を初期生成 ──────────────────────────
 window.onload = () => {
-  const div = document.createElement('div');
-  div.className = 'section';
-  div.innerHTML = `
-    <div class="section-header">
-      <span>キャラクタープロンプト 1</span>
-      <div class="header-buttons">
-        <button onclick="copyPrompt('output-character-0')">📋 コピー</button>
-        <button onclick="clearPrompt('character-0')">🗑️ 全削除</button>
-      </div>
-    </div>
-    <div id="character-0" class="tag-container"></div>
-    <div class="prompt-output-box">
-      <p id="output-character-0"></p>
-    </div>
-  `;
-  document.getElementById('character-sections').appendChild(div);
+  // 初期状態で characters = [[]] としておくので、UI は 1つだけ必要
+  resetCharacterSections(1);
 
   // "target-section" と "extra-target" に初期オプションを設定
   ['target-section', 'extra-target'].forEach(selectId => {
@@ -607,12 +555,19 @@ function loadTemplate() {
     updateTemplateSelect();
     return;
   }
+
+  // 全データを上書き
   state.base = [...data.base];
   state.negative = [...data.negative];
   state.extra = [...data.extra];
   state.characters = data.characters.map(arr => [...arr]);
-  resetCharacterSections(data.characters.length);
+
+  // キャラ欄の数に応じて DOM も再構築
+  resetCharacterSections(state.characters.length);
+
+  // 描画
   renderAll();
+
   alert(`テンプレート「${name}」を読み込みました。`);
 }
 
@@ -636,10 +591,7 @@ function deleteTemplate() {
 function resetCharacterSections(count) {
   const container = document.getElementById('character-sections');
   container.innerHTML = '';
-  characterCount = 0;
-  state.characters = [];
   for (let i = 0; i < count; i++) {
-    state.characters.push([]);
     const div = document.createElement('div');
     div.className = 'section';
     div.innerHTML = `
@@ -657,14 +609,13 @@ function resetCharacterSections(count) {
       </div>
     `;
     container.appendChild(div);
-    characterCount = i + 1;
   }
   ['target-section', 'extra-target'].forEach(selectId => {
     const select = document.getElementById(selectId);
     if (select) {
       select.innerHTML = '';
       const baseOpts = ['base'];
-      for (let idx = 0; idx < characterCount; idx++) {
+      for (let idx = 0; idx < state.characters.length; idx++) {
         baseOpts.push(`character-${idx}`);
       }
       baseOpts.push('negative', 'extra');
