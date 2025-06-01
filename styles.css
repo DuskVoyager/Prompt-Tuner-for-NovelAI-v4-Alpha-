@@ -139,33 +139,12 @@ details > summary {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-.extra-section .section-header {
-  margin-bottom: 0.5em;
-}
-
-.extra-list {
-  flex-grow: 1;
-  overflow-y: auto;
-  min-height: 0; /* Firefox対応 */
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.extra-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.extra-item label {
-  font-size: 0.9em;
+  overflow: hidden;
 }
 
 .extra-controls {
+  flex: 0 0 auto;
+  margin-bottom: 0.5em;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
@@ -207,6 +186,15 @@ details > summary {
 
 .clear-extra-button:hover {
   background-color: #a81e1e;
+}
+
+.extra-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0; /* Firefox対応 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
 /* ── タグ表示領域（ベース／キャラ／ネガティブ） ─────────────────────────── */
