@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 NovelAI v4 プロンプト調整器（α）</title>
   <link rel="stylesheet" href="styles.css" />
-
   <!-- Drag&Drop 用に Sortable.js（CDN）を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
@@ -17,13 +17,10 @@
 
   <!-- グリッドレイアウト：3列構成 -->
   <div class="grid-wrapper">
-
     <!-- ─── 1行目 ─── -->
-    <!-- カラム1：テンプレート管理（折りたたみ） -->
+    <!-- カラム1：テンプレート管理 -->
     <details class="section template-section">
-      <summary class="section-header">
-        <span>📂 テンプレート管理</span>
-      </summary>
+      <summary>📂 テンプレート管理</summary>
       <div class="template-controls">
         <input
           type="text"
@@ -42,11 +39,9 @@
       </div>
     </details>
 
-    <!-- カラム2：タグ検索（折りたたみ） -->
+    <!-- カラム2：タグ検索（準備中） -->
     <details class="section search-section">
-      <summary class="section-header">
-        <span>🔎 タグ検索（準備中）</span>
-      </summary>
+      <summary>🔍 タグ検索（準備中）</summary>
       <div class="template-controls">
         <input
           type="text"
@@ -65,7 +60,7 @@
       </div>
     </details>
 
-    <!-- カラム3：補完スペース（固定表示） -->
+    <!-- カラム3：補完スペース -->
     <div class="section extra-section">
       <div class="section-header">
         <span>📌 補完スペース</span>
@@ -80,8 +75,8 @@
     </div>
 
     <!-- ─── 2行目 ─── -->
-    <!-- カラム1～3をまたいで：タグ読み込み -->
-    <div class="section tag-loading">
+    <!-- カラム1～2をまたいで：タグ読み込み -->
+    <div class="section tag-loading span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
       </div>
@@ -89,11 +84,12 @@
         type="text"
         id="tag-input"
         placeholder="カンマ区切りのタグを入力"
-        style="width: 100%; margin-bottom: 0.5em;"
+        style="width: 100%;"
       />
       <select id="target-section"></select>
       <button onclick="loadTags()">読み込む</button>
     </div>
+    <div></div> <!-- カラム3 は空白（補完スペースを続けて表示） -->
 
     <!-- ─── 3行目以降 ─── -->
     <!-- カラム1～2をまたいで：ベース～ネガティブまで -->
