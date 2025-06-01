@@ -1,10 +1,10 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>🌟 NovelAI v4 プロンプト調整器（α）</title>
+  <title>🌟 Prompt Tuner for NovelAI v4 (Alpha)</title>
+
   <!-- OGP設定 -->
   <meta property="og:title" content="Prompt Tuner for NovelAI v4 (Alpha)" />
   <meta property="og:description" content="プロンプトをもっと自由に、もっと楽しく。" />
@@ -13,22 +13,20 @@
   <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="styles.css" />
-
   <!-- Drag&Drop 用に Sortable.js（CDN）を読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
   <h1>
-  🌟 NovelAI v4 プロンプト調整器（α）
-  <button id="theme-toggle">🌙 ダークモード</button>
-</h1>
+    🌟 NovelAI v4 プロンプト調整器（α）
+    <button id="theme-toggle">🌙 ダークモード</button>
+  </h1>
 
-
-  <!-- グリッドレイアウト：3列構成 -->
+  <!-- グリッドレイアウト：3列 × 自動行 -->
   <div class="grid-wrapper">
     <!-- ─── 1行目 ─── -->
     <!-- カラム1：テンプレート管理 -->
-    <div class="section template-section">
+    <div class="template-section section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
       </div>
@@ -51,7 +49,7 @@
     </div>
 
     <!-- カラム2：タグ検索（準備中） -->
-    <div class="section search-section">
+    <div class="search-section section">
       <div class="section-header">
         <span>🔎 タグ検索（準備中）</span>
       </div>
@@ -73,8 +71,8 @@
       </div>
     </div>
 
-    <!-- カラム3：補完スペース -->
-    <div class="section extra-section">
+    <!-- カラム3：補完スペース（右上に固定） -->
+    <div class="extra-section section">
       <div class="section-header">
         <span>📌 補完スペース</span>
       </div>
@@ -89,7 +87,7 @@
 
     <!-- ─── 2行目 ─── -->
     <!-- カラム1～2をまたいで：タグ読み込み -->
-    <div class="section tag-loading span-two-columns">
+    <div class="tag-loading section span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
       </div>
@@ -102,7 +100,7 @@
       <select id="target-section"></select>
       <button onclick="loadTags()">読み込む</button>
     </div>
-    <div></div> <!-- カラム3 は空白（補完スペースを続けて表示） -->
+    <div></div> <!-- カラム3 は空白（補完スペースを上行に固定） -->
 
     <!-- ─── 3行目以降 ─── -->
     <!-- カラム1～2をまたいで：ベース～ネガティブまで -->
