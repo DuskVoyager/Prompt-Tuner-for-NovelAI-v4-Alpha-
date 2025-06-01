@@ -451,3 +451,11 @@ body.dark-mode ::-webkit-scrollbar {
 body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
 }
+/* 補完スペースだけが縦に伸びるように修正 */
+.grid-wrapper {
+  align-items: start; /* 各列の高さを揃えない */
+}
+
+.extra-section {
+  align-self: stretch; /* この列だけ縦に伸びる */
+}
