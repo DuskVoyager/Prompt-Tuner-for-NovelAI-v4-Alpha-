@@ -1,7 +1,7 @@
 /* 右固定補完スペース */
 .extra-section {
   position: fixed;
-  top: 80px;
+  bottom: 20px;
   right: 20px;
   width: 280px;
   max-height: calc(100vh - 100px);
