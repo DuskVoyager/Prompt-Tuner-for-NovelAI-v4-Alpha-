@@ -13,8 +13,22 @@
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
-  <!-- 上段3カラム：テンプレート管理 / タグ検索 / 補完スペース -->
-  <div class="grid-top">
+  <!-- 右端に固定追従する補完スペース -->
+  <div class="extra-section section">
+    <div class="section-header">
+      <span>📌 補完スペース</span>
+    </div>
+    <div id="extra-list" class="extra-list"></div>
+    <div class="extra-controls">
+      <select id="extra-target" class="extra-select"></select>
+      <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
+      <button class="delete-extra-button" onclick="deleteSelectedExtras()">🗑️ 削除</button>
+      <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
+    </div>
+  </div>
+
+  <!-- 通常のメインUI -->
+  <div class="grid-wrapper">
     <div class="template-section section">
       <div class="section-header">
         <span>📂 テンプレート管理</span>
@@ -48,23 +62,7 @@
       </div>
     </div>
 
-    <div class="extra-section section">
-      <div class="section-header">
-        <span>📌 補完スペース</span>
-      </div>
-      <div id="extra-list" class="extra-list"></div>
-      <div class="extra-controls">
-        <select id="extra-target" class="extra-select"></select>
-        <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
-        <button class="delete-extra-button" onclick="deleteSelectedExtras()">🗑️ 削除</button>
-        <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 下段2カラム：タグ読み取り + ベース〜ネガティブ -->
-  <div class="grid-bottom">
-    <div class="tag-loading section">
+    <div class="tag-loading section span-two-columns">
       <div class="section-header">
         <span>タグ読み込み</span>
       </div>
@@ -73,7 +71,7 @@
       <button onclick="loadTags()">読み込む</button>
     </div>
 
-    <div class="main-prompts">
+    <div class="span-two-columns">
       <div class="section">
         <div class="section-header">
           <span>ベースプロンプト</span>
