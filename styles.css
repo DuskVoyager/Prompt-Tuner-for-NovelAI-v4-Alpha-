@@ -1,0 +1,453 @@
+/* styles.css */
+/* ============================= */
+/* ======== ベーススタイル ======== */
+/* ============================= */
+
+body {
+  font-family: sans-serif;
+  background: #f0f0f5;
+  color: #000000;
+  padding: 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* テーマ切替ボタン */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 0.3em;
+}
+
+/* ── グリッド：3列 × 自動行 ─────────────────────────────────── */
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 16px;
+}
+
+/* 左2列をまたいで配置するクラス */
+.span-two-columns {
+  grid-column: 1 / 3;
+}
+
+/* ── 各セクション共通スタイル ───────────────────────────────────────── */
+.section {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+/* 見出し右のボタン群をまとめる */
+.header-buttons > button {
+  margin-left: 0.5em;
+}
+
+/* ── テンプレート管理用コントロール ───────────────────────────────────── */
+.template-controls {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
+}
+
+/* テンプレート名入力欄 */
+#template-name-input {
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* ── タグ検索（準備中）入力欄 ───────────────────────────────────────── */
+#tag-search-input {
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #f9f9ff;
+  color: #888;
+}
+
+/* ── タグ読み込みセクション ─────────────────────────────────────────── */
+.tag-loading input,
+.tag-loading select {
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* ── 補完スペース用スタイル ───────────────────────────────────────── */
+.extra-section .section-header {
+  margin-bottom: 0.5em;
+}
+
+.extra-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.extra-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.extra-item label {
+  font-size: 0.9em;
+}
+
+.extra-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.extra-select {
+  padding: 0.4em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.load-extra-button,
+.delete-extra-button,
+.clear-extra-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.4em;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.delete-extra-button {
+  background-color: #ef4444;
+}
+
+.clear-extra-button {
+  background-color: #dc2626;
+}
+
+.load-extra-button:hover {
+  background-color: #1d4ed8;
+}
+
+.delete-extra-button:hover {
+  background-color: #c53030;
+}
+
+.clear-extra-button:hover {
+  background-color: #a81e1e;
+}
+
+/* ── タグ表示領域（ベース／キャラ／ネガティブ） ─────────────────────────── */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0.5em;
+  background: #f9f9ff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+/* 個々のタグ */
+.tag {
+  display: flex;
+  align-items: center;
+  background: #e0e7ff;
+  padding: 0.3em 0.6em;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+/* 括弧強調（positive） */
+.tag.positive {
+  background: #c7eaff;
+  border-color: #3b82f6;
+}
+
+/* 括弧抑制（negative） */
+.tag.negative {
+  background: #ffe0e0;
+  border-color: #dc2626;
+}
+
+/* コロン形式 */
+.tag.colon {
+  background: #e6ffcc;
+  border-color: #84cc16;
+  color: #000000;
+}
+
+/* plain（通常タグ）はデフォルトの青系背景 */
+.tag.plain {
+  background: #e0e7ff;
+  border-color: transparent;
+}
+
+/* タグ内の入力フィールド */
+.tag input {
+  border: none;
+  background: transparent;
+  font-size: 1em;
+  max-width: 150px;
+  color: inherit;
+}
+
+/* weight 数値表示（表示モードと編集モード） */
+.tag .weight {
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  color: #444;
+  cursor: pointer;
+}
+
+.tag .weight.editing {
+  display: none;
+}
+
+.tag .weight-input {
+  width: 3em;
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  display: none;
+}
+
+/* タグ内のボタン（+ - ×） */
+.tag button {
+  margin-left: 0.3em;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tag button:hover {
+  background: #c53030;
+}
+
+/* ── ドラッグハンドル用スタイル ───────────────────────────────────────── */
+.drag-handle {
+  cursor: grab;
+  margin-right: 0.4em;
+  font-size: 1em;
+  color: #666;
+}
+
+body.dark-mode .drag-handle {
+  color: #aaa;
+}
+
+/* コロン形式タグ：ダークモードでも濃い緑背景＋明るい文字色 */
+body.dark-mode .tag.colon {
+  background: #335533 !important;
+  border-color: #84cc16 !important;
+  color: #eaffea !important;
+}
+
+/* ── 共通ボタン／入力欄スタイル ───────────────────────────────────────── */
+button,
+select,
+input[type="text"] {
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: #000000;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+button:hover {
+  background: #e2e8f0;
+}
+
+/* キャラクタープロンプト追加ボタン */
+.add-button {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  margin-top: 0.5em;
+}
+
+.add-button:hover {
+  background-color: #16a34a;
+}
+
+/* キャラクタープロンプト削除ボタン */
+.remove-button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  margin-left: 1em;
+}
+
+.remove-button:hover {
+  background-color: #c53030;
+}
+
+/* ── 各プロンプト欄内の「最終プロンプト」表示ボックス ───────────────────────── */
+.prompt-output-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 0.85em;
+}
+
+body.dark-mode .prompt-output-box {
+  background: #2a2a3a;
+  border-color: #555;
+}
+
+/* ============================= */
+/* ======== ダークモード ========= */
+/* ============================= */
+body.dark-mode {
+  background: #1e1e2e;
+  color: #e5e5e5;
+}
+
+body.dark-mode h1,
+body.dark-mode button,
+body.dark-mode select,
+body.dark-mode input[type="text"] {
+  color: #e5e5e5;
+}
+
+body.dark-mode .section {
+  background: #2a2a3a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .tag-container {
+  background: #2b2b3b;
+  border-color: #444;
+}
+
+body.dark-mode .tag {
+  background: #3a3f5f;
+  border-color: transparent;
+}
+
+body.dark-mode .tag.positive {
+  background: #2b6cb0;
+  border-color: #90cdf4;
+}
+
+body.dark-mode .tag.negative {
+  background: #a94442;
+  border-color: #fc8181;
+}
+
+body.dark-mode .tag input {
+  color: #e5e5e5;
+}
+
+body.dark-mode .tag .weight {
+  color: #ddd;
+}
+
+body.dark-mode .tag button {
+  background: #9b2c2c;
+}
+
+body.dark-mode .tag button:hover {
+  background: #822727;
+}
+
+body.dark-mode button,
+body.dark-mode select,
+body.dark-mode input[type="text"] {
+  background: #3a3a4a;
+  border-color: #555;
+  color: #e5e5e5;
+}
+
+body.dark-mode button:hover {
+  background: #4b4b5b;
+}
+
+body.dark-mode .add-button {
+  background-color: #2f855a;
+}
+
+body.dark-mode .add-button:hover {
+  background-color: #276846;
+}
+
+body.dark-mode .remove-button {
+  background-color: #9b2c2c;
+}
+
+body.dark-mode .remove-button:hover {
+  background-color: #822727;
+}
+
+body.dark-mode .extra-section {
+  background: #2a2a3a;
+  color: #e5e5e5;
+}
+
+/* プレースホルダーの色調整 */
+body.dark-mode input::placeholder {
+  color: #aaa;
+}
+
+/* チェックボックスのアクセントカラー */
+body.dark-mode input[type="checkbox"] {
+  accent-color: #90cdf4;
+}
+
+/* タグ検索入力欄のダークモード対応 */
+body.dark-mode #tag-search-input {
+  background: #2e2e3a;
+  color: #aaa;
+  border-color: #555;
+}
+
+/* スクロールバー（Chrome系） */
+body.dark-mode ::-webkit-scrollbar {
+  background: #444;
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #888;
+}
