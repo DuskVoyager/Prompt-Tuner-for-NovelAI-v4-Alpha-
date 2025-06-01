@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 Prompt Tuner for NovelAI v4 (Alpha)</title>
 
-  <!-- このCSSを読み込んでください -->
+  <!-- 新しい styles.css を読み込む -->
   <link rel="stylesheet" href="styles.css" />
 
   <!-- Drag&Drop 用に Sortable.js を読み込み -->
@@ -33,7 +33,7 @@
   </div>
   <!-- -------------------------------------------------- -->
 
-  <!-- メインUI：グリッド2列構成 -->
+  <!-- メインUI：グリッド3列構成（ただし補完スペース用の隙間を右に確保） -->
   <div class="grid-wrapper">
     <!-- カラム1：テンプレート管理 -->
     <div class="template-section section">
@@ -81,23 +81,27 @@
       </div>
     </div>
 
-    <!-- タグ読み込み＆ベース～ネガティブ欄を2列分で配置 -->
-    <div class="span-two-columns">
-      <!-- タグ読み込み -->
-      <div class="tag-loading section">
-        <div class="section-header">
-          <span>タグ読み込み</span>
-        </div>
-        <input
-          type="text"
-          id="tag-input"
-          placeholder="カンマ区切りのタグを入力"
-          style="width: 100%;"
-        />
-        <select id="target-section"></select>
-        <button onclick="loadTags()">読み込む</button>
-      </div>
+    <!-- カラム3 は空白（補完スペース用余白） -->
+    <div></div>
 
+    <!-- タグ読み込み：左2列をまたいで配置 -->
+    <div class="tag-loading section span-two-columns">
+      <div class="section-header">
+        <span>タグ読み込み</span>
+      </div>
+      <input
+        type="text"
+        id="tag-input"
+        placeholder="カンマ区切りのタグを入力"
+        style="width: 100%;"
+      />
+      <select id="target-section"></select>
+      <button onclick="loadTags()">読み込む</button>
+    </div>
+    <div></div> <!-- 右端は空白 -->
+
+    <!-- ベース～ネガティブ欄：左2列をまたいで配置 -->
+    <div class="span-two-columns">
       <!-- ベースプロンプト欄 -->
       <div class="section">
         <div class="section-header">
@@ -132,6 +136,8 @@
         </div>
       </div>
     </div>
+
+    <div></div> <!-- 右端は空白 -->
   </div>
 
   <!-- JavaScriptを読み込む（変更不要） -->
