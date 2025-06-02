@@ -1,12 +1,17 @@
+// script.js
+
+// ─── Sortable.js インスタンス管理用 ─────────────────────────────────────────
+const sortableInstances = {};
+
 // ─── データ構造の初期化 ─────────────────────────────────────────
 const state = {
   base: [],        // ベースプロンプトのタグ配列
   negative: [],    // ネガティブプロンプトのタグ配列
-  extra: [],       // 補完スペースのタグ配列（チェック付きの保存領域）
-  characters: [[]] // キャラクタープロンプトを入れる配列（最初は1つの空配列）
+  extra: [],       // 補完スペースのタグ配列
+  characters: [[]] // キャラクタープロンプト配列（最初は1つ）
 };
 
-// ─── weight マップ（括弧数 → 数値）──────────────────────────────
+// ─── weight マップ（括弧数 → 数値）────────────────────────────────────────
 const weightMap = {
   positive: [
     1.00, 1.05, 1.10, 1.16, 1.22, 1.28, 1.34, 1.41, 1.48, 1.55,
@@ -27,7 +32,7 @@ themeToggleBtn.addEventListener('click', () => {
     : '🌙 ダークモード';
 });
 
-// ─── コピー機能：指定ID のテキスト（最終出力）をクリップボードにコピー ───────────
+// ─── コピー機能：指定ID のテキストをクリップボードにコピー ───────────
 function copyPrompt(elementId) {
   const text = document.getElementById(elementId)?.textContent || '';
   if (!text) {
@@ -126,6 +131,13 @@ function getBracketCountFromWeight(weight, type = 'positive') {
 function renderTags(id, targetArray) {
   const container = document.getElementById(id);
   if (!container) return;
+
+  // 既存の Sortable インスタンスがあれば破棄
+  if (sortableInstances[id]) {
+    sortableInstances[id].destroy();
+    delete sortableInstances[id];
+  }
+
   container.innerHTML = ''; // クリア
 
   targetArray.forEach((rawTag, index) => {
@@ -229,8 +241,8 @@ function renderTags(id, targetArray) {
     container.appendChild(tagEl);
   });
 
-  // ─── ここで Sortable.js を初期化 ───────────────────────────────────────
-  new Sortable(container, {
+  // ─── Sortable.js を再初期化 ───────────────────────────────────────
+  sortableInstances[id] = new Sortable(container, {
     animation: 150,
     handle: '.drag-handle',
     onEnd: function (evt) {
@@ -239,7 +251,7 @@ function renderTags(id, targetArray) {
       if (oldIndex === newIndex) return;
       const movedItem = targetArray.splice(oldIndex, 1)[0];
       targetArray.splice(newIndex, 0, movedItem);
-      renderAll(); // 並べ替え後に再描画
+      renderAll();
     }
   });
 }
@@ -439,30 +451,22 @@ function addCharacterPrompt() {
   if (state.characters.length >= 6) {
     return alert('キャラクタープロンプトは最大6つまでです。');
   }
-  // 新しい配列を追加
   state.characters.push([]);
-
-  // UIを再構築
   resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── キャラクタープロンプト欄を削除 ───────────────────────────────────────────
 function removeCharacterPrompt(index) {
-  // 配列から該当インデックスを削除
   state.characters.splice(index, 1);
-
-  // UIを再構築
   resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── 最初のキャラクタープロンプト（1番目）を初期生成 ──────────────────────────
 window.onload = () => {
-  // 初期状態で characters = [[]] としておくので、UI は 1つだけ必要
   resetCharacterSections(1);
 
-  // "target-section" と "extra-target" に初期オプションを設定
   ['target-section', 'extra-target'].forEach(selectId => {
     const select = document.getElementById(selectId);
     if (select) {
@@ -487,8 +491,6 @@ window.onload = () => {
 };
 
 // ─── テンプレート管理ロジック ───────────────────────────────────────────
-
-// 保存キー名
 const TEMPLATE_STORAGE_KEY = 'promptTemplates';
 
 function getAllTemplates() {
@@ -556,16 +558,12 @@ function loadTemplate() {
     return;
   }
 
-  // 全データを上書き
   state.base = [...data.base];
   state.negative = [...data.negative];
   state.extra = [...data.extra];
   state.characters = data.characters.map(arr => [...arr]);
 
-  // キャラ欄の数に応じて DOM も再構築
   resetCharacterSections(state.characters.length);
-
-  // 描画
   renderAll();
 
   alert(`テンプレート「${name}」を読み込みました。`);
@@ -635,3 +633,10 @@ function resetCharacterSections(count) {
     }
   });
 }
+
+// ─── 録画などでフォーカスが戻ったときに自動で再描画 ─────────────────────────────────
+window.addEventListener('focus', () => {
+  setTimeout(() => {
+    renderAll();
+  }, 100);
+});
