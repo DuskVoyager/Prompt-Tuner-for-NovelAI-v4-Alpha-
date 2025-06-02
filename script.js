@@ -1,17 +1,12 @@
-// script.js
-
-// ─── Sortable.js インスタンス管理用 ─────────────────────────────────────────
-const sortableInstances = {};
-
 // ─── データ構造の初期化 ─────────────────────────────────────────
 const state = {
   base: [],        // ベースプロンプトのタグ配列
   negative: [],    // ネガティブプロンプトのタグ配列
-  extra: [],       // 補完スペースのタグ配列
-  characters: [[]] // キャラクタープロンプト配列（最初は1つ）
+  extra: [],       // 補完スペースのタグ配列（チェック付きの保存領域）
+  characters: [[]] // キャラクタープロンプトを入れる配列（最初は1つの空配列）
 };
 
-// ─── weight マップ（括弧数 → 数値）────────────────────────────────────────
+// ─── weight マップ（括弧数 → 数値）──────────────────────────────
 const weightMap = {
   positive: [
     1.00, 1.05, 1.10, 1.16, 1.22, 1.28, 1.34, 1.41, 1.48, 1.55,
@@ -32,8 +27,9 @@ themeToggleBtn.addEventListener('click', () => {
     : '🌙 ダークモード';
 });
 
-// ─── コピー機能：指定ID のテキストをクリップボードにコピー ───────────
-function copyPrompt(elementId) {
+// ─── コピー機能：指定ID のテキスト（最終出力）をクリップボードにコピー ───────────
+//                   ＋吹き出し（ツールチップ）表示も行う
+function copyPrompt(elementId, buttonEl = null) {
   const text = document.getElementById(elementId)?.textContent || '';
   if (!text) {
     alert('コピーするテキストがありません。');
@@ -41,12 +37,48 @@ function copyPrompt(elementId) {
   }
   navigator.clipboard.writeText(text)
     .then(() => {
-      alert('クリップボードにコピーしました。');
+      if (buttonEl) showCopyTooltip(buttonEl);
     })
     .catch(err => {
       console.error('コピーに失敗しました: ', err);
       alert('コピーに失敗しました。');
     });
+}
+
+// ─── 吹き出し（ツールチップ）を表示する関数 ─────────────────────────
+function showCopyTooltip(button) {
+  // 吹き出し要素を生成
+  const tooltip = document.createElement('div');
+  tooltip.textContent = 'コピーしました';
+  tooltip.style.position = 'absolute';
+  tooltip.style.top = '-24px';
+  tooltip.style.left = '50%';
+  tooltip.style.transform = 'translateX(-50%)';
+  tooltip.style.background = '#333';
+  tooltip.style.color = '#fff';
+  tooltip.style.padding = '4px 8px';
+  tooltip.style.borderRadius = '6px';
+  tooltip.style.fontSize = '0.75em';
+  tooltip.style.whiteSpace = 'nowrap';
+  tooltip.style.zIndex = '9999';
+  tooltip.style.pointerEvents = 'none';
+  tooltip.style.opacity = '0';
+  tooltip.style.transition = 'opacity 0.3s';
+
+  // 親要素に相対位置を設定
+  button.parentElement.style.position = 'relative';
+  button.parentElement.appendChild(tooltip);
+
+  // フェードイン
+  requestAnimationFrame(() => {
+    tooltip.style.opacity = '1';
+  });
+
+  // 一定時間後にフェードアウトして削除
+  setTimeout(() => {
+    tooltip.style.opacity = '0';
+    setTimeout(() => tooltip.remove(), 300);
+  }, 1800);
 }
 
 // ─── タグ文字列を { kind, text, positive, negative, weight } に分解 ─────────────────
@@ -131,13 +163,6 @@ function getBracketCountFromWeight(weight, type = 'positive') {
 function renderTags(id, targetArray) {
   const container = document.getElementById(id);
   if (!container) return;
-
-  // 既存の Sortable インスタンスがあれば破棄
-  if (sortableInstances[id]) {
-    sortableInstances[id].destroy();
-    delete sortableInstances[id];
-  }
-
   container.innerHTML = ''; // クリア
 
   targetArray.forEach((rawTag, index) => {
@@ -241,8 +266,8 @@ function renderTags(id, targetArray) {
     container.appendChild(tagEl);
   });
 
-  // ─── Sortable.js を再初期化 ───────────────────────────────────────
-  sortableInstances[id] = new Sortable(container, {
+  // ─── ここで Sortable.js を初期化 ───────────────────────────────────────
+  new Sortable(container, {
     animation: 150,
     handle: '.drag-handle',
     onEnd: function (evt) {
@@ -251,7 +276,7 @@ function renderTags(id, targetArray) {
       if (oldIndex === newIndex) return;
       const movedItem = targetArray.splice(oldIndex, 1)[0];
       targetArray.splice(newIndex, 0, movedItem);
-      renderAll();
+      renderAll(); // 並べ替え後に再描画
     }
   });
 }
@@ -451,22 +476,30 @@ function addCharacterPrompt() {
   if (state.characters.length >= 6) {
     return alert('キャラクタープロンプトは最大6つまでです。');
   }
+  // 新しい配列を追加
   state.characters.push([]);
+
+  // UIを再構築
   resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── キャラクタープロンプト欄を削除 ───────────────────────────────────────────
 function removeCharacterPrompt(index) {
+  // 配列から該当インデックスを削除
   state.characters.splice(index, 1);
+
+  // UIを再構築
   resetCharacterSections(state.characters.length);
   renderAll();
 }
 
 // ─── 最初のキャラクタープロンプト（1番目）を初期生成 ──────────────────────────
 window.onload = () => {
+  // 初期状態で characters = [[]] としておくので、UI は 1つだけ必要
   resetCharacterSections(1);
 
+  // "target-section" と "extra-target" に初期オプションを設定
   ['target-section', 'extra-target'].forEach(selectId => {
     const select = document.getElementById(selectId);
     if (select) {
@@ -491,6 +524,8 @@ window.onload = () => {
 };
 
 // ─── テンプレート管理ロジック ───────────────────────────────────────────
+
+// 保存キー名
 const TEMPLATE_STORAGE_KEY = 'promptTemplates';
 
 function getAllTemplates() {
@@ -558,12 +593,16 @@ function loadTemplate() {
     return;
   }
 
+  // 全データを上書き
   state.base = [...data.base];
   state.negative = [...data.negative];
   state.extra = [...data.extra];
   state.characters = data.characters.map(arr => [...arr]);
 
+  // キャラ欄の数に応じて DOM も再構築
   resetCharacterSections(state.characters.length);
+
+  // 描画
   renderAll();
 
   alert(`テンプレート「${name}」を読み込みました。`);
@@ -586,6 +625,7 @@ function deleteTemplate() {
   alert(`テンプレート「${name}」を削除しました。`);
 }
 
+// ─── キャラクタープロンプト欄をリセットして再生成 ─────────────────────────
 function resetCharacterSections(count) {
   const container = document.getElementById('character-sections');
   container.innerHTML = '';
@@ -596,7 +636,8 @@ function resetCharacterSections(count) {
       <div class="section-header">
         <span>キャラクタープロンプト ${i + 1}</span>
         <div class="header-buttons">
-          <button onclick="copyPrompt('output-character-${i}')">📋 コピー</button>
+          <!-- ← ここも「this」を渡すように変更 -->
+          <button onclick="copyPrompt('output-character-${i}', this)">📋 コピー</button>
           ${i > 0 ? `<button class="remove-button" onclick="removeCharacterPrompt(${i})">削除欄</button>` : ''}
           <button onclick="clearPrompt('character-${i}')">🗑️ 全削除</button>
         </div>
@@ -633,10 +674,3 @@ function resetCharacterSections(count) {
     }
   });
 }
-
-// ─── 録画などでフォーカスが戻ったときに自動で再描画 ─────────────────────────────────
-window.addEventListener('focus', () => {
-  setTimeout(() => {
-    renderAll();
-  }, 100);
-});
