@@ -1,16 +1,15 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌟 NovelAI v4 プロンプト調整器（α）</title>
+  <title>🌟 NovelAI v4 プロンプト調整器(α)</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
   <h1>
-    🌟 NovelAI v4 プロンプト調整器（α）
+    🌟 NovelAI v4 プロンプト調整器(α)
     <button id="theme-toggle">🌙 ダークモード</button>
   </h1>
 
@@ -80,7 +79,7 @@
           <div class="section-header">
             <span>ベースプロンプト</span>
             <div class="header-buttons">
-              <button onclick="copyPrompt('output-base')">📋 コピー</button>
+              <button onclick="copyPrompt('output-base', this)">📋 コピー</button>
               <button onclick="clearPrompt('base')">🗑️ 全削除</button>
             </div>
           </div>
@@ -99,7 +98,7 @@
           <div class="section-header">
             <span>ネガティブプロンプト</span>
             <div class="header-buttons">
-              <button onclick="copyPrompt('output-negative')">📋 コピー</button>
+              <button onclick="copyPrompt('output-negative', this)">📋 コピー</button>
               <button onclick="clearPrompt('negative')">🗑️ 全削除</button>
             </div>
           </div>
