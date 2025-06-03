@@ -12,6 +12,10 @@
   <meta property="og:url" content="https://prompt-tuner-for-novel-ai-v4-alpha.vercel.app/" />
   <meta property="og:type" content="website" />
 
+  <!-- Twitterカードタグ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://prompt-tuner-for-novel-ai-v4-alpha.vercel.app/BUG_samne.png" />
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GSYBTLY6V0"></script>
   <script>
@@ -37,12 +41,7 @@
       <details class="section template-section">
         <summary>📂 テンプレート管理</summary>
         <div class="template-controls">
-          <input
-            type="text"
-            id="template-name-input"
-            placeholder="テンプレート名を入力"
-            style="flex: 1;"
-          />
+          <input type="text" id="template-name-input" placeholder="テンプレート名を入力" style="flex: 1;" />
           <button onclick="saveTemplate()">💾 保存</button>
         </div>
         <div class="template-controls">
@@ -57,13 +56,7 @@
       <details class="section search-section">
         <summary>🔍 タグ検索（準備中）</summary>
         <div class="template-controls">
-          <input
-            type="text"
-            id="tag-search-input"
-            placeholder="タグを検索（※現在使用できません）"
-            disabled
-            style="flex: 1;"
-          />
+          <input type="text" id="tag-search-input" placeholder="タグを検索（※現在使用できません）" disabled style="flex: 1;" />
           <select id="tag-search-target">
             <option value="base">ベースプロンプト</option>
             <option value="character-0">キャラクタープロンプト 1</option>
@@ -79,12 +72,7 @@
         <div class="section-header">
           <span>タグ読み込み</span>
         </div>
-        <input
-          type="text"
-          id="tag-input"
-          placeholder="カンマ区切りのタグを入力"
-          style="width: 100%;"
-        />
+        <input type="text" id="tag-input" placeholder="カンマ区切りのタグを入力" style="width: 100%;" />
         <select id="target-section"></select>
         <button onclick="loadTags()">読み込む</button>
       </div>
