@@ -99,19 +99,48 @@ details > summary {
   margin-bottom: 0.5em;
 }
 
-#template-name-input {
+#template-name-input,
+#new-category-input {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-/* ── タグ検索（準備中）入力欄 ───────────────────────────────────────── */
+/* ── タグ検索入力欄 ───────────────────────────────────────── */
 #tag-search-input {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
   background: #f9f9ff;
-  color: #888;
+  color: #000;
+}
+
+/* ── カテゴリ管理エリア（縦並び） ───────────────────────────────────────── */
+#category-management {
+  margin-top: 1em;
+  padding: 1em;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#category-management input,
+#category-management select,
+#category-management button {
+  width: 100%;
+  font-size: 1em;
+  padding: 0.4em;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 5px;
+}
+
+#category-management button:hover {
+  background-color: #286090;
 }
 
 /* ── タグ読み込みセクション ─────────────────────────────────────────── */
@@ -154,11 +183,12 @@ details > summary {
   padding: 0.4em;
   border-radius: 5px;
   border: 1px solid #ccc;
+  background: #ffffff;
+  color: #000000;
 }
 
 .load-extra-button,
-.delete-extra-button,
-.clear-extra-button {
+.delete-extra-button {
   background-color: #2563eb;
   color: white;
   border: none;
@@ -172,10 +202,6 @@ details > summary {
   background-color: #ef4444;
 }
 
-.clear-extra-button {
-  background-color: #dc2626;
-}
-
 .load-extra-button:hover {
   background-color: #1d4ed8;
 }
@@ -184,8 +210,41 @@ details > summary {
   background-color: #c53030;
 }
 
-.clear-extra-button:hover {
-  background-color: #a81e1e;
+/* ── 一括カテゴリ設定 UI ───────────────────────────────────────── */
+.extra-bulk-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#bulk-category-select {
+  padding: 0.4em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 0.95em;
+  width: auto;
+}
+
+.extra-bulk-category button {
+  font-size: 0.95em;
+  padding: 0.4em 0.8em;
+  border: none;
+  border-radius: 6px;
+  background-color: #337ab7;
+  color: white;
+  cursor: pointer;
+}
+
+.extra-bulk-category button:hover {
+  background-color: #286090;
+}
+
+.extra-bulk-category label {
+  font-size: 0.9em;
+  white-space: nowrap;
 }
 
 .extra-list {
@@ -319,7 +378,8 @@ body.dark-mode .tag.colon {
 /* ── 共通ボタン／入力欄スタイル ───────────────────────────────────────── */
 button,
 select,
-input[type="text"] {
+input[type="text"],
+input[type="file"] {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -384,7 +444,8 @@ body.dark-mode {
 body.dark-mode h1,
 body.dark-mode button,
 body.dark-mode select,
-body.dark-mode input[type="text"] {
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"] {
   color: #e5e5e5;
 }
 
@@ -431,7 +492,8 @@ body.dark-mode .tag button:hover {
 
 body.dark-mode button,
 body.dark-mode select,
-body.dark-mode input[type="text"] {
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"] {
   background: #3a3a4a;
   border-color: #555;
   color: #e5e5e5;
@@ -454,7 +516,7 @@ body.dark-mode .remove-button {
 }
 
 body.dark-mode .remove-button:hover {
-  background-color: #822727;
+  background: #822727;
 }
 
 body.dark-mode .extra-section {
@@ -463,7 +525,8 @@ body.dark-mode .extra-section {
 }
 
 /* プレースホルダーの色調整 */
-body.dark-mode input::placeholder {
+body.dark-mode input::placeholder,
+body.dark-mode input[type="file"]::placeholder {
   color: #aaa;
 }
 
@@ -472,17 +535,61 @@ body.dark-mode input[type="checkbox"] {
   accent-color: #90cdf4;
 }
 
-/* タグ検索入力欄のダークモード対応 */
-body.dark-mode #tag-search-input {
-  background: #2e2e3a;
-  color: #aaa;
-  border-color: #555;
-}
-
 /* スクロールバー（Chrome系） */
 body.dark-mode ::-webkit-scrollbar {
   background: #444;
 }
 body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
+}
+
+/* ─── ダークテーマ対応追加 ───────────────────────────────────────── */
+
+/* タグ検索欄 */
+body.dark-mode #tag-search-input {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
+}
+body.dark-mode #tag-search-input::placeholder {
+  color: #aaa;
+}
+
+/* カテゴリ管理UI */
+body.dark-mode #category-management {
+  background: #2a2a3a;
+  border-color: #444;
+}
+
+body.dark-mode #new-category-input,
+body.dark-mode #category-select {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
+}
+
+body.dark-mode #category-management button {
+  background-color: #2563eb;
+  color: white;
+}
+
+body.dark-mode #category-management button:hover {
+  background-color: #1d4ed8;
+}
+
+/* カテゴリ表示ラベル（未分類／カテゴリ名）の色切替 */
+.category-label {
+  color: #0066cc;
+}
+
+body.dark-mode .category-label {
+  color: #ffffff; /* ダークテーマ時は白 */
+  font-weight: bold;
+}
+
+/* ダークテーマ時の補完スペース下のカテゴリセレクト対応 */
+body.dark-mode #bulk-category-select {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
 }
