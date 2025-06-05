@@ -1,8 +1,15 @@
+// script.js
+
+// ─── グローバル辞書定義 ─────────────────────────────────────────
+let extraDictionary = {};
+let extraCategories = [];
+let activeCategorySelect = null; // 現在表示中のカテゴリセレクト要素
+
 // ─── データ構造の初期化 ─────────────────────────────────────────
 const state = {
   base: [],        // ベースプロンプトのタグ配列
   negative: [],    // ネガティブプロンプトのタグ配列
-  extra: [],       // 補完スペースのタグ配列（チェック付きの保存領域）
+  extra: [],       // 補完スペースのタグ配列（表示領域）
   characters: [[]] // キャラクタープロンプトを入れる配列（最初は1つの空配列）
 };
 
@@ -28,7 +35,6 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 // ─── コピー機能：指定ID のテキスト（最終出力）をクリップボードにコピー ───────────
-//                   ＋吹き出し（ツールチップ）表示も行う
 function copyPrompt(elementId, buttonEl = null) {
   const text = document.getElementById(elementId)?.textContent || '';
   if (!text) {
@@ -47,7 +53,6 @@ function copyPrompt(elementId, buttonEl = null) {
 
 // ─── 吹き出し（ツールチップ）を表示する関数 ─────────────────────────
 function showCopyTooltip(button) {
-  // 吹き出し要素を生成
   const tooltip = document.createElement('div');
   tooltip.textContent = 'コピーしました';
   tooltip.style.position = 'absolute';
@@ -65,16 +70,13 @@ function showCopyTooltip(button) {
   tooltip.style.opacity = '0';
   tooltip.style.transition = 'opacity 0.3s';
 
-  // 親要素に相対位置を設定
   button.parentElement.style.position = 'relative';
   button.parentElement.appendChild(tooltip);
 
-  // フェードイン
   requestAnimationFrame(() => {
     tooltip.style.opacity = '1';
   });
 
-  // 一定時間後にフェードアウトして削除
   setTimeout(() => {
     tooltip.style.opacity = '0';
     setTimeout(() => tooltip.remove(), 300);
@@ -83,7 +85,6 @@ function showCopyTooltip(button) {
 
 // ─── タグ文字列を { kind, text, positive, negative, weight } に分解 ─────────────────
 function parseWeight(tag) {
-  // 括弧形式 ( {tag}, [[tag]] )
   const curly = tag.match(/^({+)(.*?)(}+)$/);
   const square = tag.match(/^(\[+)(.*?)(\]+)$/);
   if (curly && curly[1].length === curly[3].length) {
@@ -106,20 +107,12 @@ function parseWeight(tag) {
       weight: parseFloat(getWeightValue(0, negCount))
     };
   }
-  // コロン形式 ( 1.10::tag:: )
   const colon = tag.match(/^(\d+(\.\d+)?)::(.+?)::$/);
   if (colon) {
     const w = parseFloat(colon[1]);
     const txt = colon[3];
-    let positive = 0, negative = 0;
-    if (w > 1.00) {
-      positive = getBracketCountFromWeight(w, 'positive');
-    } else if (w < 1.00) {
-      negative = getBracketCountFromWeight(w, 'negative');
-    }
-    return { kind: 'colon', text: txt, positive, negative, weight: w };
+    return { kind: 'colon', text: txt, positive: 0, negative: 0, weight: w };
   }
-  // 普通のタグ (weight = 1.00)
   return { kind: 'plain', text: tag, positive: 0, negative: 0, weight: 1.00 };
 }
 
@@ -163,7 +156,7 @@ function getBracketCountFromWeight(weight, type = 'positive') {
 function renderTags(id, targetArray) {
   const container = document.getElementById(id);
   if (!container) return;
-  container.innerHTML = ''; // クリア
+  container.innerHTML = '';
 
   targetArray.forEach((rawTag, index) => {
     const parsed = parseWeight(rawTag);
@@ -178,13 +171,11 @@ function renderTags(id, targetArray) {
     if (pos > 0) tagEl.classList.add('positive');
     if (neg > 0) tagEl.classList.add('negative');
 
-    // ─── ドラッグハンドルを先頭に追加 ───────────────────────────────
     const dragHandle = document.createElement('span');
     dragHandle.className = 'drag-handle';
     dragHandle.textContent = '☰';
     tagEl.appendChild(dragHandle);
 
-    // テキスト編集用 input
     const input = document.createElement('input');
     input.value = text;
     input.onchange = (e) => {
@@ -194,7 +185,6 @@ function renderTags(id, targetArray) {
     };
     tagEl.appendChild(input);
 
-    // weight 表示・編集
     const weightSpan = document.createElement('span');
     weightSpan.className = 'weight';
     weightSpan.textContent = weight;
@@ -226,7 +216,6 @@ function renderTags(id, targetArray) {
     };
     tagEl.appendChild(weightInput);
 
-    // ＋ボタン（括弧数増加）
     const plusBtn = document.createElement('button');
     plusBtn.textContent = '+';
     plusBtn.onclick = () => {
@@ -240,7 +229,6 @@ function renderTags(id, targetArray) {
     };
     tagEl.appendChild(plusBtn);
 
-    // －ボタン（括弧数減少または抑制増加）
     const minusBtn = document.createElement('button');
     minusBtn.textContent = '-';
     minusBtn.onclick = () => {
@@ -254,7 +242,6 @@ function renderTags(id, targetArray) {
     };
     tagEl.appendChild(minusBtn);
 
-    // ×ボタン（タグ削除）
     const removeBtn = document.createElement('button');
     removeBtn.textContent = '×';
     removeBtn.onclick = () => {
@@ -266,7 +253,6 @@ function renderTags(id, targetArray) {
     container.appendChild(tagEl);
   });
 
-  // ─── ここで Sortable.js を初期化 ───────────────────────────────────────
   new Sortable(container, {
     animation: 150,
     handle: '.drag-handle',
@@ -276,7 +262,7 @@ function renderTags(id, targetArray) {
       if (oldIndex === newIndex) return;
       const movedItem = targetArray.splice(oldIndex, 1)[0];
       targetArray.splice(newIndex, 0, movedItem);
-      renderAll(); // 並べ替え後に再描画
+      renderAll();
     }
   });
 }
@@ -285,40 +271,161 @@ function renderTags(id, targetArray) {
 function renderExtraList() {
   const container = document.getElementById('extra-list');
   if (!container) return;
-  container.innerHTML = ''; // クリア
+  container.innerHTML = '';
 
   state.extra.forEach((rawTag, index) => {
     const parsed = parseWeight(rawTag);
-    const text = parsed.text;
+    const tagName = parsed.text;
     const pos = parsed.positive;
     const neg = parsed.negative;
     const formatted = parsed.kind === 'colon'
-      ? formatColon(text, pos, neg)
-      : formatBrackets(text, pos, neg);
+      ? formatColon(tagName, pos, neg)
+      : formatBrackets(tagName, pos, neg);
 
     const item = document.createElement('div');
     item.className = 'extra-item';
 
+    // チェックボックス
     const chk = document.createElement('input');
     chk.type = 'checkbox';
     chk.id = `extra-${index}`;
     chk.value = rawTag;
     item.appendChild(chk);
 
+    // ラベル（削除済なら灰色表示）
     const lbl = document.createElement('label');
     lbl.htmlFor = `extra-${index}`;
     lbl.textContent = formatted;
+    if (!extraDictionary.hasOwnProperty(tagName)) {
+      lbl.style.color = '#aaa'; // 灰色
+      lbl.title = '辞書から削除済み';
+    }
     item.appendChild(lbl);
+
+    // 辞書に存在する場合のみカテゴリと説明を表示
+    const info = extraDictionary[tagName];
+    if (info) {
+      const categoryText = info.category || '未分類';
+      const categorySpan = document.createElement('span');
+      categorySpan.textContent = `[${categoryText}]`;
+      categorySpan.style.marginLeft = '0.5em';
+      categorySpan.style.fontSize = '0.75em';
+      categorySpan.style.cursor = 'pointer';
+      categorySpan.classList.add('category-label');
+      categorySpan.onclick = () => enterCategoryEdit(tagName, categorySpan);
+      item.appendChild(categorySpan);
+
+      const meta = document.createElement('div');
+      meta.style.fontSize = '0.75em';
+      meta.style.color = '#666';
+      meta.style.marginLeft = '1.5em';
+      meta.innerText = info.description || '';
+      item.appendChild(meta);
+    }
 
     container.appendChild(item);
   });
+}
+
+// ─── カテゴリセレクトを再描画 ───────────────────────────────────────
+function renderCategorySelect() {
+  const select = document.getElementById('category-select');
+  if (!select) return;
+  select.innerHTML = '<option value="">-- カテゴリを選択 --</option>';
+  extraCategories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
+}
+
+// ─── Bulkカテゴリセレクトを再描画 ─────────────────────────────────────
+function renderBulkCategorySelect() {
+  const select = document.getElementById('bulk-category-select');
+  if (!select) return;
+  select.innerHTML = '<option value="">カテゴリを選択</option>';
+  extraCategories.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    select.appendChild(opt);
+  });
+}
+
+// ─── カテゴリ編集時に表示される <select> を生成・処理 ───────────────────
+function enterCategoryEdit(tagName, spanEl) {
+  // 既に別のセレクトが開かれていたら閉じる
+  if (activeCategorySelect) {
+    activeCategorySelect.dispatchEvent(new Event('blur'));
+  }
+
+  const parent = spanEl.parentElement;
+  const current = (extraDictionary[tagName]?.category) || '';
+  const select = document.createElement('select');
+  select.style.fontSize = '0.75em';
+  select.style.marginLeft = '0.5em';
+
+  // 選択肢に既存カテゴリを追加
+  extraCategories.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    if (cat === current) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  // 選択変更時に辞書を更新して描画
+  select.onchange = () => {
+    if (!extraDictionary[tagName]) {
+      extraDictionary[tagName] = { description: "", category: "" };
+    }
+    extraDictionary[tagName].category = select.value;
+    localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+    updateCategories();
+    renderAll();
+  };
+
+  // セレクト外クリックで閉じる処理
+  const onClickOutside = (event) => {
+    if (select && !select.contains(event.target)) {
+      const chosen = select.value;
+      if (!extraDictionary[tagName]) {
+        extraDictionary[tagName] = { description: "", category: "" };
+      }
+      extraDictionary[tagName].category = chosen;
+      localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+      updateCategories();
+
+      const newSpan = document.createElement('span');
+      const displayText = chosen || '未分類';
+      newSpan.textContent = `[${displayText}]`;
+      newSpan.style.marginLeft = '0.5em';
+      newSpan.style.fontSize = '0.75em';
+      newSpan.style.cursor = 'pointer';
+      newSpan.classList.add('category-label');
+      newSpan.onclick = () => enterCategoryEdit(tagName, newSpan);
+
+      parent.replaceChild(newSpan, select);
+      document.removeEventListener('click', onClickOutside);
+      activeCategorySelect = null;
+      renderAll();
+    }
+  };
+
+  parent.replaceChild(select, spanEl);
+  select.focus();
+  activeCategorySelect = select;
+  setTimeout(() => {
+    document.addEventListener('click', onClickOutside);
+  }, 0);
 }
 
 // ─── 補完スペース用：読み込み先セレクトにオプションを表示 ────────────────────
 function renderExtraTargetOptions() {
   const select = document.getElementById('extra-target');
   if (!select) return;
-  select.innerHTML = ''; // クリア
+  select.innerHTML = '';
 
   const opts = ['base'];
   state.characters.forEach((_, idx) => opts.push(`character-${idx}`));
@@ -331,8 +438,8 @@ function renderExtraTargetOptions() {
       id === 'base'
         ? 'ベースプロンプト'
         : id.startsWith('character-')
-        ? `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`
-        : 'ネガティブプロンプト';
+          ? `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`
+          : 'ネガティブプロンプト';
     select.appendChild(option);
   });
 }
@@ -341,7 +448,7 @@ function renderExtraTargetOptions() {
 function renderLeftTargetOptions() {
   const leftSelect = document.getElementById('target-section');
   if (!leftSelect) return;
-  leftSelect.innerHTML = ''; // クリア
+  leftSelect.innerHTML = '';
 
   const opts = ['base'];
   state.characters.forEach((_, idx) => opts.push(`character-${idx}`));
@@ -354,10 +461,10 @@ function renderLeftTargetOptions() {
       id === 'base'
         ? 'ベースプロンプト'
         : id === 'negative'
-        ? 'ネガティブプロンプト'
-        : id === 'extra'
-        ? '補完スペース'
-        : `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`;
+          ? 'ネガティブプロンプト'
+          : id === 'extra'
+            ? '補完スペース'
+            : `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`;
     leftSelect.appendChild(option);
   });
 }
@@ -384,20 +491,88 @@ function renderAll() {
   renderLeftTargetOptions();
   updateOutputBoxes();
   updateTemplateSelect();
+  renderCategorySelect();
+  renderBulkCategorySelect();
 }
 
-// ─── 通常タグ読み込み：テキスト入力を各配列に振り分け ─────────────────────────
+// ─── タグ読み込み：テキスト入力を各配列に振り分けし、括弧やコロンを数値形式に変換 ─────────────────
 function loadTags() {
   const input = document.getElementById('tag-input').value;
   const target = document.getElementById('target-section').value;
   const tags = input.split(',').map(t => t.trim()).filter(Boolean);
 
-  const normal = [], negative = [], extra = [];
+  const normal = [], negativeArr = [], extraArr = [];
   tags.forEach(tag => {
-    if (tag.startsWith('!')) negative.push(tag.slice(1));
-    else if (tag.startsWith('#')) extra.push(tag.slice(1));
+    if (tag.startsWith('!')) negativeArr.push(tag.slice(1));
+    else if (tag.startsWith('#')) extraArr.push(tag.slice(1));
     else normal.push(tag);
   });
+
+  // 辞書用に「括弧を取り除いて中身だけ」を抽出
+  const stripBrackets = (tag) => parseWeight(tag).text;
+
+  // 補完スペース用：中身だけ
+  const cleanedExtra = extraArr.map(stripBrackets);
+
+  // 辞書登録：target === 'extra' のときは中身だけ辞書に登録
+  if (target === 'extra') {
+    normal.map(stripBrackets).forEach(tag => {
+      if (!Object.prototype.hasOwnProperty.call(extraDictionary, tag)) {
+        extraDictionary[tag] = { description: "", category: "" };
+      }
+    });
+  }
+  // #プレフィックスタグも中身だけ登録
+  cleanedExtra.forEach(tag => {
+    if (!Object.prototype.hasOwnProperty.call(extraDictionary, tag)) {
+      extraDictionary[tag] = { description: "", category: "" };
+    }
+  });
+
+  // localStorage に保存
+  localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+  updateCategories();
+
+  // ====================
+  // ここから「括弧やコロンを数値形式に変換」して各配列へ push
+  // ====================
+
+  // 変換関数：parseWeight して
+  // - weight = 1.00 → プレーンテキスト（括弧やコロン削除）
+  // - parsed.kind==='colon' → コロン形式で再構築
+  // - 括弧形式の weight と一致すれば括弧形式
+  // - それ以外はコロン形式
+  const buildFormattedTags = (tagList) =>
+    tagList.map(tag => {
+      const parsed = parseWeight(tag);
+      const w = parsed.weight.toFixed(2);
+
+      // weight=1.00 の場合はプレーンテキスト
+      if (w === '1.00') {
+        return parsed.text;
+      }
+
+      // 入力がコロン形式だったらそのままコロン形式に再構築
+      if (parsed.kind === 'colon') {
+        return `${w}::${parsed.text}::`;
+      }
+
+      // weightMap と一致する括弧数かチェック
+      const posIdx = weightMap.positive.findIndex(val => val.toFixed(2) === w);
+      const negIdx = weightMap.negative.findIndex(val => val.toFixed(2) === w);
+
+      if (posIdx >= 0 && parsed.positive === posIdx) {
+        // 括弧形式を保持
+        return formatBrackets(parsed.text, parsed.positive, 0);
+      }
+      if (negIdx >= 0 && parsed.negative === negIdx) {
+        // 括弧形式を保持
+        return formatBrackets(parsed.text, 0, parsed.negative);
+      }
+
+      // それ以外 → コロン形式
+      return `${w}::${parsed.text}::`;
+    });
 
   if (target.startsWith('character-')) {
     const idx = parseInt(target.split('-')[1], 10);
@@ -406,15 +581,26 @@ function loadTags() {
       document.getElementById('target-section').value = 'character-0';
       return;
     }
-    state.characters[idx].push(...normal);
+    // normal を変換して格納
+    const formattedNormal = buildFormattedTags(normal);
+    state.characters[idx].push(...formattedNormal);
   } else if (target === 'extra') {
-    state.extra.push(...normal);
+    // 補完スペースは「中身だけ」を push
+    const cleanedNormal = normal.map(stripBrackets);
+    state.extra.push(...cleanedNormal);
   } else {
-    state[target].push(...normal);
+    // base または negative 以外（ただし main では base/negative）
+    const formattedNormal = buildFormattedTags(normal);
+    state[target].push(...formattedNormal);
   }
 
-  state.negative.push(...negative);
-  state.extra.push(...extra);
+  // ネガティブは同様に変換して push
+  const formattedNegative = buildFormattedTags(negativeArr);
+  state.negative.push(...formattedNegative);
+
+  // 補完スペースにも中身だけを追加
+  state.extra.push(...cleanedExtra);
+
   renderAll();
 }
 
@@ -446,60 +632,160 @@ function loadSelectedExtras() {
   renderAll();
 }
 
-// ─── 補完スペースから選択したタグを削除 ───────────────────────────────────────
+// ─── 補完スペースから選択したタグを削除（辞書からも完全削除） ────────────────────────────────
 function deleteSelectedExtras() {
   const items = document.querySelectorAll('#extra-list input[type="checkbox"]:checked');
   if (items.length === 0) {
-    alert('削除したい補完スペースタグをチェックしてください');
+    alert('辞書から削除したいタグにチェックを入れてください');
     return;
   }
-  const toDelete = Array.from(items).map(chk => chk.value);
-  state.extra = state.extra.filter(raw => !toDelete.includes(raw));
+
+  if (!confirm('選択されたタグを辞書（extraDictionary）および補完スペースから削除します。元に戻せません。よろしいですか？')) return;
+
+  // 削除するタグ名を抽出
+  const toDelete = Array.from(items).map(chk => parseWeight(chk.value).text);
+
+  // 辞書から削除
+  toDelete.forEach(tagName => {
+    delete extraDictionary[tagName];
+  });
+
+  // 補完スペースからも削除
+  state.extra = state.extra.filter(tag => {
+    const parsed = parseWeight(tag);
+    return !toDelete.includes(parsed.text);
+  });
+
+  // localStorage 上書き保存
+  localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+
+  // カテゴリ更新と再描画
+  updateCategories();
   renderAll();
 }
 
-// ─── 各セクションを一括クリア ───────────────────────────────────────────────
-function clearPrompt(type) {
-  if (type === 'extra') {
-    state.extra = [];
-  } else if (type.startsWith('character-')) {
-    const idx = parseInt(type.split('-')[1], 10);
-    if (!isNaN(idx) && state.characters[idx]) state.characters[idx] = [];
+// ─── タグ検索：辞書に部分一致するタグを state.extra に反映 ─────────────────────
+function searchTags() {
+  const query = document.getElementById('tag-search-input').value.trim().toLowerCase();
+  if (!query) {
+    state.extra = Object.keys(extraDictionary);
   } else {
-    state[type] = [];
+    state.extra = Object.keys(extraDictionary).filter(tagName => {
+      const info = extraDictionary[tagName];
+      return (
+        tagName.toLowerCase().includes(query) ||
+        (info.description && info.description.toLowerCase().includes(query)) ||
+        (info.category && info.category.toLowerCase().includes(query))
+      );
+    });
   }
+  renderExtraList();
+}
+
+// ─── カテゴリ一覧を再集計 ───────────────────────────────────────────────
+function updateCategories() {
+  extraCategories = [...new Set(
+    Object.values(extraDictionary)
+      .map(d => d.category)
+      .filter(c => c)
+  )];
+}
+
+// ─── 新規カテゴリ作成 ─────────────────────────────────────────────────────
+function createCategory() {
+  const input = document.getElementById('new-category-input');
+  const name = input.value.trim();
+  if (!name) {
+    alert('カテゴリ名を入力してください。');
+    return;
+  }
+  if (!extraCategories.includes(name)) {
+    extraCategories.push(name);
+    input.value = '';
+    alert(`カテゴリ「${name}」を追加しました。`);
+    renderAll();
+  } else {
+    alert('そのカテゴリは既に存在します。');
+  }
+}
+
+// ─── カテゴリ削除（使用中でも未分類にして削除） ─────────────────────────────────
+function deleteCategory() {
+  const select = document.getElementById('category-select');
+  const target = select.value;
+  if (!target) return;
+
+  const confirmMsg = `カテゴリ「${target}」は使用中のタグにも設定されています。\nこのカテゴリを削除し、該当タグのカテゴリを「未分類」に変更しますか？`;
+  if (!confirm(confirmMsg)) return;
+
+  // 該当するタグのカテゴリを空文字に（未分類扱い）
+  Object.keys(extraDictionary).forEach(tag => {
+    if (extraDictionary[tag].category === target) {
+      extraDictionary[tag].category = "";
+    }
+  });
+
+  // カテゴリリストから削除
+  extraCategories = extraCategories.filter(cat => cat !== target);
+
+  // 保存と再描画
+  localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+  updateCategories();
+  renderAll();
+
+  alert(`カテゴリ「${target}」を削除し、関連タグは未分類に変更されました。`);
+}
+
+// ─── Bulk一括カテゴリ設定 ─────────────────────────────────────────────────
+function applyBulkCategory() {
+  const selected = document.getElementById('bulk-category-select').value;
+  if (!selected) {
+    alert('カテゴリを選択してください');
+    return;
+  }
+
+  const checkboxes = document.querySelectorAll('#extra-list input[type="checkbox"]:checked');
+  if (checkboxes.length === 0) {
+    alert('カテゴリを設定したいタグにチェックを入れてください');
+    return;
+  }
+
+  checkboxes.forEach(chk => {
+    const rawTag = chk.value;
+    const parsed = parseWeight(rawTag);
+    const name = parsed.text;
+    if (!extraDictionary[name]) {
+      extraDictionary[name] = { description: "", category: "" };
+    }
+    extraDictionary[name].category = selected;
+  });
+
+  localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+  updateCategories();
   renderAll();
 }
 
-// ─── キャラクタープロンプト欄を追加（最大6つまで） ─────────────────────────────────
-function addCharacterPrompt() {
-  if (state.characters.length >= 6) {
-    return alert('キャラクタープロンプトは最大6つまでです。');
-  }
-  // 新しい配列を追加
-  state.characters.push([]);
-
-  // UIを再構築
-  resetCharacterSections(state.characters.length);
-  renderAll();
-}
-
-// ─── キャラクタープロンプト欄を削除 ───────────────────────────────────────────
-function removeCharacterPrompt(index) {
-  // 配列から該当インデックスを削除
-  state.characters.splice(index, 1);
-
-  // UIを再構築
-  resetCharacterSections(state.characters.length);
-  renderAll();
+// ─── 一括チェックトグル ───────────────────────────────────────────────
+function toggleBulkCheck() {
+  const checked = document.getElementById('bulk-check-toggle').checked;
+  const checkboxes = document.querySelectorAll('#extra-list input[type="checkbox"]');
+  checkboxes.forEach(chk => {
+    chk.checked = checked;
+  });
 }
 
 // ─── 最初のキャラクタープロンプト（1番目）を初期生成 ──────────────────────────
 window.onload = () => {
-  // 初期状態で characters = [[]] としておくので、UI は 1つだけ必要
+  // 辞書を localStorage から復元
+  const savedDict = localStorage.getItem('extraDictionary');
+  if (savedDict) {
+    extraDictionary = JSON.parse(savedDict);
+    state.extra = Object.keys(extraDictionary);
+  }
+  updateCategories();
+
   resetCharacterSections(1);
 
-  // "target-section" と "extra-target" に初期オプションを設定
   ['target-section', 'extra-target'].forEach(selectId => {
     const select = document.getElementById(selectId);
     if (select) {
@@ -510,10 +796,10 @@ window.onload = () => {
           id === 'base'
             ? 'ベースプロンプト'
             : id === 'negative'
-            ? 'ネガティブプロンプト'
-            : id === 'extra'
-            ? '補完スペース'
-            : 'キャラクタープロンプト 1';
+              ? 'ネガティブプロンプト'
+              : id === 'extra'
+                ? '補完スペース'
+                : 'キャラクタープロンプト 1';
         select.appendChild(option);
       });
     }
@@ -593,16 +879,12 @@ function loadTemplate() {
     return;
   }
 
-  // 全データを上書き
   state.base = [...data.base];
   state.negative = [...data.negative];
   state.extra = [...data.extra];
   state.characters = data.characters.map(arr => [...arr]);
 
-  // キャラ欄の数に応じて DOM も再構築
   resetCharacterSections(state.characters.length);
-
-  // 描画
   renderAll();
 
   alert(`テンプレート「${name}」を読み込みました。`);
@@ -636,7 +918,6 @@ function resetCharacterSections(count) {
       <div class="section-header">
         <span>キャラクタープロンプト ${i + 1}</span>
         <div class="header-buttons">
-          <!-- ← ここも「this」を渡すように変更 -->
           <button onclick="copyPrompt('output-character-${i}', this)">📋 コピー</button>
           ${i > 0 ? `<button class="remove-button" onclick="removeCharacterPrompt(${i})">削除欄</button>` : ''}
           <button onclick="clearPrompt('character-${i}')">🗑️ 全削除</button>
@@ -665,12 +946,42 @@ function resetCharacterSections(count) {
           id === 'base'
             ? 'ベースプロンプト'
             : id === 'negative'
-            ? 'ネガティブプロンプト'
-            : id === 'extra'
-            ? '補完スペース'
-            : `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`;
+              ? 'ネガティブプロンプト'
+              : id === 'extra'
+                ? '補完スペース'
+                : `キャラクタープロンプト ${parseInt(id.split('-')[1], 10) + 1}`;
         select.appendChild(option);
       });
     }
   });
+}
+
+function removeCharacterPrompt(index) {
+  state.characters.splice(index, 1);
+  resetCharacterSections(state.characters.length);
+  renderAll();
+}
+
+// ─── 各セクションを一括クリア ───────────────────────────────────────────────
+function clearPrompt(type) {
+  if (type === 'extra') {
+    state.extra = [];
+  } else if (type.startsWith('character-')) {
+    const idx = parseInt(type.split('-')[1], 10);
+    if (!isNaN(idx) && state.characters[idx]) state.characters[idx] = [];
+  } else {
+    state[type] = [];
+  }
+  renderAll();
+}
+
+// ─── キャラクタープロンプト追加機能（最大6つまで） ───────────────────────────
+function addCharacterPrompt() {
+  if (state.characters.length >= 6) {
+    alert('キャラクタープロンプトは最大6つまでです。');
+    return;
+  }
+  state.characters.push([]);
+  resetCharacterSections(state.characters.length);
+  renderAll();
 }
