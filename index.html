@@ -4,16 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 NovelAI v4 プロンプト調整器(α)</title>
-<!-- ここに空行 -->
 
-  <!-- OGP設定 -->
+  <!-- OGP / Twitter Card タグ -->
   <meta property="og:title" content="Prompt Tuner for NovelAI v4 (Alpha)" />
   <meta property="og:description" content="プロンプトをもっと自由に、もっと楽しく。" />
   <meta property="og:image" content="https://raw.githubusercontent.com/DuskVoyager/Prompt-Tuner-for-NovelAI-v4-Alpha-/main/BUG_samne.png" />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- Twitterカードタグ -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://prompt-tuner-for-novel-ai-v4-alpha.vercel.app/BUG_samne.png" />
 
@@ -55,30 +51,33 @@
       </details>
 
       <details class="section search-section">
-        <summary>🔍 タグ検索（準備中）</summary>
+        <summary>🔍 タグ検索</summary>
         <div class="template-controls">
-          <input type="text" id="tag-search-input" placeholder="タグを検索（※現在使用できません）" disabled style="flex: 1;" />
-          <select id="tag-search-target">
-            <option value="base">ベースプロンプト</option>
-            <option value="character-0">キャラクタープロンプト 1</option>
-            <option value="negative">ネガティブプロンプト</option>
-            <option value="extra">補完スペース</option>
+          <input type="text" id="tag-search-input" placeholder="タグを検索" autocomplete="off" oninput="searchTags()" style="flex: 1;" />
+        </div>
+        <!-- ── カテゴリ管理UI ── -->
+        <div id="category-management">
+          <input type="text" id="new-category-input" placeholder="新しいカテゴリ名を入力" autocomplete="off" />
+          <button onclick="createCategory()">カテゴリ追加</button>
+
+          <select id="category-select">
+            <option value="">-- カテゴリを選択 --</option>
           </select>
-          <button onclick="alert('この機能はまだ実装されていません')">➕ 追加</button>
+          <button onclick="deleteCategory()">カテゴリ削除</button>
         </div>
       </details>
 
-      <!-- ─── 行2: タグ読み込み（左2列ぶん横に広く） ─── -->
+      <!-- ─── 行2: タグ読み込み ─── -->
       <div class="section tag-loading span-two-columns">
         <div class="section-header">
           <span>タグ読み込み</span>
         </div>
-        <input type="text" id="tag-input" placeholder="カンマ区切りのタグを入力" style="width: 100%;" />
+        <input type="text" id="tag-input" placeholder="カンマ区切りのタグを入力" autocomplete="off" />
         <select id="target-section"></select>
         <button onclick="loadTags()">読み込む</button>
       </div>
 
-      <!-- ─── 行3: ベース・キャラ・ネガティブ欄（左2列ぶん） ─── -->
+      <!-- ─── 行3: ベース・キャラ・ネガティブ欄 ─── -->
       <div class="span-two-columns">
         <!-- ベースプロンプト欄 -->
         <div class="section">
@@ -123,12 +122,23 @@
           <span>📌 補完スペース</span>
         </div>
 
-        <!-- ボタン（読み込み・削除など）を先に配置 -->
+        <!-- ボタン（読み込み・削除など） -->
         <div class="extra-controls">
           <select id="extra-target" class="extra-select"></select>
           <button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
           <button class="delete-extra-button" onclick="deleteSelectedExtras()">🗑️ 削除</button>
-          <button class="clear-extra-button" onclick="clearPrompt('extra')">🗑️ 全削除</button>
+        </div>
+
+        <!-- ── 一括カテゴリ設定UI ── -->
+        <div class="extra-bulk-category">
+          <select id="bulk-category-select">
+            <option value="">カテゴリを選択</option>
+          </select>
+          <button onclick="applyBulkCategory()">カテゴリ設定</button>
+          <label>
+            <input type="checkbox" id="bulk-check-toggle" onchange="toggleBulkCheck()" />
+            一括選択
+          </label>
         </div>
 
         <!-- タグリスト部分だけスクロール -->
