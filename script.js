@@ -316,11 +316,27 @@ function renderExtraList() {
       item.appendChild(categorySpan);
 
       const meta = document.createElement('div');
+    meta.classList.add('description-meta');
       meta.style.fontSize = '0.75em';
       meta.style.color = '#666';
       meta.style.marginLeft = '1.5em';
       meta.innerText = info.description || '';
-      item.appendChild(meta);
+      
+    // 説明（description）編集可能
+    if (info) {
+      const descSpan = document.createElement('span');
+    descSpan.classList.add('description-text');
+      descSpan.textContent = info.description ? info.description + " ✏️" : "✏️";
+      descSpan.style.marginLeft = '0.5em';
+      descSpan.style.fontSize = '0.75em';
+      descSpan.style.color = '#333';
+      descSpan.style.cursor = 'pointer';
+      descSpan.title = 'クリックして編集';
+      descSpan.onclick = () => enterDescriptionEdit(tagName, descSpan);
+      item.appendChild(descSpan);
+    }
+
+    item.appendChild(meta);
     }
 
     container.appendChild(item);
@@ -984,4 +1000,95 @@ function addCharacterPrompt() {
   state.characters.push([]);
   resetCharacterSections(state.characters.length);
   renderAll();
+}
+
+
+// ─── 📁 辞書インポート機能 ─────────────────────────────────────────────
+
+function importDictionaryFromFile() {
+  const input = document.getElementById('dict-file-input');
+  if (!input.files.length) {
+    alert('辞書ファイルを選択してください。');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    importDictionaryFromText(e.target.result);
+  };
+  reader.readAsText(input.files[0]);
+}
+
+function importDictionaryFromText(text) {
+  const lines = text.trim().split('\n');
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    // タブ、半角複数スペース、全角スペースに対応
+    const parts = line.split(/[\t\u3000]+| {2,}/);
+    const tag = parts[0]?.trim();
+    const desc = parts[1]?.trim() || '';
+    const cat = parts[2]?.trim() || '';
+
+    if (!tag) continue;
+    extraDictionary[tag] = { description: desc, category: cat };
+  }
+
+  localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+  updateCategories();
+  state.extra = Object.keys(extraDictionary);
+  renderAll();
+}
+
+
+// ─── 和訳（description）編集用関数 ─────────────────────────────────────
+function enterDescriptionEdit(tagName, spanEl) {
+  const parent = spanEl.parentElement;
+  const current = (extraDictionary[tagName]?.description) || '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = current;
+  input.style.fontSize = '0.75em';
+  input.style.marginLeft = '0.5em';
+  input.style.width = '60%';
+
+  input.onkeydown = (e) => {
+    if (e.key === "Enter") input.blur();
+  };
+
+  input.onblur = () => {
+    if (!extraDictionary[tagName]) {
+      extraDictionary[tagName] = { description: "", category: "" };
+    }
+    extraDictionary[tagName].description = input.value.trim();
+    localStorage.setItem('extraDictionary', JSON.stringify(extraDictionary));
+    renderAll();
+  };
+
+  parent.replaceChild(input, spanEl);
+  input.focus();
+}
+
+
+// 📤 表示中の辞書タグを整形してテキストファイルとしてエクスポートする
+function exportVisibleDictionaryAligned() {
+  const header = "タグ名               和訳                     カテゴリ";
+  const lines = [header];
+
+  for (const tag of state.extra) {
+    const info = extraDictionary[tag] || {};
+    const desc = info.description || "";
+    const cat = info.category || "";
+    const line = `${tag.padEnd(20)}${desc.padEnd(25)}${cat}`;
+    lines.push(line);
+  }
+
+  const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = "辞書ファイル.txt";
+  link.click();
+  URL.revokeObjectURL(url);
 }
