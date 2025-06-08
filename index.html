@@ -48,6 +48,19 @@
           <button onclick="loadTemplate()">📥 読み込み</button>
           <button onclick="deleteTemplate()">🗑️ 削除</button>
         </div>
+        <div class="template-controls dictionary-import-section">
+          <input type="file" id="dict-file-input" accept=".txt" />
+          <button onclick="importDictionaryFromFile()">📁 辞書インポート</button>
+        </div>
+
+        <div class="template-controls dictionary-export-section">
+          <button onclick="exportVisibleDictionaryAligned()">📤 辞書エクスポート</button>
+        </div>
+        <div class="template-description">
+          補完スペースに表示してあるタグをテキストファイルとして書き出します
+        </div>
+
+        
       </details>
 
       <details class="section search-section">
@@ -147,6 +160,7 @@
     </div>
   </div>
 
+  
   <script src="script.js"></script>
 </body>
 </html>
