@@ -593,3 +593,31 @@ body.dark-mode #bulk-category-select {
   color: #e5e5e5;
   border-color: #666;
 }
+
+
+/* ── 辞書インポート用スタイル ─────────────────────── */
+.dictionary-import-section input,
+.dictionary-import-section button {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+
+/* ダークモード時の和訳表示（descSpan） */
+body.dark-mode .extra-item span {
+  color: #e5e5e5;
+}
+
+
+/* ダークモードでも和訳が白文字で見えるように強制指定 */
+body.dark-mode .description-text {
+  color: #e5e5e5 !important;
+}
+
+
+/* タグの下にある補足テキストも白っぽく */
+body.dark-mode .description-meta {
+  color: #dddddd !important;
+}
