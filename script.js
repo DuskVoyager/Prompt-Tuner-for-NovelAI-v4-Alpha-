@@ -310,9 +310,9 @@ function renderExtraList() {
       categorySpan.textContent = `[${categoryText}]`;
       categorySpan.style.marginLeft = '0.5em';
       categorySpan.style.fontSize = '0.75em';
-      categorySpan.style.cursor = 'pointer';
+      categorySpan.style.cursor = 'default';
       categorySpan.classList.add('category-label');
-      categorySpan.onclick = () => enterCategoryEdit(tagName, categorySpan);
+      // categorySpan.onclick = () => enterCategoryEdit(tagName, categorySpan);
       item.appendChild(categorySpan);
 
       const meta = document.createElement('div');
@@ -715,14 +715,25 @@ function createCategory() {
     alert('カテゴリ名を入力してください。');
     return;
   }
-  if (!extraCategories.includes(name)) {
-    extraCategories.push(name);
-    input.value = '';
-    alert(`カテゴリ「${name}」を追加しました。`);
-    renderAll();
-  } else {
+
+  if (extraCategories.includes(name)) {
     alert('そのカテゴリは既に存在します。');
+    return;
   }
+
+  // 未使用カテゴリがすでに存在しているかチェック
+  const unused = extraCategories.filter(cat => {
+    return !Object.values(extraDictionary).some(d => d.category === cat);
+  });
+  if (unused.length > 0) {
+    alert(`未使用のカテゴリ「${unused[0]}」があります。まずそれを使用してください。`);
+    return;
+  }
+
+  extraCategories.push(name);
+  input.value = '';
+  alert(`カテゴリ「${name}」を追加しました。`);
+  renderAll();
 }
 
 // ─── カテゴリ削除（使用中でも未分類にして削除） ─────────────────────────────────
