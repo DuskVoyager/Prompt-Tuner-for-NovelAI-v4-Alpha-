@@ -765,9 +765,6 @@ body.dark-mode #theme-toggle {
 /* === モバイル時 main-content 幅調整 === */
 
 @media (max-width: 1024px) {
-  #main-content {
-    width: 100%;
-    padding: 1em;
   }
 }
 
@@ -775,11 +772,6 @@ body.dark-mode #theme-toggle {
 /* === モバイル時 main-content を中央寄せ・半分幅に制限 === */
 
 @media (max-width: 1024px) {
-  #main-content {
-    width: 90vw;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 1em;
   }
 }
 
@@ -790,11 +782,6 @@ body.dark-mode #theme-toggle {
   body.sidebar-open #main-content,
   
 
-  body:not(.sidebar-open):not(.search-extra-open) #main-content {
-    width: 100vw;
-    max-width: none;
-    margin: 0;
-    padding: 1em;
   }
 }
 
@@ -812,11 +799,6 @@ details > summary::-webkit-details-marker {
 /* === main-content を常に100%幅にする === */
 
 @media (max-width: 1024px) {
-  #main-content {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 1em;
   }
 }
 
@@ -983,5 +965,90 @@ details > summary::-webkit-details-marker {
   #search-extra-panel {
     overflow-y: auto;
     max-height: calc(100vh - 60px);
+  }
+}
+
+@media (max-width: 768px) {
+  #main-content {
+    width: 100%;
+    max-width: 100vw;
+    padding: 0 1em;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+  }
+}
+
+@media (max-width: 1024px) {
+  #search-extra-panel {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    right: 0;
+    width: 80%;
+    max-width: 300px;
+    background: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  body.search-extra-open #search-extra-panel {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+  }
+}
+
+/* === main-content 縦スクロール無効化（最終優先） === */
+@media (max-width: 1024px) {
+  }
+}
+
+/* === 最終統一スタイル: main-content の固定＆スクロール除去 === */
+@media (max-width: 1024px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 1em !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    box-sizing: border-box;
+  }
+}
+
+/* === 中央縦スクロール完全除去（1400px以下） === */
+@media (max-width: 1400px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+}
+
+/* === フルサイズ時に補完スペースのタグ一覧だけ縦スクロール === */
+@media (min-width: 1401px) {
+  .extra-scroll-wrapper {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
   }
 }
