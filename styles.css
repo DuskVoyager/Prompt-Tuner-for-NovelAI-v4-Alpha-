@@ -1083,3 +1083,12 @@ details > summary::-webkit-details-marker {
     z-index: 1000;
   }
 }
+
+
+/* === 補完スペース：画面に収まるよう縦スクロール制限を常時有効化 === */
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 140px); /* ヘッダーやボタンを除いた高さ分 */
+  min-height: 0;
+  box-sizing: border-box;
+}
