@@ -1088,7 +1088,25 @@ details > summary::-webkit-details-marker {
 /* === 補完スペース：画面に収まるよう縦スクロール制限を常時有効化 === */
 .extra-scroll-wrapper {
   overflow-y: auto;
-  max-height: calc(100vh - 140px); /* ヘッダーやボタンを除いた高さ分 */
+  max-height: calc(100vh - 200px); /* ヘッダーやボタンを除いた高さ分 */
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+
+/* === 補完スペース全体を高さ480pxに固定 === */
+.extra-section {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 480px;
+  overflow: hidden;
+}
+
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  height: 100%;
+  max-height: none;
   min-height: 0;
   box-sizing: border-box;
 }
