@@ -634,11 +634,11 @@ body.dark-mode .description-meta {
 /* === 3カラムレイアウト拡張 === */
 #sidebar {
   width: 220px;
+  overflow-y: auto;
 }
 #main-content {
   flex: 1;
   padding: 1em;
-  overflow-y: auto;
 }
 #search-extra-panel {
   width: 300px;
@@ -657,6 +657,16 @@ body.dark-mode .description-meta {
 
 /* === モバイル対応 === */
 @media (max-width: 1024px) {
+  html, body {
+    overflow-x: hidden;
+  }
+  .layout {
+    overflow-x: hidden;
+  }
+  #main-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
   .layout {
     flex-direction: column;
   }
@@ -956,14 +966,6 @@ details > summary::-webkit-details-marker {
   transform: scale(0.85);
 }
 
-/* --- 補完スペーススクロール修正追加 --- */
-.extra-section {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: calc(100vh - 120px);
-  overflow: hidden;
-}
 
 .extra-scroll-wrapper {
   flex: 1 1 auto;
