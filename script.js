@@ -1103,18 +1103,3 @@ function exportVisibleDictionaryAligned() {
   link.click();
   URL.revokeObjectURL(url);
 }
-
-// モバイル用の開閉トグル機能
-const sbToggle = document.getElementById("sidebar-toggle");
-const seToggle = document.getElementById("search-extra-toggle");
-
-if (sbToggle) {
-  sbToggle.onclick = () => {
-    document.body.classList.toggle("sidebar-open");
-  };
-}
-if (seToggle) {
-  seToggle.onclick = () => {
-    document.body.classList.toggle("search-extra-open");
-  };
-}
