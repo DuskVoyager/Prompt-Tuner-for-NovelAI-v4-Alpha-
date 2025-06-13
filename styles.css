@@ -656,6 +656,10 @@ body.dark-mode .description-meta {
 }
 
 /* === モバイル対応 === */
+@media (max-width: 1024px) {
+  html, body {
+    overflow-x: hidden;
+  }
   .layout {
     overflow-x: hidden;
   }
@@ -724,6 +728,19 @@ body.dark-mode #theme-toggle {
 
 /* === スライド式モバイルメニュー追加 === */
 
+@media (max-width: 1024px) {
+  #sidebar, #search-extra-panel {
+    position: fixed;
+    top: 60px; /* ヘッダーの下 */
+    bottom: 0;
+    width: 80%;
+    max-width: 300px;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
 
   #search-extra-panel {
     right: 0;
@@ -747,16 +764,38 @@ body.dark-mode #theme-toggle {
 
 /* === モバイル時 main-content 幅調整 === */
 
+@media (max-width: 1024px) {
+  #main-content {
+    width: 100%;
+    padding: 1em;
+  }
 }
 
 
 /* === モバイル時 main-content を中央寄せ・半分幅に制限 === */
 
+@media (max-width: 1024px) {
+  #main-content {
+    width: 90vw;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 1em;
+  }
 }
 
 
 
 /* === サイドメニュー非表示時、main-content を全幅に広げる === */
+@media (max-width: 1024px) {
+  body.sidebar-open #main-content,
+  
+
+  body:not(.sidebar-open):not(.search-extra-open) #main-content {
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 1em;
+  }
 }
 
 
@@ -772,11 +811,23 @@ details > summary::-webkit-details-marker {
 
 /* === main-content を常に100%幅にする === */
 
+@media (max-width: 1024px) {
+  #main-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 1em;
+  }
 }
 
 
 /* === モバイル表示制御 === */
 
+@media (max-width: 1024px) {
+  #sidebar-toggle,
+  #search-extra-toggle {
+    display: inline-block;
+  }
 
   .close-button-container {
     visibility: hidden;
@@ -874,6 +925,11 @@ details > summary::-webkit-details-marker {
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.5);
 }
 
+@media (max-width: 1024px) {
+  #sidebar,
+  #search-extra-panel {
+    top: 100px !important;
+  }
 }
 /* ☰ サイドメニューのヘッダースタイル強調 */
 .template-section .section-header span {
@@ -923,86 +979,9 @@ details > summary::-webkit-details-marker {
   gap: 0.5em;
 }
 
-}
-
-@media (max-width: 768px) {
-  #main-content {
-    width: 100%;
-    max-width: 100vw;
-    padding: 0 1em;
-    box-sizing: border-box;
-  }
-}
-
-@media (max-width: 768px) {
-  .layout {
-    height: auto !important;
-  }
-  #main-content {
-  }
-}
-
-  body.search-extra-open #search-extra-panel {
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .layout {
-    height: auto !important;
-  }
-  #main-content {
-  }
-}
-
-/* === main-content 縦スクロール無効化（最終優先） === */
-}
-
-/* === 最終統一スタイル: main-content の固定＆スクロール除去 === */
-  #main-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 1em !important;
-    overflow-y: visible !important;
-    height: auto !important;
-    box-sizing: border-box;
-  }
-}
-
-/* === 中央縦スクロール完全除去（1400px以下） === */
-@media (max-width: 1400px) {
-  .layout {
-    height: auto !important;
-  }
-  #main-content {
-    height: auto !important;
-    overflow-y: visible !important;
-  }
-}
-
-/* === フルサイズ時に補完スペースのタグ一覧だけ縦スクロール === */
-@media (min-width: 1401px) {
-  .extra-scroll-wrapper {
-    overflow-y: auto;
-    max-height: calc(100vh - 100px);
-  }
-}
-
-/* === 折りたたみ最大幅（1024px以下）で中央を100%表示に固定 === */
 @media (max-width: 1024px) {
-  .layout {
-    height: auto !important;
-  }
-  #main-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 1em !important;
-    height: auto !important;
-    overflow-y: visible !important;
-    box-sizing: border-box;
-    flex: none !important;
+  #search-extra-panel {
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
   }
 }
