@@ -1110,3 +1110,26 @@ details > summary::-webkit-details-marker {
   min-height: 0;
   box-sizing: border-box;
 }
+
+
+/* === タグ編集エリアのスマホ横スクロール防止対応 === */
+@media (max-width: 768px) {
+  .tag-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .tag {
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tag input {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
+}
