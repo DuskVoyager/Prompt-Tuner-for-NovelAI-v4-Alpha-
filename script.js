@@ -1,13 +1,11 @@
 // script.js
 
-
-// === グローバル辞書定義 ===
+// ─── グローバル辞書定義 ─────────────────────────────────────────
 let extraDictionary = {};
 let extraCategories = [];
 let activeCategorySelect = null; // 現在表示中のカテゴリセレクト要素
 
-
-// === データ構造の初期化 ===
+// ─── データ構造の初期化 ─────────────────────────────────────────
 const state = {
   base: [],        // ベースプロンプトのタグ配列
   negative: [],    // ネガティブプロンプトのタグ配列
@@ -15,8 +13,7 @@ const state = {
   characters: [[]] // キャラクタープロンプトを入れる配列（最初は1つの空配列）
 };
 
-
-// === weight マップ（括弧数 → 数値） ===
+// ─── weight マップ（括弧数 → 数値）──────────────────────────────
 const weightMap = {
   positive: [
     1.00, 1.05, 1.10, 1.16, 1.22, 1.28, 1.34, 1.41, 1.48, 1.55,
@@ -28,8 +25,7 @@ const weightMap = {
   ]
 };
 
-
-// === ダークモード切り替え機能 ===
+// ─── ダークモード切り替え機能 ───────────────────────────────────
 const themeToggleBtn = document.getElementById('theme-toggle');
 themeToggleBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
@@ -38,8 +34,7 @@ themeToggleBtn.addEventListener('click', () => {
     : '🌙 ダークモード';
 });
 
-
-// === コピー機能：指定ID のテキスト（最終出力）をクリップボードにコピー ===
+// ─── コピー機能：指定ID のテキスト（最終出力）をクリップボードにコピー ───────────
 function copyPrompt(elementId, buttonEl = null) {
   const text = document.getElementById(elementId)?.textContent || '';
   if (!text) {
@@ -56,8 +51,7 @@ function copyPrompt(elementId, buttonEl = null) {
     });
 }
 
-
-// === 吹き出し（ツールチップ）を表示する関数 ===
+// ─── 吹き出し（ツールチップ）を表示する関数 ─────────────────────────
 function showCopyTooltip(button) {
   const tooltip = document.createElement('div');
   tooltip.textContent = 'コピーしました';
@@ -89,8 +83,7 @@ function showCopyTooltip(button) {
   }, 1800);
 }
 
-
-// === タグ文字列を { kind, text, positive, negative, weight } に分解 ===
+// ─── タグ文字列を { kind, text, positive, negative, weight } に分解 ─────────────────
 function parseWeight(tag) {
   const curly = tag.match(/^({+)(.*?)(}+)$/);
   const square = tag.match(/^(\[+)(.*?)(\]+)$/);
@@ -123,23 +116,20 @@ function parseWeight(tag) {
   return { kind: 'plain', text: tag, positive: 0, negative: 0, weight: 1.00 };
 }
 
-
-// === {text, positive, negative} から括弧形式文字列を生成 ===
+// ─── {text, positive, negative} から括弧形式文字列を生成 ─────────────────────────
 function formatBrackets(text, pos, neg) {
   if (pos > 0) return '{'.repeat(pos) + text + '}'.repeat(pos);
   if (neg > 0) return '['.repeat(neg) + text + ']'.repeat(neg);
   return text;
 }
 
-
-// === {text, positive, negative} からコロン形式文字列を生成 ===
+// ─── {text, positive, negative} からコロン形式文字列を生成 ─────────────────────────
 function formatColon(text, pos, neg) {
   const w = getWeightValue(pos, neg);
   return `${w}::${text}::`;
 }
 
-
-// === 現在の bracket レベルに応じた weight 数値を取得 ===
+// ─── 現在の bracket レベルに応じた weight 数値を取得 ─────────────────────────
 function getWeightValue(pos, neg) {
   const idx = Math.min(20, Math.max(0, pos || neg));
   if (pos > 0) {
@@ -151,8 +141,7 @@ function getWeightValue(pos, neg) {
   return '1.00';
 }
 
-
-// === weight 数値から対応する括弧数を逆算（厳密一致） ===
+// ─── weight 数値から対応する括弧数を逆算（厳密一致） ─────────────────────────
 function getBracketCountFromWeight(weight, type = 'positive') {
   const table = weightMap[type];
   for (let i = 0; i < table.length; i++) {
@@ -163,8 +152,7 @@ function getBracketCountFromWeight(weight, type = 'positive') {
   return 0;
 }
 
-
-// === 各セクションにタグを描画 (base, negative, characters) ===
+// ─── 各セクションにタグを描画 (base, negative, characters) ─────────────────────
 function renderTags(id, targetArray) {
   const container = document.getElementById(id);
   if (!container) return;
@@ -279,8 +267,7 @@ function renderTags(id, targetArray) {
   });
 }
 
-
-// === 補完スペース用：チェックボックス付きリストを描画 ===
+// ─── 補完スペース用：チェックボックス付きリストを描画 ─────────────────────────
 function renderExtraList() {
   const container = document.getElementById('extra-list');
   if (!container) return;
@@ -356,8 +343,7 @@ function renderExtraList() {
   });
 }
 
-
-// === カテゴリセレクトを再描画 ===
+// ─── カテゴリセレクトを再描画 ───────────────────────────────────────
 function renderCategorySelect() {
   const select = document.getElementById('category-select');
   if (!select) return;
@@ -370,8 +356,7 @@ function renderCategorySelect() {
   });
 }
 
-
-// === Bulkカテゴリセレクトを再描画 ===
+// ─── Bulkカテゴリセレクトを再描画 ─────────────────────────────────────
 function renderBulkCategorySelect() {
   const select = document.getElementById('bulk-category-select');
   if (!select) return;
@@ -384,8 +369,7 @@ function renderBulkCategorySelect() {
   });
 }
 
-
-// === カテゴリ編集時に表示される <select> を生成・処理 ===
+// ─── カテゴリ編集時に表示される <select> を生成・処理 ───────────────────
 function enterCategoryEdit(tagName, spanEl) {
   // 既に別のセレクトが開かれていたら閉じる
   if (activeCategorySelect) {
@@ -453,8 +437,7 @@ function enterCategoryEdit(tagName, spanEl) {
   }, 0);
 }
 
-
-// === 補完スペース用：読み込み先セレクトにオプションを表示 ===
+// ─── 補完スペース用：読み込み先セレクトにオプションを表示 ────────────────────
 function renderExtraTargetOptions() {
   const select = document.getElementById('extra-target');
   if (!select) return;
@@ -477,8 +460,7 @@ function renderExtraTargetOptions() {
   });
 }
 
-
-// === 各セクションの選択肢（左側 target-section）を更新 ===
+// ─── 各セクションの選択肢（左側 target-section）を更新 ───────────────────────────
 function renderLeftTargetOptions() {
   const leftSelect = document.getElementById('target-section');
   if (!leftSelect) return;
@@ -503,8 +485,7 @@ function renderLeftTargetOptions() {
   });
 }
 
-
-// === 各セクションの「最終プロンプト」表示を更新 ===
+// ─── 各セクションの「最終プロンプト」表示を更新 ─────────────────────────────
 function updateOutputBoxes() {
   document.getElementById('output-base').textContent = state.base.join(', ');
   document.getElementById('output-negative').textContent = state.negative.join(', ');
@@ -514,8 +495,7 @@ function updateOutputBoxes() {
   });
 }
 
-
-// === 全セクションを再描画し、出力更新 ===
+// ─── 全セクションを再描画し、出力更新 ─────────────────────────────────────
 function renderAll() {
   renderTags('base', state.base);
   renderTags('negative', state.negative);
@@ -531,8 +511,7 @@ function renderAll() {
   renderBulkCategorySelect();
 }
 
-
-// === タグ読み込み：テキスト入力を各配列に振り分けし、括弧やコロンを数値形式に変換 ===
+// ─── タグ読み込み：テキスト入力を各配列に振り分けし、括弧やコロンを数値形式に変換 ─────────────────
 function loadTags() {
   const input = document.getElementById('tag-input').value;
   const target = document.getElementById('target-section').value;
@@ -641,8 +620,7 @@ function loadTags() {
   renderAll();
 }
 
-
-// === 補完スペースから選択したタグを読み込む ===
+// ─── 補完スペースから選択したタグを読み込む ─────────────────────────────────
 function loadSelectedExtras() {
   const target = document.getElementById('extra-target').value;
   const items = document.querySelectorAll('#extra-list input[type="checkbox"]:checked');
@@ -670,8 +648,7 @@ function loadSelectedExtras() {
   renderAll();
 }
 
-
-// === 補完スペースから選択したタグを削除（辞書からも完全削除） ===
+// ─── 補完スペースから選択したタグを削除（辞書からも完全削除） ────────────────────────────────
 function deleteSelectedExtras() {
   const items = document.querySelectorAll('#extra-list input[type="checkbox"]:checked');
   if (items.length === 0) {
@@ -703,8 +680,7 @@ function deleteSelectedExtras() {
   renderAll();
 }
 
-
-// === タグ検索：辞書に部分一致するタグを state.extra に反映 ===
+// ─── タグ検索：辞書に部分一致するタグを state.extra に反映 ─────────────────────
 function searchTags() {
   const query = document.getElementById('tag-search-input').value.trim().toLowerCase();
   if (!query) {
@@ -722,8 +698,7 @@ function searchTags() {
   renderExtraList();
 }
 
-
-// === カテゴリ一覧を再集計 ===
+// ─── カテゴリ一覧を再集計 ───────────────────────────────────────────────
 function updateCategories() {
   extraCategories = [...new Set(
     Object.values(extraDictionary)
@@ -732,8 +707,7 @@ function updateCategories() {
   )];
 }
 
-
-// === 新規カテゴリ作成 ===
+// ─── 新規カテゴリ作成 ─────────────────────────────────────────────────────
 function createCategory() {
   const input = document.getElementById('new-category-input');
   const name = input.value.trim();
@@ -762,8 +736,7 @@ function createCategory() {
   renderAll();
 }
 
-
-// === カテゴリ削除（使用中でも未分類にして削除） ===
+// ─── カテゴリ削除（使用中でも未分類にして削除） ─────────────────────────────────
 function deleteCategory() {
   const select = document.getElementById('category-select');
   const target = select.value;
@@ -790,8 +763,7 @@ function deleteCategory() {
   alert(`カテゴリ「${target}」を削除し、関連タグは未分類に変更されました。`);
 }
 
-
-// === Bulk一括カテゴリ設定 ===
+// ─── Bulk一括カテゴリ設定 ─────────────────────────────────────────────────
 function applyBulkCategory() {
   const selected = document.getElementById('bulk-category-select').value;
   if (!selected) {
@@ -820,8 +792,7 @@ function applyBulkCategory() {
   renderAll();
 }
 
-
-// === 一括チェックトグル ===
+// ─── 一括チェックトグル ───────────────────────────────────────────────
 function toggleBulkCheck() {
   const checked = document.getElementById('bulk-check-toggle').checked;
   const checkboxes = document.querySelectorAll('#extra-list input[type="checkbox"]');
@@ -830,8 +801,7 @@ function toggleBulkCheck() {
   });
 }
 
-
-// === 最初のキャラクタープロンプト（1番目）を初期生成 ===
+// ─── 最初のキャラクタープロンプト（1番目）を初期生成 ──────────────────────────
 window.onload = () => {
   // 辞書を localStorage から復元
   const savedDict = localStorage.getItem('extraDictionary');
@@ -866,8 +836,8 @@ window.onload = () => {
   renderAll();
 };
 
+// ─── テンプレート管理ロジック ───────────────────────────────────────────
 
-// === テンプレート管理ロジック ===
 // 保存キー名
 const TEMPLATE_STORAGE_KEY = 'promptTemplates';
 
@@ -964,8 +934,7 @@ function deleteTemplate() {
   alert(`テンプレート「${name}」を削除しました。`);
 }
 
-
-// === キャラクタープロンプト欄をリセットして再生成 ===
+// ─── キャラクタープロンプト欄をリセットして再生成 ─────────────────────────
 function resetCharacterSections(count) {
   const container = document.getElementById('character-sections');
   container.innerHTML = '';
@@ -1020,8 +989,7 @@ function removeCharacterPrompt(index) {
   renderAll();
 }
 
-
-// === 各セクションを一括クリア ===
+// ─── 各セクションを一括クリア ───────────────────────────────────────────────
 function clearPrompt(type) {
   if (type === 'extra') {
     state.extra = [];
@@ -1034,8 +1002,7 @@ function clearPrompt(type) {
   renderAll();
 }
 
-
-// === キャラクタープロンプト追加機能（最大6つまで） ===
+// ─── キャラクタープロンプト追加機能（最大6つまで） ───────────────────────────
 function addCharacterPrompt() {
   if (state.characters.length >= 6) {
     alert('キャラクタープロンプトは最大6つまでです。');
@@ -1047,8 +1014,8 @@ function addCharacterPrompt() {
 }
 
 
+// ─── 📁 辞書インポート機能 ─────────────────────────────────────────────
 
-// === 📁 辞書インポート機能 ===
 function importDictionaryFromFile() {
   const input = document.getElementById('dict-file-input');
   if (!input.files.length) {
@@ -1086,8 +1053,7 @@ function importDictionaryFromText(text) {
 }
 
 
-
-// === 和訳（description）編集用関数 ===
+// ─── 和訳（description）編集用関数 ─────────────────────────────────────
 function enterDescriptionEdit(tagName, spanEl) {
   const parent = spanEl.parentElement;
   const current = (extraDictionary[tagName]?.description) || '';
