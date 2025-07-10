@@ -1,4 +1,8 @@
-/* === ベーススタイル === */
+/* styles.css */
+/* ============================= */
+/* ======== ベーススタイル ======== */
+/* ============================= */
+
 body {
   font-family: sans-serif;
   background: #f0f0f5;
@@ -16,6 +20,7 @@ h1 {
   align-items: center;
 }
 
+/* テーマ切替ボタン */
 .theme-toggle {
   background: transparent;
   border: none;
@@ -24,14 +29,14 @@ h1 {
   padding: 0.3em;
 }
 
-/* === レイアウト設定（Flexbox） === */
+/* ── 全体レイアウト: Flexboxで左右2カラム ───────────────────────── */
 .layout {
   display: flex;
   gap: 16px;
   align-items: flex-start;
 }
 
-/* === メインコンテンツ：グリッド2列 === */
+/* 左カラム（メインコンテンツ） */
 .main-content {
   flex: 2;
   display: grid;
@@ -40,11 +45,12 @@ h1 {
   gap: 16px;
 }
 
+/* 左カラム 内部で 2列に跨る要素 */
 .main-content .span-two-columns {
   grid-column: 1 / span 2;
 }
 
-/* === サイドバー：縦スクロール制御 === */
+/* 右カラム（サイドバー） */
 .sidebar {
   flex: 1;
   display: flex;
@@ -54,7 +60,7 @@ h1 {
   overflow: hidden;
 }
 
-/* === セクション共通スタイル === */
+/* ── 各セクション共通スタイル ───────────────────────────────────────── */
 .section {
   background: #ffffff;
   border-radius: 8px;
@@ -65,6 +71,7 @@ h1 {
   max-height: none;
 }
 
+/* details をセクションとして使う場合 */
 details.section {
   padding: 1em;
   background: #ffffff;
@@ -72,37 +79,24 @@ details.section {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* summary 部分 */
 details > summary {
   font-weight: bold;
   cursor: pointer;
   margin-bottom: 0.5em;
 }
 
-/* === テンプレート操作UI === */
+/* 見出し右のボタン群をまとめる */
+.header-buttons > button {
+  margin-left: 0.5em;
+}
+
+/* ── テンプレート管理用コントロール ───────────────────────────────────── */
 .template-controls {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   gap: 0.5em;
-  margin-bottom: 0.75em;
-}
-
-.template-controls input,
-.template-controls select,
-.template-controls button {
-  padding: 0.4em 0.6em;
-  font-size: 0.95em;
-  flex: 1;
-  min-width: 120px;
-  box-sizing: border-box;
-}
-
-body.dark-mode .template-controls,
-body.dark-mode .extra-controls,
-body.dark-mode .extra-bulk-category,
-body.dark-mode .template-description {
-  background-color: transparent;
-  color: inherit;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
 }
 
 #template-name-input,
@@ -112,19 +106,7 @@ body.dark-mode .template-description {
   border: 1px solid #ccc;
 }
 
-.character-add-button {
-  margin-top: 1em;
-  text-align: left;
-}
-
-.character-add-button button {
-  width: 100%;
-  padding: 0.6em 1em;
-  font-size: 1em;
-}
-
-
-/* === タグ検索入力欄 === */
+/* ── タグ検索入力欄 ───────────────────────────────────────── */
 #tag-search-input {
   padding: 0.5em;
   border-radius: 5px;
@@ -133,7 +115,7 @@ body.dark-mode .template-description {
   color: #000;
 }
 
-/* === カテゴリ管理エリア === */
+/* ── カテゴリ管理エリア（縦並び） ───────────────────────────────────────── */
 #category-management {
   margin-top: 1em;
   padding: 1em;
@@ -161,7 +143,7 @@ body.dark-mode .template-description {
   background-color: #286090;
 }
 
-/* === タグ読み込みセクション === */
+/* ── タグ読み込みセクション ─────────────────────────────────────────── */
 .tag-loading {
   display: flex;
   flex-direction: column;
@@ -181,7 +163,7 @@ body.dark-mode .template-description {
   border: 1px solid #ccc;
 }
 
-/* === 補完スペース：全体構造 === */
+/* ── 補完スペース用スタイル ───────────────────────────────────────── */
 .extra-section {
   display: flex;
   flex-direction: column;
@@ -228,7 +210,7 @@ body.dark-mode .template-description {
   background-color: #c53030;
 }
 
-/* === 補完スペース：一括カテゴリUI === */
+/* ── 一括カテゴリ設定 UI ───────────────────────────────────────── */
 .extra-bulk-category {
   display: flex;
   align-items: center;
@@ -265,69 +247,67 @@ body.dark-mode .template-description {
   white-space: nowrap;
 }
 
-/* === 補完スペース：タグリスト表示 === */
 .extra-list {
   flex: 1 1 auto;
   overflow-y: auto;
-  min-height: 0; display: flex;
+  min-height: 0; /* Firefox対応 */
+  display: flex;
   flex-direction: column;
   gap: 0.5em;
 }
 
-/* === タグ表示エリア（共通） === */
+/* ── タグ表示領域（ベース／キャラ／ネガティブ） ─────────────────────────── */
 .tag-container {
   display: flex;
-  flex-wrap: wrap;               gap: 0.5em;                    max-height: 160px;            overflow-y: auto;             padding: 0.5em;
-  background: #f9f9f9;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0.5em;
+  background: #f9f9ff;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  box-sizing: border-box;
+  border-radius: 8px;
   transition: background 0.3s, border-color 0.3s;
 }
 
-body.dark-mode .tag-container {
-  background: #2b2b3b;
-  border-color: #444;
+/* 個々のタグ */
+.tag {
+  display: flex;
+  align-items: center;
+  background: #e0e7ff;
+  padding: 0.3em 0.6em;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
 }
 
-@media (max-width: 768px) {
-/* === タグ表示エリア（共通） === */
-  .tag-container {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .tag input {
-    min-width: 0;
-    max-width: 100%;
-    flex: 1 1 auto;
-  }
+/* 括弧強調（positive） */
+.tag.positive {
+  background: #c7eaff;
+  border-color: #3b82f6;
 }
 
-/* === タグ要素の基本スタイル === */
+/* 括弧抑制（negative） */
+.tag.negative {
+  background: #ffe0e0;
+  border-color: #dc2626;
+}
 
+/* コロン形式 */
+.tag.colon {
+  background: #e6ffcc;
+  border-color: #84cc16;
+  color: #000000;
+}
 
-body.dark-mode .tag {
-  background: #3a3f5f;
+/* plain（通常タグ）はデフォルトの青系背景 */
+.tag.plain {
+  background: #e0e7ff;
   border-color: transparent;
 }
 
-/* === タグ要素の基本スタイル === */
-.tag {
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-
-
-
-
-
-
-
-
+/* タグ内の入力フィールド */
 .tag input {
   border: none;
   background: transparent;
@@ -336,13 +316,12 @@ body.dark-mode .tag {
   color: inherit;
 }
 
+/* weight 数値表示（表示モードと編集モード） */
 .tag .weight {
   font-size: 0.8em;
   margin-left: 0.5em;
   color: #444;
   cursor: pointer;
-  user-select: none;
-  transition: color 0.3s;
 }
 
 .tag .weight.editing {
@@ -350,24 +329,13 @@ body.dark-mode .tag {
 }
 
 .tag .weight-input {
-  width: 3.2em;                  font-size: 0.85em;             margin-left: 0.5em;            display: none;                 padding: 0.2em 0.4em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #222;
-  box-sizing: border-box;
+  width: 3em;
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  display: none;
 }
 
-body.dark-mode .tag .weight-input {
-  background-color: #333;
-  color: #eee;
-  border-color: #555;
-}
-
-body.dark-mode .tag .weight {
-  color: #ddd;
-}
-
+/* タグ内のボタン（+ - ×） */
 .tag button {
   margin-left: 0.3em;
   background: #ef4444;
@@ -388,7 +356,7 @@ body.dark-mode .tag .weight {
   background: #c53030;
 }
 
-/* === ドラッグハンドル === */
+/* ── ドラッグハンドル用スタイル ───────────────────────────────────────── */
 .drag-handle {
   cursor: grab;
   margin-right: 0.4em;
@@ -400,8 +368,14 @@ body.dark-mode .drag-handle {
   color: #aaa;
 }
 
-body.dark-mode 
+/* コロン形式タグ：ダークモードでも濃い緑背景＋明るい文字色 */
+body.dark-mode .tag.colon {
+  background: #335533 !important;
+  border-color: #84cc16 !important;
+  color: #eaffea !important;
+}
 
+/* ── 共通ボタン／入力欄スタイル ───────────────────────────────────────── */
 button,
 select,
 input[type="text"],
@@ -414,19 +388,11 @@ input[type="file"] {
   transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
-#tag-input,
-#target-section {
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  padding: 0.4em;
-  font-size: 1em;
-}
-
 button:hover {
   background: #e2e8f0;
 }
 
+/* キャラクタープロンプト追加ボタン */
 .add-button {
   background-color: #22c55e;
   color: white;
@@ -438,6 +404,7 @@ button:hover {
   background-color: #16a34a;
 }
 
+/* キャラクタープロンプト削除ボタン */
 .remove-button {
   background-color: #ef4444;
   color: white;
@@ -449,27 +416,26 @@ button:hover {
   background-color: #c53030;
 }
 
-/* === 出力表示ボックス === */
+/* ── 各プロンプト欄内の「最終プロンプト」表示ボックス ───────────────────────── */
 .prompt-output-box {
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 0.5em;
   margin-top: 0.5em;
-  min-height: 80px;
-  max-height: 200px;
+  max-height: 100px;
   overflow-y: auto;
-  font-size: 0.95em;
-  color: #333;
+  font-size: 0.85em;
 }
 
 body.dark-mode .prompt-output-box {
-  background-color: #181818;
-  border-color: #444;
-  color: #ddd;
+  background: #2a2a3a;
+  border-color: #555;
 }
 
-/* === ダークモード：ベース === */
+/* ============================= */
+/* ======== ダークモード ========= */
+/* ============================= */
 body.dark-mode {
   background: #1e1e2e;
   color: #e5e5e5;
@@ -488,12 +454,32 @@ body.dark-mode .section {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-body.dark-mode 
+body.dark-mode .tag-container {
+  background: #2b2b3b;
+  border-color: #444;
+}
 
-body.dark-mode 
+body.dark-mode .tag {
+  background: #3a3f5f;
+  border-color: transparent;
+}
+
+body.dark-mode .tag.positive {
+  background: #2b6cb0;
+  border-color: #90cdf4;
+}
+
+body.dark-mode .tag.negative {
+  background: #a94442;
+  border-color: #fc8181;
+}
 
 body.dark-mode .tag input {
   color: #e5e5e5;
+}
+
+body.dark-mode .tag .weight {
+  color: #ddd;
 }
 
 body.dark-mode .tag button {
@@ -538,15 +524,18 @@ body.dark-mode .extra-section {
   color: #e5e5e5;
 }
 
+/* プレースホルダーの色調整 */
 body.dark-mode input::placeholder,
 body.dark-mode input[type="file"]::placeholder {
   color: #aaa;
 }
 
+/* チェックボックスのアクセントカラー */
 body.dark-mode input[type="checkbox"] {
   accent-color: #90cdf4;
 }
 
+/* スクロールバー（Chrome系） */
 body.dark-mode ::-webkit-scrollbar {
   background: #444;
 }
@@ -554,6 +543,9 @@ body.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
 }
 
+/* ─── ダークテーマ対応追加 ───────────────────────────────────────── */
+
+/* タグ検索欄 */
 body.dark-mode #tag-search-input {
   background: #3a3a4a;
   color: #e5e5e5;
@@ -563,6 +555,7 @@ body.dark-mode #tag-search-input::placeholder {
   color: #aaa;
 }
 
+/* カテゴリ管理UI */
 body.dark-mode #category-management {
   background: #2a2a3a;
   border-color: #444;
@@ -584,14 +577,17 @@ body.dark-mode #category-management button:hover {
   background-color: #1d4ed8;
 }
 
+/* カテゴリ表示ラベル（未分類／カテゴリ名）の色切替 */
 .category-label {
   color: #0066cc;
 }
 
 body.dark-mode .category-label {
-  color: #ffffff; font-weight: bold;
+  color: #ffffff; /* ダークテーマ時は白 */
+  font-weight: bold;
 }
 
+/* ダークテーマ時の補完スペース下のカテゴリセレクト対応 */
 body.dark-mode #bulk-category-select {
   background: #3a3a4a;
   color: #e5e5e5;
@@ -599,6 +595,7 @@ body.dark-mode #bulk-category-select {
 }
 
 
+/* ── 辞書インポート用スタイル ─────────────────────── */
 .dictionary-import-section input,
 .dictionary-import-section button {
   margin-top: 0.5em;
@@ -608,21 +605,24 @@ body.dark-mode #bulk-category-select {
 }
 
 
+/* ダークモード時の和訳表示（descSpan） */
 body.dark-mode .extra-item span {
   color: #e5e5e5;
 }
 
 
+/* ダークモードでも和訳が白文字で見えるように強制指定 */
 body.dark-mode .description-text {
   color: #e5e5e5 !important;
 }
 
 
+/* タグの下にある補足テキストも白っぽく */
 body.dark-mode .description-meta {
   color: #dddddd !important;
 }
 
-/* === ヘッダー設定 === */
+/* === 3カラム用ヘッダー === */
 .header {
   display: flex;
   justify-content: space-between;
@@ -631,37 +631,35 @@ body.dark-mode .description-meta {
   padding: 0.5em 1em;
 }
 
-/* === サイドバー幅とスクロール === */
+/* === 3カラムレイアウト拡張 === */
 #sidebar {
   width: 220px;
-  min-width: 260px;       overflow-y: auto;
-  overflow-x: hidden;     }
-
+  overflow-y: auto;
+}
 #main-content {
   flex: 1;
   padding: 1em;
 }
-/* === 検索／補完パネル幅 === */
 #search-extra-panel {
   width: 300px;
 }
 
-/* === レイアウト設定（Flexbox） === */
 .layout {
   display: flex;
-  height: calc(100vh - 60px); gap: 16px;
+  height: calc(100vh - 60px); /* ヘッダー除外 */
+  gap: 16px;
 }
 
-/* === セクション共通スタイル === */
+/* 区切り線 */
 .section {
   border-right: 1px solid #ccc;
 }
 
+/* === モバイル対応 === */
 @media (max-width: 1024px) {
   html, body {
     overflow-x: hidden;
   }
-/* === レイアウト設定（Flexbox） === */
   .layout {
     overflow-x: hidden;
   }
@@ -669,12 +667,10 @@ body.dark-mode .description-meta {
     padding-left: 0.5em;
     padding-right: 0.5em;
   }
-/* === レイアウト設定（Flexbox） === */
   .layout {
     flex-direction: column;
   }
   #sidebar,
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     display: none;
   }
@@ -684,7 +680,7 @@ body.dark-mode .description-meta {
   }
 }
 
-/* === ダークモード：ベース === */
+/* === ダークモード強化 === */
 body.dark-mode {
   background-color: #121212;
   color: #eee;
@@ -707,11 +703,21 @@ body.dark-mode textarea {
   border: 1px solid #555;
 }
 
-/* === 補完スペース：一括カテゴリUI === */
+body.dark-mode .prompt-output-box,
+body.dark-mode .tag-container {
+  background-color: #1a1a1a;
+}
+
 .extra-bulk-category {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+}
+
+body.dark-mode .header {
+  background-color: #1a1a1a;
+  color: #eee;
+  border-bottom: 1px solid #444;
 }
 
 body.dark-mode #theme-toggle {
@@ -720,10 +726,13 @@ body.dark-mode #theme-toggle {
   border: 1px solid #555;
 }
 
+/* === スライド式モバイルメニュー追加 === */
+
 @media (max-width: 1024px) {
   #sidebar, #search-extra-panel {
     position: fixed;
-    top: 60px; bottom: 0;
+    top: 60px; /* ヘッダーの下 */
+    bottom: 0;
     width: 80%;
     max-width: 300px;
     background: #fff;
@@ -733,7 +742,6 @@ body.dark-mode #theme-toggle {
     z-index: 1000;
   }
 
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     right: 0;
     left: auto;
@@ -748,22 +756,28 @@ body.dark-mode #theme-toggle {
     transform: translateX(0);
   }
 
-/* === レイアウト設定（Flexbox） === */
   .layout {
     flex-direction: column;
   }
 }
 
 
+/* === モバイル時 main-content 幅調整 === */
 
+@media (max-width: 1024px) {
+  }
+}
+
+
+/* === モバイル時 main-content を中央寄せ・半分幅に制限 === */
+
+@media (max-width: 1024px) {
+  }
 }
 
 
 
-}
-
-
-
+/* === サイドメニュー非表示時、main-content を全幅に広げる === */
 @media (max-width: 1024px) {
   body.sidebar-open #main-content,
   
@@ -773,6 +787,7 @@ body.dark-mode #theme-toggle {
 
 
 
+/* === summaryの三角マークを非表示にする === */
 details > summary {
   list-style: none;
 }
@@ -781,9 +796,14 @@ details > summary::-webkit-details-marker {
 }
 
 
+/* === main-content を常に100%幅にする === */
 
+@media (max-width: 1024px) {
+  }
 }
 
+
+/* === モバイル表示制御 === */
 
 @media (max-width: 1024px) {
   #sidebar-toggle,
@@ -811,9 +831,17 @@ details > summary::-webkit-details-marker {
 
 
 
+/* === ダークモード対応スタイル追加 === */
 .dark-mode .section {
   background-color: #222;
   color: #eee;
+}
+
+.dark-mode .template-controls,
+.dark-mode .extra-controls,
+.dark-mode .extra-bulk-category {
+  background-color: transparent;
+  color: inherit;
 }
 
 .dark-mode input,
@@ -830,6 +858,14 @@ details > summary::-webkit-details-marker {
   border: 1px solid #888;
 }
 
+.dark-mode .prompt-output-box {
+  background-color: #111;
+  border-color: #444;
+}
+
+
+
+/* === ダークモード補完: 内部セクションの背景・枠色・余白など調整 === */
 .dark-mode .template-section,
 .dark-mode .search-section,
 .dark-mode .extra-section {
@@ -837,6 +873,14 @@ details > summary::-webkit-details-marker {
   color: #eee;
   border-radius: 8px;
   box-shadow: none;
+}
+
+.dark-mode .template-controls,
+.dark-mode .extra-controls,
+.dark-mode .extra-bulk-category,
+.dark-mode .template-description {
+  background-color: transparent;
+  color: inherit;
 }
 
 .dark-mode select,
@@ -847,6 +891,15 @@ details > summary::-webkit-details-marker {
   border: 1px solid #666;
 }
 
+.dark-mode .tag-container,
+.dark-mode .prompt-output-box {
+  background-color: #181818;
+  border-color: #444;
+}
+
+
+
+/* === ダークモード補完（折りたたみ時のパネル背景に反映） === */
 .dark-mode #sidebar,
 .dark-mode #search-extra-panel {
   background-color: #222;
@@ -856,34 +909,19 @@ details > summary::-webkit-details-marker {
 
 @media (max-width: 1024px) {
   #sidebar,
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     top: 100px !important;
   }
 }
+/* ☰ サイドメニューのヘッダースタイル強調 */
 .template-section .section-header span {
   font-weight: bold;
   font-size: 1.1em;
 }
 
-/* === セクションヘッダー調整 === */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5em;
-}
 
-.section-header h2 {
-  font-size: 1.1em;
-  margin: 0;
-}
 
-.section-header button {
-  font-size: 0.9em;
-  padding: 0.3em 0.6em;
-}
-
+/* === 補完スペース：コンパクトレイアウト === */
 .extra-row {
   display: flex;
   justify-content: space-between;
@@ -910,7 +948,13 @@ details > summary::-webkit-details-marker {
   transform: scale(0.85);
 }
 
-/* === 補完スペース：タグリスト表示 === */
+
+.extra-scroll-wrapper {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 .extra-list {
   display: flex;
   flex-direction: column;
@@ -918,7 +962,6 @@ details > summary::-webkit-details-marker {
 }
 
 @media (max-width: 1024px) {
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     overflow-y: auto;
     max-height: calc(100vh - 60px);
@@ -935,7 +978,6 @@ details > summary::-webkit-details-marker {
 }
 
 @media (max-width: 768px) {
-/* === レイアウト設定（Flexbox） === */
   .layout {
     height: auto !important;
   }
@@ -944,7 +986,6 @@ details > summary::-webkit-details-marker {
 }
 
 @media (max-width: 1024px) {
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     position: fixed;
     top: 60px;
@@ -965,7 +1006,6 @@ details > summary::-webkit-details-marker {
 }
 
 @media (max-width: 768px) {
-/* === レイアウト設定（Flexbox） === */
   .layout {
     height: auto !important;
   }
@@ -973,21 +1013,13 @@ details > summary::-webkit-details-marker {
   }
 }
 
-.extra-scroll-wrapper {
-  overflow-y: auto;             max-height: 400px;            min-height: 0;                padding-right: 4px;           box-sizing: border-box;       }
-
-/* === 補完スペース：全体構造 === */
-.extra-section {
-  display: flex;
-  flex-direction: column;
-  max-height: 480px;            overflow: hidden;             }
-
-
-
+/* === main-content 縦スクロール無効化（最終優先） === */
+@media (max-width: 1024px) {
+  }
 }
 
+/* === 最終統一スタイル: main-content の固定＆スクロール除去 === */
 @media (max-width: 1024px) {
-/* === レイアウト設定（Flexbox） === */
   .layout {
     height: auto !important;
   }
@@ -1002,8 +1034,8 @@ details > summary::-webkit-details-marker {
   }
 }
 
+/* === 中央縦スクロール完全除去（1400px以下） === */
 @media (max-width: 1400px) {
-/* === レイアウト設定（Flexbox） === */
   .layout {
     height: auto !important;
   }
@@ -1013,9 +1045,17 @@ details > summary::-webkit-details-marker {
   }
 }
 
+/* === フルサイズ時に補完スペースのタグ一覧だけ縦スクロール === */
+@media (min-width: 1401px) {
+  .extra-scroll-wrapper {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+  }
+}
 
+
+/* === 修正追加: 折りたたみサイズ対応で中央崩れを防ぐ === */
 @media (max-width: 1024px) {
-/* === レイアウト設定（Flexbox） === */
   .layout {
     flex-direction: column !important;
     height: auto !important;
@@ -1032,7 +1072,6 @@ details > summary::-webkit-details-marker {
   }
 
   #sidebar,
-/* === 検索／補完パネル幅 === */
   #search-extra-panel {
     display: none !important;
   }
@@ -1045,7 +1084,17 @@ details > summary::-webkit-details-marker {
   }
 }
 
-/* === 補完スペース：全体構造 === */
+
+/* === 補完スペース：画面に収まるよう縦スクロール制限を常時有効化 === */
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); /* ヘッダーやボタンを除いた高さ分 */
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+
+/* === 補完スペース全体を高さ480pxに固定 === */
 .extra-section {
   display: flex;
   flex-direction: column;
@@ -1054,20 +1103,33 @@ details > summary::-webkit-details-marker {
   overflow: hidden;
 }
 
-.tag.colon {
-  background-color: #fef3c7;
-  border-color: #84cc16;
-  color: #000000;
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+  box-sizing: border-box;
 }
-.tag.positive {
-  background-color: #c7eaff;
-  border-color: #3b82f6;
-}
-.tag.negative {
-  background-color: #ffe0e0;
-  border-color: #dc2626;
-}
-.tag.plain {
-  background-color: #e0e7ff;
-  border-color: transparent;
+
+
+/* === タグ編集エリアのスマホ横スクロール防止対応 === */
+@media (max-width: 768px) {
+  .tag-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .tag {
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tag input {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
 }
