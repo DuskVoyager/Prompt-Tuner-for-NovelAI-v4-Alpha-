@@ -1,8 +1,73 @@
-/* styles.css - プロンプト調整器のスタイル定義 */
-/* 🌐 全体の背景・文字色・フォントなどの基本スタイル */
-body {
-  font-family: sans-serif;
-  background: #f0f0f5;
+.main-content .span-two-columns {
+  grid-column: 1 / span 2;
+}
+
+.sidebar-open #main-content,
+  }
+}
+details > summary {
+  list-style: none;
+}
+
+#sidebar {
+  width: 220px;
+  overflow-y: auto;
+}
+
+#sidebar,
+  
+  .sidebar-open #sidebar,
+  .search-extra-open 
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #eee;
+}
+
+#sidebar, 
+  
+  body.sidebar-open #sidebar {
+    transform: translateX(0);
+  }
+
+#sidebar-toggle,
+  #search-extra-toggle {
+    display: inline-block;
+  }
+
+#sidebar.open .close-button-container,
+  #search-extra-panel.open .close-button-container {
+    visibility: visible;
+  }
+
+#sidebar-toggle,
+  #search-extra-toggle,
+  .close-button-container {
+    display: none !important;
+  }
+
+.dark-mode #sidebar,
+.dark-mode 
+
+@media (max-width: 1024px) {
+  #sidebar,
+  
+}
+
+#sidebar,
+  
+  body.sidebar-open #sidebar,
+  body.search-extra-open 
+}
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); 
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+#f0f0f5;
   color: #000000;
   padding: 20px;
   margin: 0;
@@ -15,6 +80,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+
 .theme-toggle {
   background: transparent;
   border: none;
@@ -22,40 +88,7 @@ h1 {
   cursor: pointer;
   padding: 0.3em;
 }
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-.layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-.main-content {
-  flex: 2 1 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: auto;
-  gap: 16px;
-  padding: 1em;
-  min-width: 0;
-  min-height: 0;
-  overflow: auto;
-  box-sizing: border-box;
-}
-.main-content .span-two-columns {
-  grid-column: 1 / span 2;
-}
-.sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
-}
-/* 📦 各セクションボックスの共通デザイン */
+
 .section {
   background: #ffffff;
   border-radius: 8px;
@@ -65,33 +98,34 @@ h1 {
   height: auto;
   max-height: none;
 }
-details.section {
+
+.section {
   padding: 1em;
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-details > summary {
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 0.5em;
+
+.5em;
 }
 .header-buttons > button {
   margin-left: 0.5em;
 }
+
 .template-controls {
   display: flex;
   gap: 0.5em;
   flex-wrap: wrap;
   margin-bottom: 0.5em;
 }
+
 #template-name-input,
 #new-category-input {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-/* 🔍 タグ検索入力欄のスタイル */
+
 #tag-search-input {
   padding: 0.5em;
   border-radius: 5px;
@@ -99,6 +133,7 @@ details > summary {
   background: #f9f9ff;
   color: #000;
 }
+
 #category-management {
   margin-top: 1em;
   padding: 1em;
@@ -109,6 +144,7 @@ details > summary {
   flex-direction: column;
   gap: 0.5em;
 }
+
 #category-management input,
 #category-management select,
 #category-management button {
@@ -120,18 +156,22 @@ details > summary {
   color: #000000;
   border-radius: 5px;
 }
+
 #category-management button:hover {
   background-color: #286090;
 }
+
 .tag-loading {
   display: flex;
   flex-direction: column;
 }
+
 .tag-loading input,
 .tag-loading select,
 .tag-loading button {
   flex: 1;
 }
+
 .tag-loading input,
 .tag-loading select {
   margin-bottom: 0.5em;
@@ -139,12 +179,14 @@ details > summary {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
 .extra-section {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
 }
+
 .extra-controls {
   flex: 0 0 auto;
   margin-bottom: 0.5em;
@@ -152,6 +194,7 @@ details > summary {
   flex-direction: column;
   gap: 0.5em;
 }
+
 .extra-select {
   padding: 0.4em;
   border-radius: 5px;
@@ -159,6 +202,7 @@ details > summary {
   background: #ffffff;
   color: #000000;
 }
+
 .load-extra-button,
 .delete-extra-button {
   background-color: #2563eb;
@@ -169,21 +213,26 @@ details > summary {
   cursor: pointer;
   font-size: 0.9em;
 }
+
 .delete-extra-button {
   background-color: #ef4444;
 }
+
 .load-extra-button:hover {
   background-color: #1d4ed8;
 }
+
 .delete-extra-button:hover {
   background-color: #c53030;
 }
+
 .extra-bulk-category {
   display: flex;
   align-items: center;
   gap: 0.5em;
   margin-bottom: 0.5em;
 }
+
 #bulk-category-select {
   padding: 0.4em;
   border: 1px solid #ccc;
@@ -193,6 +242,7 @@ details > summary {
   font-size: 0.95em;
   width: auto;
 }
+
 .extra-bulk-category button {
   font-size: 0.95em;
   padding: 0.4em 0.8em;
@@ -202,13 +252,16 @@ details > summary {
   color: white;
   cursor: pointer;
 }
+
 .extra-bulk-category button:hover {
   background-color: #286090;
 }
+
 .extra-bulk-category label {
   font-size: 0.9em;
   white-space: nowrap;
 }
+
 .extra-list {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -218,7 +271,6 @@ details > summary {
   gap: 0.5em;
 }
 
-/* 🏷️ タグ表示エリア：編集対象のタグ群のレイアウト */
 .tag-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -235,12 +287,11 @@ details > summary {
   transition: background 0.3s, border-color 0.3s;
 }
 
-body.dark-mode .tag-container {
+.dark-mode .tag-container {
   background: #2b2b3b;
   border-color: #444;
 }
 
-/* 🔖 個別のタグの見た目（構造＋hover効果） */
 .tag {
   display: flex;
   flex-direction: column;
@@ -262,17 +313,17 @@ body.dark-mode .tag-container {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-mode .tag {
+.dark-mode .tag {
   background: #3a3f5f;
   border: 1px solid #50588e;
   color: #f0f0f0;
 }
-body.dark-mode .tag:hover {
+
+.dark-mode .tag:hover {
   background: #4a4f73;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* 🧾 タグ名と和訳のまとまり */
 .tag-label-group {
   display: flex;
   flex-direction: column;
@@ -283,60 +334,58 @@ body.dark-mode .tag:hover {
   font-size: 0.75em;
   color: #666;
 }
-body.dark-mode .description-text {
+
+.dark-mode .description-text {
   color: #ccc;
 }
 
-/* 📱 スマホ対応：768px以下 */
-@media (max-width: 768px) {
-  .tag-container {
+.tag-container {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
   }
 
-  .tag {
+.tag {
     width: 100%;
     max-width: 100%;
     flex-wrap: wrap;
     box-sizing: border-box;
   }
 
-  .tag input {
+.tag input {
     min-width: 0;
     max-width: 100%;
     flex: 1 1 auto;
   }
-}
 
-/* ⭕ 強調タグ（{ }で囲む） */
 .tag.positive {
   background: #d1f4ff;
   border-color: #3b82f6;
 }
-/* ❌ 抑制タグ（[ ]で囲む） */
+
 .tag.negative {
   background: #ffe0e0;
   border-color: #dc2626;
 }
-/* ⬛ 重み付きタグ（1.3::タグ::） */
+
 .tag.colon {
   background: #e6ffcc;
   border-color: #84cc16;
   color: #000000;
 }
-body.dark-mode .tag.colon {
+
+.dark-mode .tag.colon {
   background: #335533 !important;
   border-color: #84cc16 !important;
   color: #eaffea !important;
 }
+
 .tag.plain {
   background: #e0e7ff;
   border-color: transparent;
 }
 
-/* ✏️ タグ名編集のテキスト入力フィールド（大きめフォント＋余白） */
 .tag input[type="text"] {
   font-size: 16px;
   font-weight: 600;
@@ -349,7 +398,6 @@ body.dark-mode .tag.colon {
   min-height: 1.8em;
 }
 
-/* 🔢 weight 表示＋入力（左寄せ＆中央揃え） */
 .weight-wrapper {
   width: 4em;
   height: 2.2em;
@@ -361,7 +409,6 @@ body.dark-mode .tag.colon {
   overflow: hidden;
 }
 
-/* 表示モード */
 .weight-wrapper .weight {
   font-size: 0.9em;
   font-weight: bold;
@@ -379,12 +426,10 @@ body.dark-mode .tag.colon {
   text-overflow: ellipsis;
 }
 
-/* 編集モード非表示 */
 .weight-wrapper .weight.editing {
   display: none !important;
 }
 
-/* 入力モード */
 .weight-wrapper .weight-input {
   display: none;
   font-size: 0.9em;
@@ -406,12 +451,10 @@ body.dark-mode .tag.colon {
   height: 100%;
 }
 
-/* 編集中の入力欄を表示 */
 .weight-wrapper .weight-input.editing {
   display: block;
 }
 
-/* 🧱 weight+ボタンを分けて並べるコンテナ */
 .tag-footer {
   display: flex;
   align-items: center;
@@ -421,15 +464,13 @@ body.dark-mode .tag.colon {
   min-height: 2.2em;
 }
 
-/* 🎯 ボタン群を右に詰めて配置（隙間なし） */
 .button-group {
   display: flex;
-  justify-content: flex-end; /* ✅ 右寄せ */
+  justify-content: flex-end; 
   align-items: center;
-  gap: 0;                    /* ✅ 隙間なし */
+  gap: 0;                    
 }
 
-/* ➕➖✖ タグ操作ボタン */
 .tag button {
   padding: 0.4em 0.6em;
   font-size: 1em;
@@ -440,42 +481,37 @@ body.dark-mode .tag.colon {
   cursor: pointer;
   transition: background 0.2s ease;
 }
+
 .tag button:hover {
   background: #c53030;
 }
 
-/* ☰ ドラッグハンドル */
 .drag-handle {
   cursor: grab;
   margin-bottom: 0.4em;
   font-size: 1.1em;
   color: #666;
 }
-body.dark-mode .drag-handle {
+
+.dark-mode .drag-handle {
   color: #aaa;
 }
 
-/* 🌙 ダークモード調整 */
-body.dark-mode .weight-wrapper .weight {
+.dark-mode .weight-wrapper .weight {
   background: transparent !important;
   color: #ddd;
   border-radius: 0;
   z-index: 0;
 }
 
-body.dark-mode .weight-wrapper .weight-input {
+.dark-mode .weight-wrapper .weight-input {
   background: #444;
   color: #f0f0f0;
   border: 1px solid #666;
   z-index: 1;
 }
 
-/* 汎用フォーム部品の共通スタイル */
-button,
-select,
-input[type="text"],
-input[type="file"] {
-  padding: 0.5em;
+.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
   background: #ffffff;
@@ -486,29 +522,28 @@ button:hover {
   background: #e2e8f0;
 }
 
-/* 緑の追加ボタン */
 .add-button {
   background-color: #22c55e;
   color: white;
   border: none;
   margin-top: 0.5em;
 }
+
 .add-button:hover {
   background-color: #16a34a;
 }
 
-/* 赤の削除ボタン */
 .remove-button {
   background-color: #ef4444;
   color: white;
   border: none;
   margin-left: 1em;
 }
+
 .remove-button:hover {
   background-color: #c53030;
 }
 
-/* 📤 最終プロンプト出力欄のボックス */
 .prompt-output-box {
   background: #fff;
   border: 1px solid #ccc;
@@ -519,48 +554,57 @@ button:hover {
   overflow-y: auto;
   font-size: 0.85em;
 }
-body.dark-mode .prompt-output-box {
+
+.dark-mode .prompt-output-box {
   background: #2a2a3a;
   border-color: #555;
 }
-/* 🌙 ダークモード：全体の背景色・文字色の切替 */
-body.dark-mode {
+
+.dark-mode {
   background: #1e1e2e;
   color: #e5e5e5;
 }
-body.dark-mode h1,
+
+.dark-mode h1,
 body.dark-mode button,
 body.dark-mode select,
 body.dark-mode input[type="text"],
 body.dark-mode input[type="file"] {
   color: #e5e5e5;
 }
-body.dark-mode .section {
+
+.dark-mode .section {
   background: #2a2a3a;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-body.dark-mode .tag.positive {
+.dark-mode .tag.positive {
   background: #2b6cb0;
   border-color: #90cdf4;
 }
-body.dark-mode .tag.negative {
+
+.dark-mode .tag.negative {
   background: #a94442;
   border-color: #fc8181;
 }
-body.dark-mode .tag input {
+
+.dark-mode .tag input {
   color: #e5e5e5;
 }
-body.dark-mode .tag .weight {
+
+.dark-mode .tag .weight {
   color: #ddd;
 }
-body.dark-mode .tag button {
+
+.dark-mode .tag button {
   background: #9b2c2c;
 }
-body.dark-mode .tag button:hover {
+
+.dark-mode .tag button:hover {
   background: #822727;
 }
-body.dark-mode button,
+
+.dark-mode button,
 body.dark-mode select,
 body.dark-mode input[type="text"],
 body.dark-mode input[type="file"] {
@@ -568,75 +612,95 @@ body.dark-mode input[type="file"] {
   border-color: #555;
   color: #e5e5e5;
 }
-body.dark-mode button:hover {
+
+.dark-mode button:hover {
   background: #4b4b5b;
 }
-body.dark-mode .add-button {
+
+.dark-mode .add-button {
   background-color: #2f855a;
 }
-body.dark-mode .add-button:hover {
+
+.dark-mode .add-button:hover {
   background-color: #276846;
 }
-body.dark-mode .remove-button {
+
+.dark-mode .remove-button {
   background-color: #9b2c2c;
 }
-body.dark-mode .remove-button:hover {
+
+.dark-mode .remove-button:hover {
   background: #822727;
 }
-body.dark-mode .extra-section {
+
+.dark-mode .extra-section {
   background: #2a2a3a;
   color: #e5e5e5;
 }
-body.dark-mode input::placeholder,
+
+.dark-mode input::placeholder,
 body.dark-mode input[type="file"]::placeholder {
   color: #aaa;
 }
-body.dark-mode input[type="checkbox"] {
+
+.dark-mode input[type="checkbox"] {
   accent-color: #90cdf4;
 }
-body.dark-mode ::-webkit-scrollbar {
+
+.dark-mode ::-webkit-scrollbar {
   background: #444;
 }
-body.dark-mode ::-webkit-scrollbar-thumb {
+
+.dark-mode ::-webkit-scrollbar-thumb {
   background: #888;
 }
-body.dark-mode #tag-search-input {
+
+.dark-mode #tag-search-input {
   background: #3a3a4a;
   color: #e5e5e5;
   border-color: #666;
 }
-body.dark-mode #tag-search-input::placeholder {
+
+.dark-mode #tag-search-input::placeholder {
   color: #aaa;
 }
-body.dark-mode #category-management {
+
+.dark-mode #category-management {
   background: #2a2a3a;
   border-color: #444;
 }
-body.dark-mode #new-category-input,
+
+.dark-mode #new-category-input,
 body.dark-mode #category-select {
   background: #3a3a4a;
   color: #e5e5e5;
   border-color: #666;
 }
-body.dark-mode #category-management button {
+
+.dark-mode #category-management button {
   background-color: #2563eb;
   color: white;
 }
-body.dark-mode #category-management button:hover {
+
+.dark-mode #category-management button:hover {
   background-color: #1d4ed8;
 }
+
 .category-label {
   color: #0066cc;
 }
-body.dark-mode .category-label {
+
+.dark-mode .category-label {
   color: #ffffff; 
   font-weight: bold;
 }
-body.dark-mode #bulk-category-select {
+
+.dark-mode #bulk-category-select {
   background: #3a3a4a;
   color: #e5e5e5;
   border-color: #666;
 }
+
 .dictionary-import-section input,
 .dictionary-import-section button {
   margin-top: 0.5em;
@@ -644,15 +708,19 @@ body.dark-mode #bulk-category-select {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-body.dark-mode .extra-item span {
+
+.dark-mode .extra-item span {
   color: #e5e5e5;
 }
-body.dark-mode .description-text {
+
+.dark-mode .description-text {
   color: #e5e5e5 !important;
 }
-body.dark-mode .description-meta {
+
+.dark-mode .description-meta {
   color: #dddddd !important;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -660,79 +728,20 @@ body.dark-mode .description-meta {
   background: #eeeeee;
   padding: 0.5em 1em;
 }
-#sidebar {
-  width: 220px;
-  overflow-y: auto;
-}
 
-#search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-.layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-/* 📦 各セクションボックスの共通デザイン */
 .section {
   border-right: 1px solid #ccc;
 }
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  html, body {
-    overflow-x: hidden;
-  }
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  #sidebar,
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-  .sidebar-open #sidebar,
-  .search-extra-open #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-}
-/* 🌙 ダークモード：全体の背景色・文字色の切替 */
-body.dark-mode {
-  background-color: #121212;
-  color: #eee;
-}
-body.dark-mode .section,
+
+.dark-mode .section,
 body.dark-mode .template-section,
 body.dark-mode .extra-section {
   background-color: #1e1e1e;
   color: #eee;
   border-color: #444;
 }
-body.dark-mode input,
+
+.dark-mode input,
 body.dark-mode select,
 body.dark-mode button,
 body.dark-mode textarea {
@@ -746,98 +755,35 @@ body.dark-mode textarea {
   flex-direction: column;
   gap: 0.5em;
 }
-body.dark-mode .header {
+
+.dark-mode .header {
   background-color: #1a1a1a;
   color: #eee;
   border-bottom: 1px solid #444;
 }
-body.dark-mode #theme-toggle {
+
+.dark-mode #theme-toggle {
   background-color: #2a2a2a;
   color: #fff;
   border: 1px solid #555;
 }
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  #sidebar, #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-  body.sidebar-open #sidebar {
-    transform: translateX(0);
-  }
-  body.search-extra-open #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  }
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  }
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  body.sidebar-open #main-content,
-  }
-}
-details > summary {
-  list-style: none;
-}
-details > summary::-webkit-details-marker {
-  display: none;
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  }
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  #sidebar-toggle,
-  #search-extra-toggle {
-    display: inline-block;
-  }
-  .close-button-container {
+
+.close-button-container {
     visibility: hidden;
   }
-  #sidebar.open .close-button-container,
-  #search-extra-panel.open .close-button-container {
-    visibility: visible;
-  }
-}
-@media (min-width: 1025px) {
-  #sidebar-toggle,
-  #search-extra-toggle,
-  .close-button-container {
-    display: none !important;
-  }
-}
+
 .dark-mode .section {
   background-color: #222;
   color: #eee;
 }
+
 .dark-mode .template-controls,
 .dark-mode .extra-controls,
 .dark-mode .extra-bulk-category {
   background-color: transparent;
   color: inherit;
 }
+
 .dark-mode input,
 .dark-mode select,
 .dark-mode textarea {
@@ -845,15 +791,18 @@ details > summary::-webkit-details-marker {
   color: #eee;
   border: 1px solid #666;
 }
+
 .dark-mode button {
   background-color: #444;
   color: #eee;
   border: 1px solid #888;
 }
+
 .dark-mode .prompt-output-box {
   background-color: #111;
   border-color: #444;
 }
+
 .dark-mode .template-section,
 .dark-mode .search-section,
 .dark-mode .extra-section {
@@ -862,6 +811,7 @@ details > summary::-webkit-details-marker {
   border-radius: 8px;
   box-shadow: none;
 }
+
 .dark-mode .template-controls,
 .dark-mode .extra-controls,
 .dark-mode .extra-bulk-category,
@@ -869,6 +819,7 @@ details > summary::-webkit-details-marker {
   background-color: transparent;
   color: inherit;
 }
+
 .dark-mode select,
 .dark-mode input,
 .dark-mode button {
@@ -876,40 +827,32 @@ details > summary::-webkit-details-marker {
   color: #eee;
   border: 1px solid #666;
 }
+
 .dark-mode .tag-container,
 .dark-mode .prompt-output-box {
   background-color: #181818;
   border-color: #444;
 }
-.dark-mode #sidebar,
-.dark-mode #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  #sidebar,
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-}
+
 .template-section .section-header span {
   font-weight: bold;
   font-size: 1.1em;
 }
+
 .extra-row {
   display: flex;
   justify-content: space-between;
   gap: 0.5em;
   margin-bottom: 0.5em;
 }
+
 .extra-row select,
 .extra-row button {
   flex: 1;
   padding: 0.4em 0.6em;
   font-size: 0.9em;
 }
+
 .checkbox-small label {
   font-size: 0.8em;
   display: flex;
@@ -917,133 +860,28 @@ details > summary::-webkit-details-marker {
   gap: 0.25em;
   margin-left: 0.25em;
 }
+
 .checkbox-small input[type="checkbox"] {
   transform: scale(0.85);
 }
+
 .extra-scroll-wrapper {
   flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
 }
+
 .extra-list {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
 }
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-}
-@media (max-width: 768px) {
-  
-}
-@media (max-width: 768px) {
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-  body.search-extra-open #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-}
-@media (max-width: 768px) {
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-  }
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-}
-@media (max-width: 1400px) {
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-}
-@media (min-width: 1401px) {
-  .extra-scroll-wrapper {
+
+.extra-scroll-wrapper {
     overflow-y: auto;
     max-height: calc(100vh - 100px);
   }
-}
-/* 📱 モバイル表示最適化（1024px以下） */
-@media (max-width: 1024px) {
-/* 🧱 ページ全体のレイアウト構造（Flexベース） */
-  .layout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 16px;
-  height: auto;
-  overflow-x: hidden;
-}
-  
-  #sidebar,
-  #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-  body.sidebar-open #sidebar,
-  body.search-extra-open #search-extra-panel {
-  width: 300px;
-  flex-shrink: 0;
-}
-}
-.extra-scroll-wrapper {
-  overflow-y: auto;
-  max-height: calc(100vh - 200px); 
-  min-height: 0;
-  box-sizing: border-box;
-}
+
 .extra-section {
   display: flex;
   flex-direction: column;
@@ -1051,6 +889,7 @@ details > summary::-webkit-details-marker {
   max-height: 480px;
   overflow: hidden;
 }
+
 .extra-scroll-wrapper {
   overflow-y: auto;
   height: 100%;
@@ -1059,8 +898,6 @@ details > summary::-webkit-details-marker {
   box-sizing: border-box;
 }
 
-/* 📌 補完スペースのデザインと高さ調整 */
-/* 🏷️ タグ編集欄（左）の高さを拡大 */
 .tag-container {
   display: flex;
   flex-wrap: wrap;
@@ -1077,12 +914,12 @@ details > summary::-webkit-details-marker {
   max-width: 100%;
   transition: background 0.3s, border-color 0.3s;
 }
-body.dark-mode .tag-container {
+
+.dark-mode .tag-container {
   background: #2b2b3b;
   border-color: #444;
 }
 
-/* 📌 補完スペースの表示 */
 .extra-item {
   background: #eef2ff;
   border-radius: 12px;
@@ -1096,11 +933,13 @@ body.dark-mode .tag-container {
   gap: 0.3em;
   transition: background 0.2s;
 }
+
 .extra-item:hover {
   background: #e0e7ff;
   cursor: pointer;
 }
-body.dark-mode .extra-item {
+
+.dark-mode .extra-item {
   background: #2e334e;
   border-color: #475569;
 }
@@ -1109,7 +948,8 @@ body.dark-mode .extra-item {
   font-size: 0.75em;
   color: #666;
 }
-body.dark-mode .extra-info {
+
+.dark-mode .extra-info {
   color: #ccc;
 }
 
@@ -1119,3 +959,18 @@ body.dark-mode .extra-info {
   padding-right: 6px;
 }
 
+.search-extra-open 
+
+  
+}
+
+@media (max-width: 1024px) {
+  }
+
+.search-extra-open 
+}
+@media (max-width: 768px) {
+
+  
+  
+}
