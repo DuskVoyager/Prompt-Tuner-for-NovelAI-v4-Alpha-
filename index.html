@@ -1,1038 +1,204 @@
-/* =============================
-   構造・レイアウト
-============================= */
-
-/* === ベース初期化 === */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-main, aside {
-  box-sizing: border-box;
-}
-
-/* === 中央列で2列分使うグリッド要素用（未使用なら削除可） === */
-.main-content .span-two-columns {
-  grid-column: 1 / span 2;
-}
-
-/* === レイアウト構造（3カラム対応） === */
-.layout {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 60px); /* ヘッダー除外 */
-  gap: 16px;
-  overflow: hidden;
-}
-
-/* === 中央メインカラム === */
-#main-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1em;
-  box-sizing: border-box;
-  min-width: 300px;
-  max-width: 100%;
-}
-
-/* === サイドバー === */
-#sidebar {
-  width: 220px;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  display: block;
-  z-index: 100;
-  background-color: #fff;
-  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
-}
-
-/* === 右パネル（補完スペース） === */
-#search-extra-panel {
-  width: 280px;
-  overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  display: block;
-  z-index: 100;
-  background-color: #fff;
-  box-shadow: -2px 0 4px rgba(0,0,0,0.1);
-}
-
-/* === サイドパネル表示時にスライドイン === */
-body.sidebar-open #sidebar {
-  transform: translateX(0);
-}
-
-body.search-extra-open #search-extra-panel {
-  transform: translateX(0);
-}
-
-/* === トグルボタン（PC表示時は常に表示） === */
-#sidebar-toggle,
-#search-extra-toggle {
-  display: inline-block;
-}
-
-/* === 閉じるボタン表示制御 === */
-#sidebar.open .close-button-container,
-#search-extra-panel.open .close-button-container {
-  visibility: visible;
-}
-
-/* === モバイル非表示デフォルト設定 === */
-#sidebar-toggle,
-#search-extra-toggle,
-.close-button-container {
-  display: none !important;
-}
-
-/* === ダークモード背景など === */
-body.dark-mode {
-  background-color: #121212;
-  color: #eee;
-}
-
-.dark-mode #sidebar,
-.dark-mode #search-extra-panel {
-  background-color: #1e1e2e;
-  color: #eee;
-}
-
-/* === モバイル対応レイアウト === */
-@media (max-width: 1024px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  #main-content {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 1em;
-  }
-
-  #sidebar,
-  #search-extra-panel {
-    display: none;
-  }
-
-  body.sidebar-open #sidebar,
-  body.search-extra-open #search-extra-panel {
-    display: block;
-    position: fixed;
-    z-index: 1000;
-  }
-
-  #sidebar-toggle,
-  #search-extra-toggle {
-    display: inline-block;
-  }
-}
-
-/* === 補完スクロール領域の高さ調整 === */
-.extra-scroll-wrapper {
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
-  min-height: 0;
-  box-sizing: border-box;
-}
-
-/* =============================
-   タグUI（入力・操作）
-============================= */
-.tag-loading {
-  display: flex;
-  flex-direction: column;
-}
-
-.tag-loading input,
-.tag-loading select,
-.tag-loading button {
-  flex: 1;
-}
-
-.tag-loading input,
-.tag-loading select {
-  margin-bottom: 0.5em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.tag-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  min-height: 360px;
-  padding: 1em;
-  background: #f9f9ff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  width: 100%;
-  max-width: 100%;
-  transition: background 0.3s, border-color 0.3s;
-}
-
-.dark-mode .tag-container {
-  background: #2b2b3b;
-  border-color: #444;
-}
-
-.tag {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex-wrap: wrap;
-  background: #f5f5f5;
-  padding: 1em;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 280px;
-  box-sizing: border-box;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tag:hover {
-  background: #f0f4ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.dark-mode .tag {
-  background: #3a3f5f;
-  border: 1px solid #50588e;
-  color: #f0f0f0;
-}
-
-.dark-mode .tag:hover {
-  background: #4a4f73;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.tag-label-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-}
-
-.tag-container {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-
-.tag {
-    width: 100%;
-    max-width: 100%;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-  }
-
-.tag input {
-    min-width: 0;
-    max-width: 100%;
-    flex: 1 1 auto;
-  }
-
-.tag.positive {
-  background: #d1f4ff;
-  border-color: #3b82f6;
-}
-
-.tag.negative {
-  background: #ffe0e0;
-  border-color: #dc2626;
-}
-
-.tag.colon {
-  background: #e6ffcc;
-  border-color: #84cc16;
-  color: #000000;
-}
-
-.dark-mode .tag.colon {
-  background: #335533 !important;
-  border-color: #84cc16 !important;
-  color: #eaffea !important;
-}
-
-.tag.plain {
-  background: #e0e7ff;
-  border-color: transparent;
-}
-
-.tag input[type="text"] {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: inherit;
-  border: none;
-  background: transparent;
-  width: 100%;
-  outline: none;
-  min-height: 1.8em;
-}
-
-.weight-wrapper {
-  width: 4em;
-  height: 2.2em;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.weight-wrapper .weight {
-  font-size: 0.9em;
-  font-weight: bold;
-  padding: 0;
-  background: transparent;
-  color: #444;
-  border-radius: 0;
-  cursor: pointer;
-  line-height: 1.2;
-  box-sizing: border-box;
-  text-align: left;
-  z-index: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.weight-wrapper .weight.editing {
-  display: none !important;
-}
-
-.weight-wrapper .weight-input {
-  display: none;
-  font-size: 0.9em;
-  padding: 0;
-  background: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  line-height: 1.2;
-  box-sizing: border-box;
-  text-align: left;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  box-shadow: none;
-  outline: none;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.weight-wrapper .weight-input.editing {
-  display: block;
-}
-
-.tag-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4em;
-  margin-top: 0.4em;
-  min-height: 2.2em;
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end; 
-  align-items: center;
-  gap: 0;                    
-}
-
-.tag button {
-  padding: 0.4em 0.6em;
-  font-size: 1em;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.tag button:hover {
-  background: #c53030;
-}
-
-.drag-handle {
-  cursor: grab;
-  margin-bottom: 0.4em;
-  font-size: 1.1em;
-  color: #666;
-}
-
-.dark-mode .drag-handle {
-  color: #aaa;
-}
-
-.dark-mode .weight-wrapper .weight {
-  background: transparent !important;
-  color: #ddd;
-  border-radius: 0;
-  z-index: 0;
-}
-
-.dark-mode .weight-wrapper .weight-input {
-  background: #444;
-  color: #f0f0f0;
-  border: 1px solid #666;
-  z-index: 1;
-}
-
-.dark-mode .tag.positive {
-  background: #2b6cb0;
-  border-color: #90cdf4;
-}
-
-.dark-mode .tag.negative {
-  background: #a94442;
-  border-color: #fc8181;
-}
-
-.dark-mode .tag input {
-  color: #e5e5e5;
-}
-
-.dark-mode .tag .weight {
-  color: #ddd;
-}
-
-.dark-mode .tag button {
-  background: #9b2c2c;
-}
-
-.dark-mode .tag button:hover {
-  background: #822727;
-}
-
-.dark-mode .tag-container,
-.dark-mode .prompt-output-box {
-  background-color: #181818;
-  border-color: #444;
-}
-
-.tag-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6em;
-  min-height: 360px;
-  padding: 0.75em;
-  background: #f9f9ff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
-  transition: background 0.3s, border-color 0.3s;
-}
-
-.dark-mode .tag-container {
-  background: #2b2b3b;
-  border-color: #444;
-}
-
-/* =============================
-   レイアウト基礎（3カラム構成）
-============================= */
-
-.layout {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 60px); /* ヘッダー除外分 */
-  gap: 16px;
-  overflow: hidden;
-}
-
-/* 中央のメインコンテンツ */
-#main-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1em;
-  box-sizing: border-box;
-  min-width: 300px;
-  max-width: 100%;
-}
-
-/* モバイル対応：縦積みに変更 */
-@media (max-width: 1024px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  #main-content {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 1em;
-    overflow-y: auto;
-  }
-
-  #sidebar,
-  #search-extra-panel {
-    display: none;
-  }
-
-  body.sidebar-open #sidebar,
-  body.search-extra-open #search-extra-panel {
-    display: block;
-    position: fixed;
-    z-index: 1000;
-  }
-}
-
-/* =============================
-   補完スペース
-============================= */
-.extra-section {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  overflow: hidden;
-  max-height: calc(100vh - 120px); /* ヘッダー・ボタンを除いた高さ調整 */
-  box-sizing: border-box;
-}
-
-.extra-controls {
-  flex: 0 0 auto;
-  margin-bottom: 0.5em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-.extra-bulk-category {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.extra-scroll-wrapper {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 0;
-  max-height: 100%;
-  padding-right: 6px;
-  box-sizing: border-box;
-}
-
-.extra-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-/* 各タグブロック */
-.extra-item {
-  background: #eef2ff;
-  border-radius: 12px;
-  padding: 0.75em;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  margin-bottom: 0.75em;
-  font-size: 0.9em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-  transition: background 0.2s;
-}
-
-.extra-item:hover {
-  background: #e0e7ff;
-  cursor: pointer;
-}
-
-.extra-info {
-  font-size: 0.75em;
-  color: #666;
-}
-
-/* 💡 ダークモード対応 */
-.dark-mode .extra-section {
-  background: #2a2a3a;
-  color: #e5e5e5;
-}
-
-.dark-mode .extra-scroll-wrapper {
-  background: #1e1e2e;
-}
-
-.dark-mode .extra-item {
-  background: #2e334e;
-  border-color: #475569;
-}
-
-.dark-mode .extra-info {
-  color: #ccc;
-}
-
-.dark-mode .extra-item span {
-  color: #e5e5e5;
-}
-
-.dark-mode .extra-bulk-category,
-.dark-mode .extra-controls {
-  background-color: transparent;
-  color: inherit;
-}
-
-/* =============================
-   テンプレート・出力
-============================= */
-.template-controls {
-  display: flex;
-  gap: 0.5em;
-  flex-wrap: wrap;
-  margin-bottom: 0.5em;
-}
-
-#template-name-input,
-#new-category-input {
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.prompt-output-box {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 0.5em;
-  margin-top: 0.5em;
-  max-height: 100px;
-  overflow-y: auto;
-  font-size: 0.85em;
-}
-
-.dark-mode .prompt-output-box {
-  background: #2a2a3a;
-  border-color: #555;
-}
-
-.dark-mode .prompt-output-box {
-  background-color: #111;
-  border-color: #444;
-}
-
-.template-section .section-header span {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-
-/* =============================
-   フィルター・辞書
-============================= */
-#category-management {
-  margin-top: 1em;
-  padding: 1em;
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-#category-management input,
-#category-management select,
-#category-management button {
-  width: 100%;
-  font-size: 1em;
-  padding: 0.4em;
-  border: 1px solid #ccc;
-  background: #ffffff;
-  color: #000000;
-  border-radius: 5px;
-}
-
-#category-management button:hover {
-  background-color: #286090;
-}
-
-.dark-mode #category-management {
-  background: #2a2a3a;
-  border-color: #444;
-}
-
-.dark-mode #category-management button {
-  background-color: #2563eb;
-  color: white;
-}
-
-.dark-mode #category-management button:hover {
-  background-color: #1d4ed8;
-}
-
-.dictionary-import-section input,
-.dictionary-import-section button {
-  margin-top: 0.5em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-
-/* =============================
-   共通UI・ヘッダーなど
-============================= */
-.section {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 1em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s, box-shadow 0.3s;
-  height: auto;
-  max-height: none;
-}
-
-.section {
-  padding: 1em;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.5em;
-}
-.header-buttons > button {
-  margin-left: 0.5em;
-}
-
-#tag-search-input {
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #f9f9ff;
-  color: #000;
-}
-
-.load-extra-button,
-.delete-extra-button {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 0.4em;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-}
-
-.delete-extra-button {
-  background-color: #ef4444;
-}
-
-.load-extra-button:hover {
-  background-color: #1d4ed8;
-}
-
-.delete-extra-button:hover {
-  background-color: #c53030;
-}
-
-.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #ffffff;
-  color: #000000;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-button:hover {
-  background: #e2e8f0;
-}
-
-.add-button {
-  background-color: #22c55e;
-  color: white;
-  border: none;
-  margin-top: 0.5em;
-}
-
-.add-button:hover {
-  background-color: #16a34a;
-}
-
-.remove-button {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  margin-left: 1em;
-}
-
-.remove-button:hover {
-  background-color: #c53030;
-}
-
-.dark-mode h1,
-body.dark-mode button,
-body.dark-mode select,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="file"] {
-  color: #e5e5e5;
-}
-
-.dark-mode .section {
-  background: #2a2a3a;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-}
-
-.dark-mode button,
-body.dark-mode select,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="file"] {
-  background: #3a3a4a;
-  border-color: #555;
-  color: #e5e5e5;
-}
-
-.dark-mode button:hover {
-  background: #4b4b5b;
-}
-
-.dark-mode .add-button {
-  background-color: #2f855a;
-}
-
-.dark-mode .add-button:hover {
-  background-color: #276846;
-}
-
-.dark-mode .remove-button {
-  background-color: #9b2c2c;
-}
-
-.dark-mode .remove-button:hover {
-  background: #822727;
-}
-
-.dark-mode input::placeholder,
-body.dark-mode input[type="file"]::placeholder {
-  color: #aaa;
-}
-
-.dark-mode input[type="checkbox"] {
-  accent-color: #90cdf4;
-}
-
-.dark-mode #tag-search-input {
-  background: #3a3a4a;
-  color: #e5e5e5;
-  border-color: #666;
-}
-
-.dark-mode #tag-search-input::placeholder {
-  color: #aaa;
-}
-
-.dark-mode #new-category-input,
-body.dark-mode #category-select {
-  background: #3a3a4a;
-  color: #e5e5e5;
-  border-color: #666;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #eeeeee;
-  padding: 0.5em 1em;
-}
-
-.section {
-  border-right: 1px solid #ccc;
-}
-
-.dark-mode input,
-body.dark-mode select,
-body.dark-mode button,
-body.dark-mode textarea {
-  background-color: #2a2a2a;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-.dark-mode .header {
-  background-color: #1a1a1a;
-  color: #eee;
-  border-bottom: 1px solid #444;
-}
-
-.close-button-container {
-    visibility: hidden;
-  }
-
-.dark-mode .section {
-  background-color: #222;
-  color: #eee;
-}
-
-.dark-mode input,
-.dark-mode select,
-.dark-mode textarea {
-  background-color: #333;
-  color: #eee;
-  border: 1px solid #666;
-}
-
-.dark-mode button {
-  background-color: #444;
-  color: #eee;
-  border: 1px solid #888;
-}
-
-.dark-mode select,
-.dark-mode input,
-.dark-mode button {
-  background-color: #333;
-  color: #eee;
-  border: 1px solid #666;
-}
-
-.checkbox-small input[type="checkbox"] {
-  transform: scale(0.85);
-}
-
-
-/* =============================
-   ダークモード全般
-============================= */
-.dark-mode .description-text {
-  color: #ccc;
-}
-
-.dark-mode {
-  background: #1e1e2e;
-  color: #e5e5e5;
-}
-
-.dark-mode ::-webkit-scrollbar {
-  background: #444;
-}
-
-.dark-mode ::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-.dark-mode .category-label {
-  color: #ffffff; 
-  font-weight: bold;
-}
-
-.dark-mode .description-text {
-  color: #e5e5e5 !important;
-}
-
-.dark-mode .description-meta {
-  color: #dddddd !important;
-}
-
-.dark-mode #theme-toggle {
-  background-color: #2a2a2a;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-
-/* =============================
-   その他
-============================= */
-
-/* detailsタグの三角マークを非表示にする */
-details > summary {
-  list-style: none;
-  cursor: pointer;
-}
-
-/* h1 ヘッダー用のスタイル */
-h1 {
-  font-size: 1.5em;
-  margin-bottom: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* テーマ切替ボタン */
-.theme-toggle {
-  background: transparent;
-  border: none;
-  font-size: 1em;
-  cursor: pointer;
-  padding: 0.3em;
-}
-
-/* 補足テキストなど */
-.description-text {
-  font-size: 0.75em;
-  color: #666;
-}
-
-.category-label {
-  color: #0066cc;
-  font-weight: bold;
-}
-
-/* チェックボックス小サイズ用 */
-.checkbox-small label {
-  font-size: 0.8em;
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  margin-left: 0.25em;
-}
-
-.checkbox-small input[type="checkbox"] {
-  transform: scale(0.85);
-}
-
-/* モバイル時に #main-content を全幅に広げる */
-body.sidebar-open #main-content,
-body.search-extra-open #main-content {
-  width: 100%;
-}
-
-/* メディアクエリ：モバイル画面での表示調整 */
-@media (max-width: 1024px) {
-  .header {
-    flex-direction: column;
-    gap: 0.5em;
-    align-items: flex-start;
-  }
-
-  h1 {
-    font-size: 1.2em;
-  }
-}
-
-@media (max-width: 768px) {
-  .prompt-output-box {
-    font-size: 0.8em;
-  }
-
-  .tag {
-    padding: 0.75em;
-    font-size: 0.9em;
-  }
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌟 NovelAI v4 プロンプト調整器(α)</title>
+
+  
+  <meta property="og:title" content="Prompt Tuner for NovelAI v4 (Alpha)" />
+  <meta property="og:description" content="プロンプトをもっと自由に、もっと楽しく。" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/DuskVoyager/Prompt-Tuner-for-NovelAI-v4-Alpha-/main/BUG_samne.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://prompt-tuner-for-novel-ai-v4-alpha.vercel.app/BUG_samne.png" />
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GSYBTLY6V0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GSYBTLY6V0');
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+</head>
+<body>
+<!-- 🔝 ヘッダー：タイトルと切替ボタン -->
+<header class="header">
+<button id="sidebar-toggle">☰</button>
+<h1>🌟 NovelAI v4 プロンプト調整器(α)</h1>
+<button id="theme-toggle">🌙 ダークモード</button>
+<button id="search-extra-toggle">🔍</button>
+</header>
+
+
+
+<!-- 🧱 レイアウト全体：3カラム構成（サイドバー／メイン／補完） -->
+<div class="layout">
+
+
+
+<!-- 📁 左カラム：テンプレートや辞書の操作パネル -->
+<aside class="section" id="sidebar">
+<div class="section template-section">
+<div class="section-header"><span>☰ サイドメニュー</span></div>
+<div class="close-button-container"><button class="close-panel-btn" onclick="document.body.classList.remove('sidebar-open')">✖</button></div>
+<div class="template-controls">
+<input id="template-name-input" placeholder="テンプレート名を入力" style="flex: 1;" type="text"/>
+<button onclick="saveTemplate()">💾 保存</button>
+</div>
+<div class="template-controls">
+<select id="template-select">
+<option value="">-- テンプレートを選択 --</option>
+</select>
+<button onclick="loadTemplate()">📥 読み込み</button>
+<button onclick="deleteTemplate()">🗑️ 削除</button>
+</div>
+<div class="template-controls dictionary-import-section">
+<input accept=".txt" id="dict-file-input" style="max-width: 100%; box-sizing: border-box;" type="file"/>
+<button onclick="importDictionaryFromFile()">📁 辞書インポート</button>
+</div>
+<div class="template-controls dictionary-export-section">
+<button onclick="exportVisibleDictionaryAligned()">📤 辞書エクスポート</button>
+</div>
+<div class="template-description">
+          補完スペースに表示してあるタグをテキストファイルとして書き出します
+        </div>
+<div class="template-controls">
+<input id="new-category-input" placeholder="新しいカテゴリ名を入力" type="text"/>
+<button onclick="createCategory()">カテゴリ追加</button>
+</div>
+<div class="template-controls">
+<select id="category-select">
+<option value="">-- カテゴリを選択 --</option>
+</select>
+<button onclick="deleteCategory()">カテゴリ削除</button>
+</div>
+</div>
+</aside>
+
+<!-- ✏️ タグ名編集のテキスト入力フィールド -->
+<main id="main-content">
+
+<!-- 📥 タグ読み込みフォーム（入力欄とセクション選択） -->
+<div class="section tag-loading">
+  <div class="section-header">
+    <span>タグ読み込み</span>
+  </div>
+  <input autocomplete="off" id="tag-input" placeholder="カンマ区切りのタグを入力" type="text"/>
+  <select id="target-section"></select>
+  <button onclick="loadTags()">読み込む</button>
+</div>
+
+<!-- 🧩 ベースプロンプト欄：メインのプロンプトタグを編集 -->
+<div class="section">
+  <div class="section-header">
+    <span>ベースプロンプト</span>
+    <div class="header-buttons">
+      <button onclick="clearPrompt('base')">🗑️ 全削除</button>
+    </div>
+  </div>
+  <div class="tag-container" id="base"></div>
+
+<!-- 💡 形式切替とコピー -->
+<div class="output-header">
+  <label for="format-toggle">形式：</label>
+  <select id="format-toggle">
+    <option value="novelai">NovelAI形式</option>
+    <option value="stable">Stable Diffusion形式</option>
+  </select>
+  <button id="copy-output-btn" onclick="copyCurrentOutput()">📋 コピー</button>
+</div>
+
+<div class="prompt-output-box">
+  <p id="output-base-novelai" class="format-output format-novelai"></p>
+  <p id="output-base-stable" class="format-output format-stable" style="display: none;"></p>
+</div>
+</div> <!-- 🧩 ベースプロンプト欄をここで閉じる -->
+
+<!-- 👤 キャラクタープロンプト：複数キャラ対応（動的生成） -->
+<div id="character-sections"></div>
+<button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
+
+<!-- キャラクタープロンプト出力欄（JSが追加） -->
+<div id="character-output-sections"></div>
+
+<!-- 🚫 ネガティブプロンプト：除外するタグ -->
+<div class="section">
+  <div class="section-header">
+    <span>ネガティブプロンプト</span>
+    <div class="header-buttons">
+      <button onclick="copyPrompt('output-negative', this)">📋 コピー</button>
+      <button onclick="clearPrompt('negative')">🗑️ 全削除</button>
+    </div>
+  </div>
+  <div class="tag-container" id="negative"></div>
+  <div class="prompt-output-box">
+    <p id="output-negative-novelai" class="format-output format-novelai"></p>
+    <p id="output-negative-stable" class="format-output format-stable" style="display: none;"></p>
+  </div>
+</div>
+
+<!-- 🔍 右カラム：検索／補完スペース -->
+<aside class="section" id="search-extra-panel">
+
+
+
+<!-- 🔎 タグ検索ボックス：辞書から検索フィルター -->
+<div class="section search-section">
+<div class="section-header"><span>🔍 タグ検索</span></div>
+<div class="close-button-container"><button class="close-panel-btn" onclick="document.body.classList.remove('search-extra-open')">✖</button></div>
+<div class="template-controls">
+<input autocomplete="off" id="tag-search-input" oninput="searchTags()" placeholder="タグを検索" style="flex: 1;" type="text"/>
+</div>
+</div>
+
+
+
+<!-- 📌 補完スペース：辞書のタグを一覧し操作 -->
+<div class="section extra-section">
+<div class="section-header">
+<span>📌 補完スペース</span>
+</div>
+<div class="extra-controls">
+<select class="extra-select" id="extra-target"></select>
+<div class="extra-row">
+<button class="load-extra-button" onclick="loadSelectedExtras()">📥 読み込む</button>
+<button class="delete-extra-button" onclick="deleteSelectedExtras()">🗑️ 削除</button>
+</div>
+</div>
+<div class="extra-row">
+<select id="bulk-category-select">
+<option value="">カテゴリを選択</option>
+</select>
+<button onclick="applyBulkCategory()">カテゴリ設定</button>
+</div>
+<div class="extra-scroll-wrapper"><div class="extra-list" id="extra-list"></div></div>
+
+<div class="extra-row checkbox-small">
+<label>
+<input id="bulk-check-toggle" onchange="toggleBulkCheck()" type="checkbox"/>
+          一括選択
+        </label>
+</div>
+</div>
+</aside>
+</div>
+<script>
+    function autoTogglePanels() {
+      const isMobile = window.innerWidth <= 1024;
+      document.body.classList.toggle('sidebar-open', !isMobile);
+      document.body.classList.toggle('search-extra-open', !isMobile);
+    }
+    window.addEventListener('load', autoTogglePanels);
+    window.addEventListener('resize', autoTogglePanels);
+  </script>
+<!-- 📜 メインスクリプト：動的UI機能を制御 -->
+<script src="Sortable.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
