@@ -1035,7 +1035,6 @@ if (info && info.description) {
 
 // ✅ parseWeight - Stable形式対応含む
 function parseWeight(tag) {
-  // NovelAI: {{{tag}}} → 重み付き括弧
   const curly = tag.match(/^({+)(.*?)(}+)$/);
   if (curly && curly[1].length === curly[3].length) {
     const posCount = curly[1].length;
@@ -1048,7 +1047,6 @@ function parseWeight(tag) {
     };
   }
 
-  // NovelAI: [[[tag]]] → ネガティブ強調
   const square = tag.match(/^(\[+)(.*?)(\]+)$/);
   if (square && square[1].length === square[3].length) {
     const negCount = square[1].length;
@@ -1061,7 +1059,6 @@ function parseWeight(tag) {
     };
   }
 
-  // NovelAI: 1.2::tag:: → 重み付きコロン構文
   const colon = tag.match(/^(\d+(\.\d+)?)::(.+?)::$/);
   if (colon) {
     const w = parseFloat(colon[1]);
@@ -1069,7 +1066,6 @@ function parseWeight(tag) {
     return { kind: 'colon', text: txt, positive: 0, negative: 0, weight: w };
   }
 
-  // Stable Diffusion: (tag:1.2) → 重み付きStable構文
   const stable = tag.match(/^\((.+?):([\d.]+)\)$/);
   if (stable) {
     const txt = stable[1];
@@ -1077,15 +1073,11 @@ function parseWeight(tag) {
     return { kind: 'colon', text: txt, positive: 0, negative: 0, weight: w };
   }
 
-  // プレーンなタグ（weight = 1.00）
   return { kind: 'plain', text: tag, positive: 0, negative: 0, weight: 1.00 };
 }
 
-// ✅ updateOutputBoxes - 出力形式切替対応（表示切替方式）
 function updateOutputBoxes() {
   const format = document.getElementById('format-toggle')?.value || 'novelai';
-
-  // ベースプロンプト
   const baseNovel = document.getElementById('output-base-novelai');
   const baseStable = document.getElementById('output-base-stable');
   baseNovel.textContent = state.base.map(convertToNovelAIFormat).join(', ');
@@ -1093,7 +1085,6 @@ function updateOutputBoxes() {
   baseNovel.style.display = format === 'novelai' ? 'block' : 'none';
   baseStable.style.display = format === 'stable' ? 'block' : 'none';
 
-  // ネガティブプロンプト
   const negNovel = document.getElementById('output-negative-novelai');
   const negStable = document.getElementById('output-negative-stable');
   if (negNovel && negStable) {
@@ -1103,7 +1094,6 @@ function updateOutputBoxes() {
     negStable.style.display = format === 'stable' ? 'block' : 'none';
   }
 
-  // キャラクタープロンプト（複数対応）
   state.characters.forEach((set, i) => {
     const charNovel = document.getElementById(`output-character-${i}-novelai`);
     const charStable = document.getElementById(`output-character-${i}-stable`);
@@ -1116,7 +1106,6 @@ function updateOutputBoxes() {
   });
 }
 
-// ✅ 追加: Stable形式出力関数
 function convertToStableDiffusionFormat(tag) {
   const parsed = parseWeight(tag);
   const text = parsed.text;
@@ -1125,7 +1114,6 @@ function convertToStableDiffusionFormat(tag) {
   return `(${text}:${weight})`;
 }
 
-// ✅ 追加: NovelAI形式出力関数
 function convertToNovelAIFormat(tag) {
   const parsed = parseWeight(tag);
   const text = parsed.text;
@@ -1140,7 +1128,6 @@ function convertToNovelAIFormat(tag) {
   return `${open.repeat(level)}${text}${close.repeat(level)}`;
 }
 
-// ✅ 出力形式セレクトが変更されたときに出力欄を再描画
 document.addEventListener('DOMContentLoaded', () => {
   const formatToggle = document.getElementById('format-toggle');
   if (formatToggle) {
@@ -1149,10 +1136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  renderAll(); // ←❗ これを追加
+  renderAll();
 });
 
-// ♻️ キャラクタープロンプト欄を指定数で初期化（出力欄は末尾に配置）
 function resetCharacterSections(count) {
   const container = document.getElementById('character-sections');
   const outputContainer = document.getElementById('character-output-sections');
@@ -1160,7 +1146,6 @@ function resetCharacterSections(count) {
   outputContainer.innerHTML = '';
 
   for (let i = 0; i < count; i++) {
-    // 🔳 入力UI部分
     const div = document.createElement('div');
     div.className = 'section';
     div.innerHTML = `
@@ -1176,7 +1161,6 @@ function resetCharacterSections(count) {
     `;
     container.appendChild(div);
 
-    // 🧾 出力欄は下にまとめて配置（2形式対応）
     const outBox = document.createElement('div');
     outBox.className = 'prompt-output-box';
     outBox.innerHTML = `
@@ -1186,7 +1170,6 @@ function resetCharacterSections(count) {
     outputContainer.appendChild(outBox);
   }
 
-  // 🔁 セクション選択ドロップダウンの再構築
   ['target-section', 'extra-target'].forEach(selectId => {
     const select = document.getElementById(selectId);
     if (select) {
@@ -1213,14 +1196,12 @@ function resetCharacterSections(count) {
   });
 }
 
-// ➖ キャラクタープロンプト欄を1つ削除
 function removeCharacterPrompt(index) {
   state.characters.splice(index, 1);
   resetCharacterSections(state.characters.length);
   renderAll();
 }
 
-// 🧹 指定セクションのタグをすべて削除
 function clearPrompt(type) {
   if (type === 'extra') {
     state.extra = [];
@@ -1235,7 +1216,6 @@ function clearPrompt(type) {
   renderAll();
 }
 
-// ➕ キャラクタープロンプト欄を1つ追加（最大6）
 function addCharacterPrompt() {
   if (state.characters.length >= 6) {
     alert('キャラクタープロンプトは最大6つまでです。');
@@ -1245,4 +1225,5 @@ function addCharacterPrompt() {
   resetCharacterSections(state.characters.length);
   renderAll();
 }
+
 
