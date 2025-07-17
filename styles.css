@@ -44,10 +44,10 @@ main, aside {
   overflow-y: auto;
   padding: 1em;
   box-sizing: border-box;
-  min-width: 0;            /* 🔧 横圧縮防止 */
+  min-width: 0;                 /* 🔧 横圧縮防止 */
   max-width: 100%;
-  overflow-wrap: break-word; /* 🔧 長文によるはみ出し防止 */
-  word-break: break-word;    /* 🔧 日本語・長単語にも対応 */
+  overflow-wrap: break-word;   /* 🔧 長文によるはみ出し防止 */
+  word-break: break-word;      /* 🔧 日本語・長単語にも対応 */
 }
 
 /* === サイドバー === */
@@ -198,7 +198,6 @@ body.dark-mode {
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* === ダークモード対応 === */
 .dark-mode .tag-container {
   background: #2b2b3b;
   border-color: #444;
@@ -216,7 +215,6 @@ body.dark-mode {
   border: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   width: auto;
-  max-width: 100%;
   box-sizing: border-box;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
@@ -226,7 +224,7 @@ body.dark-mode {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* === タグ状態バリエーション === */
+/* === タグバリエーション === */
 .tag.positive {
   background: #d1f4ff;
   border-color: #3b82f6;
@@ -240,7 +238,7 @@ body.dark-mode {
 .tag.colon {
   background: #e6ffcc;
   border-color: #84cc16;
-  color: #000000;
+  color: #000;
 }
 
 .tag.plain {
@@ -248,7 +246,7 @@ body.dark-mode {
   border-color: transparent;
 }
 
-/* === ダークモードの状態色 === */
+/* === ダークモード対応 === */
 .dark-mode .tag {
   background: #3a3f5f;
   border: 1px solid #50588e;
@@ -292,14 +290,28 @@ body.dark-mode {
   background: #822727;
 }
 
-/* === タグラベル構造 === */
+.dark-mode .drag-handle {
+  color: #aaa;
+}
+
+.dark-mode .weight-wrapper .weight {
+  background: transparent !important;
+  color: #ddd;
+}
+
+.dark-mode .weight-wrapper .weight-input {
+  background: #444;
+  color: #f0f0f0;
+  border: 1px solid #666;
+}
+
+/* === タグ内構造 === */
 .tag-label-group {
   display: flex;
   flex-direction: column;
   gap: 0.3em;
 }
 
-/* === タグ内の入力欄 === */
 .tag input[type="text"] {
   font-size: 16px;
   font-weight: 600;
@@ -307,11 +319,9 @@ body.dark-mode {
   color: inherit;
   border: none;
   background: transparent;
-  width: 100%;
   outline: none;
   min-height: 1.8em;
   min-width: 0;
-  max-width: 100%;
   flex: 1 1 auto;
 }
 
@@ -353,7 +363,6 @@ body.dark-mode {
   border-radius: 6px;
   box-sizing: border-box;
   text-align: left;
-  width: 100%;
   height: 100%;
   z-index: 1;
   outline: none;
@@ -363,7 +372,7 @@ body.dark-mode {
   display: block;
 }
 
-/* === タグ下部（削除・重みなど） === */
+/* === タグ下部UI（重み＋ボタン） === */
 .tag-footer {
   display: flex;
   align-items: center;
@@ -404,74 +413,10 @@ body.dark-mode {
   color: #666;
 }
 
-.dark-mode .drag-handle {
-  color: #aaa;
-}
-
-.dark-mode .weight-wrapper .weight {
-  background: transparent !important;
-  color: #ddd;
-}
-
-.dark-mode .weight-wrapper .weight-input {
-  background: #444;
-  color: #f0f0f0;
-  border: 1px solid #666;
-}
-
-/* =============================
-   レイアウト基礎（3カラム構成）
-============================= */
-
-.layout {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 60px); /* ヘッダー除外分 */
-  gap: 16px;
-  overflow: hidden;
-}
-
-/* 中央のメインコンテンツ */
-/* 中央欄の各セクション崩れ防止 */
-#main-content > .section {
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  flex-shrink: 0;
-}
-
-/* モバイル対応：縦積みに変更 */
-@media (max-width: 1024px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  #main-content {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 1em;
-    overflow-y: auto;
-  }
-
-  #sidebar,
-  #search-extra-panel {
-    display: none;
-  }
-
-  body.sidebar-open #sidebar,
-  body.search-extra-open #search-extra-panel {
-    display: block;
-    position: fixed;
-    z-index: 1000;
-  }
-}
-
 /* =============================
    補完スペース
 ============================= */
+
 .extra-section {
   display: flex;
   flex-direction: column;
@@ -570,6 +515,7 @@ body.dark-mode {
 /* =============================
    テンプレート・出力
 ============================= */
+
 .template-controls {
   display: flex;
   gap: 0.5em;
@@ -604,11 +550,7 @@ body.dark-mode {
   box-sizing: border-box;
 }
 
-.dark-mode .prompt-output-box {
-  background: #2a2a3a;
-  border-color: #555;
-}
-
+/* ダークモード：出力ボックス */
 .dark-mode .prompt-output-box {
   background-color: #111;
   border-color: #444;
@@ -619,10 +561,10 @@ body.dark-mode {
   font-size: 1.1em;
 }
 
-
 /* =============================
    フィルター・辞書
 ============================= */
+
 #category-management {
   margin-top: 1em;
   padding: 1em;
@@ -650,6 +592,7 @@ body.dark-mode {
   background-color: #286090;
 }
 
+/* 💡 ダークモード対応 */
 .dark-mode #category-management {
   background: #2a2a3a;
   border-color: #444;
@@ -664,6 +607,7 @@ body.dark-mode {
   background-color: #1d4ed8;
 }
 
+/* 📥 辞書インポートUI */
 .dictionary-import-section input,
 .dictionary-import-section button {
   margin-top: 0.5em;
@@ -672,34 +616,36 @@ body.dark-mode {
   border: 1px solid #ccc;
 }
 
-
 /* =============================
    共通UI・ヘッダーなど
 ============================= */
+
 .section {
   background: #ffffff;
   border-radius: 8px;
   padding: 1em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s, box-shadow 0.3s;
+  border-right: 1px solid #ccc;
   height: auto;
   max-height: none;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
-.section {
-  padding: 1em;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eeeeee;
+  padding: 0.5em 1em;
 }
 
-.5em;
-}
 .header-buttons > button {
   margin-left: 0.5em;
 }
 
-#tag-search-input {
+/* 入力・検索・共通UI部品 */
+#tag-search-input,
+#new-category-input {
   padding: 0.5em;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -707,92 +653,88 @@ body.dark-mode {
   color: #000;
 }
 
+/* ボタン類 */
 .load-extra-button,
-.delete-extra-button {
-  background-color: #2563eb;
-  color: white;
-  border: none;
+.delete-extra-button,
+.add-button,
+.remove-button {
   padding: 0.4em;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
+  border: none;
+  color: white;
 }
 
-.delete-extra-button {
-  background-color: #ef4444;
+.load-extra-button {
+  background-color: #2563eb;
 }
-
 .load-extra-button:hover {
   background-color: #1d4ed8;
 }
 
-.delete-extra-button:hover {
+.delete-extra-button,
+.remove-button {
+  background-color: #ef4444;
+}
+.delete-extra-button:hover,
+.remove-button:hover {
   background-color: #c53030;
-}
-
-.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #ffffff;
-  color: #000000;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-button:hover {
-  background: #e2e8f0;
 }
 
 .add-button {
   background-color: #22c55e;
-  color: white;
-  border: none;
   margin-top: 0.5em;
 }
-
 .add-button:hover {
   background-color: #16a34a;
 }
 
 .remove-button {
-  background-color: #ef4444;
-  color: white;
-  border: none;
   margin-left: 1em;
 }
 
-.remove-button:hover {
-  background-color: #c53030;
-}
-
-.dark-mode h1,
-body.dark-mode button,
-body.dark-mode select,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="file"] {
+/* ダークモード */
+body.dark-mode,
+.dark-mode {
   color: #e5e5e5;
 }
 
 .dark-mode .section {
-  background: #2a2a3a;
+  background-color: #222;
+  color: #eee;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-.dark-mode button,
-body.dark-mode select,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="file"] {
-  background: #3a3a4a;
-  border-color: #555;
-  color: #e5e5e5;
+.dark-mode .header {
+  background-color: #1a1a1a;
+  color: #eee;
+  border-bottom: 1px solid #444;
 }
 
-.dark-mode button:hover {
-  background: #4b4b5b;
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"],
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #666;
+}
+
+.dark-mode button,
+.dark-mode .add-button,
+.dark-mode .remove-button {
+  background-color: #444;
+  color: #eee;
+  border: 1px solid #888;
 }
 
 .dark-mode .add-button {
   background-color: #2f855a;
 }
-
 .dark-mode .add-button:hover {
   background-color: #276846;
 }
@@ -800,9 +742,22 @@ body.dark-mode input[type="file"] {
 .dark-mode .remove-button {
   background-color: #9b2c2c;
 }
-
 .dark-mode .remove-button:hover {
-  background: #822727;
+  background-color: #822727;
+}
+
+.dark-mode .load-extra-button {
+  background-color: #2563eb;
+}
+.dark-mode .load-extra-button:hover {
+  background-color: #1d4ed8;
+}
+
+.dark-mode .delete-extra-button {
+  background-color: #9b2c2c;
+}
+.dark-mode .delete-extra-button:hover {
+  background-color: #822727;
 }
 
 .dark-mode input::placeholder,
@@ -819,7 +774,6 @@ body.dark-mode input[type="file"]::placeholder {
   color: #e5e5e5;
   border-color: #666;
 }
-
 .dark-mode #tag-search-input::placeholder {
   color: #aaa;
 }
@@ -831,81 +785,26 @@ body.dark-mode #category-select {
   border-color: #666;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #eeeeee;
-  padding: 0.5em 1em;
-}
-
-.section {
-  border-right: 1px solid #ccc;
-}
-
-.dark-mode input,
-body.dark-mode select,
-body.dark-mode button,
-body.dark-mode textarea {
-  background-color: #2a2a2a;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-.dark-mode .header {
-  background-color: #1a1a1a;
-  color: #eee;
-  border-bottom: 1px solid #444;
-}
-
-.close-button-container {
-    visibility: hidden;
-  }
-
-.dark-mode .section {
-  background-color: #222;
-  color: #eee;
-}
-
-.dark-mode input,
-.dark-mode select,
-.dark-mode textarea {
-  background-color: #333;
-  color: #eee;
-  border: 1px solid #666;
-}
-
-.dark-mode button {
-  background-color: #444;
-  color: #eee;
-  border: 1px solid #888;
-}
-
-.dark-mode select,
-.dark-mode input,
-.dark-mode button {
-  background-color: #333;
-  color: #eee;
-  border: 1px solid #666;
-}
-
+/* 小型チェックボックス */
 .checkbox-small input[type="checkbox"] {
   transform: scale(0.85);
 }
 
+/* 閉じるボタン初期状態 */
+.close-button-container {
+  visibility: hidden;
+}
 
 /* =============================
    ダークモード全般
 ============================= */
-.dark-mode .description-text {
-  color: #ccc;
-}
 
 .dark-mode {
   background: #1e1e2e;
   color: #e5e5e5;
 }
 
+/* スクロールバー調整 */
 .dark-mode ::-webkit-scrollbar {
   background: #444;
 }
@@ -914,25 +813,26 @@ body.dark-mode textarea {
   background: #888;
 }
 
-.dark-mode .category-label {
-  color: #ffffff; 
-  font-weight: bold;
-}
-
+/* テキスト系色調整 */
 .dark-mode .description-text {
-  color: #e5e5e5 !important;
+  color: #e5e5e5;
 }
 
 .dark-mode .description-meta {
-  color: #dddddd !important;
+  color: #dddddd;
 }
 
+.dark-mode .category-label {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* テーマ切り替えボタン */
 .dark-mode #theme-toggle {
   background-color: #2a2a2a;
   color: #fff;
   border: 1px solid #555;
 }
-
 
 /* =============================
    その他
@@ -944,7 +844,7 @@ details > summary {
   cursor: pointer;
 }
 
-/* h1 ヘッダー用のスタイル */
+/* ヘッダー */
 h1 {
   font-size: 1.5em;
   margin-bottom: 1em;
@@ -962,7 +862,7 @@ h1 {
   padding: 0.3em;
 }
 
-/* 補足テキストなど */
+/* 補足テキスト */
 .description-text {
   font-size: 0.75em;
   color: #666;
@@ -973,7 +873,7 @@ h1 {
   font-weight: bold;
 }
 
-/* チェックボックス小サイズ用 */
+/* チェックボックス縮小用 */
 .checkbox-small label {
   font-size: 0.8em;
   display: flex;
@@ -986,13 +886,13 @@ h1 {
   transform: scale(0.85);
 }
 
-/* モバイル時に #main-content を全幅に広げる */
+/* モバイル時のメインコンテンツ全幅化 */
 body.sidebar-open #main-content,
 body.search-extra-open #main-content {
   width: 100%;
 }
 
-/* メディアクエリ：モバイル画面での表示調整 */
+/* メディアクエリ：モバイル対応 */
 @media (max-width: 1024px) {
   .header {
     flex-direction: column;
