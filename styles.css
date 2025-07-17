@@ -1,521 +1,97 @@
-/* =============================
-   構造・レイアウト
-============================= */
+/* styles.css */
+/* ============================= */
+/* ======== ベーススタイル ======== */
+/* ============================= */
 
-/* === ベース初期化 === */
-html, body {
-  height: 100%;
+body {
+  font-family: sans-serif;
+  background: #f0f0f5;
+  color: #000000;
+  padding: 20px;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  transition: background 0.3s, color 0.3s;
 }
 
-main, aside {
-  box-sizing: border-box;
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* === 中央列で2列分使うグリッド要素用（未使用なら削除可） === */
+/* テーマ切替ボタン */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 0.3em;
+}
+
+/* ── 全体レイアウト: Flexboxで左右2カラム ───────────────────────── */
+.layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* 左カラム（メインコンテンツ） */
+.main-content {
+  flex: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 16px;
+}
+
+/* 左カラム 内部で 2列に跨る要素 */
 .main-content .span-two-columns {
   grid-column: 1 / span 2;
 }
 
-/* === レイアウト構造（3カラム対応） === */
-.layout {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 60px); /* ヘッダー除外 */
-  gap: 16px;
-  overflow: hidden;
-  min-height: 0;              /* 🔧 高さ潰れ防止 */
-  width: 100%;                /* 🔧 横方向の圧縮防止（特にSafari対策） */
-  box-sizing: border-box;     /* 🔧 パディング考慮した幅計算 */
-}
-
-.layout > * {
-  min-height: 0;
-  min-width: 0;               /* 🔧 横幅潰れ防止 */
-  flex-shrink: 0;             /* 🔧 中央列の圧縮回避 */
-  box-sizing: border-box;
-}
-
-/* === 中央メインカラム === */
-#main-content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: 1em;
-  box-sizing: border-box;
-  min-width: 0;                 /* 🔧 横圧縮防止 */
-  max-width: 100%;
-  overflow-wrap: break-word;   /* 🔧 長文によるはみ出し防止 */
-  word-break: break-word;      /* 🔧 日本語・長単語にも対応 */
-}
-
-/* === サイドバー === */
-#sidebar {
-  width: 220px;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  display: block;
-  z-index: 100;
-  background-color: #fff;
-  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
-}
-
-/* === 右パネル（補完スペース） === */
-#search-extra-panel {
-  width: 280px;
-  overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  display: block;
-  z-index: 100;
-  background-color: #fff;
-  box-shadow: -2px 0 4px rgba(0,0,0,0.1);
-}
-
-/* === サイドパネル表示時にスライドイン === */
-body.sidebar-open #sidebar {
-  transform: translateX(0);
-}
-
-body.search-extra-open #search-extra-panel {
-  transform: translateX(0);
-}
-
-/* === トグルボタン（PC表示時は常に表示） === */
-#sidebar-toggle,
-#search-extra-toggle {
-  display: inline-block;
-}
-
-/* === 閉じるボタン表示制御 === */
-#sidebar.open .close-button-container,
-#search-extra-panel.open .close-button-container {
-  visibility: visible;
-}
-
-/* === モバイル非表示デフォルト設定 === */
-#sidebar-toggle,
-#search-extra-toggle,
-.close-button-container {
-  display: none !important;
-}
-
-/* === ダークモード背景など === */
-body.dark-mode {
-  background-color: #121212;
-  color: #eee;
-}
-
-.dark-mode #sidebar,
-.dark-mode #search-extra-panel {
-  background-color: #1e1e2e;
-  color: #eee;
-}
-
-/* === モバイル対応レイアウト === */
-@media (max-width: 1024px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  #main-content {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 1em;
-  }
-
-  #sidebar,
-  #search-extra-panel {
-    display: none;
-  }
-
-  body.sidebar-open #sidebar,
-  body.search-extra-open #search-extra-panel {
-    display: block;
-    position: fixed;
-    z-index: 1000;
-  }
-
-  #sidebar-toggle,
-  #search-extra-toggle {
-    display: inline-block;
-  }
-}
-
-/* === 補完スクロール領域の高さ調整 === */
-.extra-scroll-wrapper {
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
-  min-height: 0;
-  box-sizing: border-box;
-  flex: 1 1 auto;
-}
-
-/* =============================
-   タグUI（入力・操作）
-============================= */
-
-.tag-loading {
-  display: flex;
-  flex-direction: column;
-}
-
-.tag-loading input,
-.tag-loading select,
-.tag-loading button {
+/* 右カラム（サイドバー） */
+.sidebar {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
-.tag-loading input,
-.tag-loading select {
-  margin-bottom: 0.5em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-/* === タグコンテナ === */
-.tag-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  min-height: 360px;
-  padding: 1em;
-  background: #f9f9ff;
-  border: 1px solid #ddd;
+/* ── 各セクション共通スタイル ───────────────────────────────────────── */
+.section {
+  background: #ffffff;
   border-radius: 8px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: auto;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  transition: background 0.3s, border-color 0.3s;
-}
-
-.dark-mode .tag-container {
-  background: #2b2b3b;
-  border-color: #444;
-}
-
-/* === 各タグブロック === */
-.tag {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex-wrap: wrap;
-  background: #f5f5f5;
   padding: 1em;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  width: auto;
-  box-sizing: border-box;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, box-shadow 0.3s;
+  height: auto;
+  max-height: none;
 }
 
-.tag:hover {
-  background: #f0f4ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* details をセクションとして使う場合 */
+details.section {
+  padding: 1em;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* === タグバリエーション === */
-.tag.positive {
-  background: #d1f4ff;
-  border-color: #3b82f6;
-}
-
-.tag.negative {
-  background: #ffe0e0;
-  border-color: #dc2626;
-}
-
-.tag.colon {
-  background: #e6ffcc;
-  border-color: #84cc16;
-  color: #000;
-}
-
-.tag.plain {
-  background: #e0e7ff;
-  border-color: transparent;
-}
-
-/* === ダークモード対応 === */
-.dark-mode .tag {
-  background: #3a3f5f;
-  border: 1px solid #50588e;
-  color: #f0f0f0;
-}
-
-.dark-mode .tag:hover {
-  background: #4a4f73;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode .tag.colon {
-  background: #335533 !important;
-  border-color: #84cc16 !important;
-  color: #eaffea !important;
-}
-
-.dark-mode .tag.positive {
-  background: #2b6cb0;
-  border-color: #90cdf4;
-}
-
-.dark-mode .tag.negative {
-  background: #a94442;
-  border-color: #fc8181;
-}
-
-.dark-mode .tag input {
-  color: #e5e5e5;
-}
-
-.dark-mode .tag .weight {
-  color: #ddd;
-}
-
-.dark-mode .tag button {
-  background: #9b2c2c;
-}
-
-.dark-mode .tag button:hover {
-  background: #822727;
-}
-
-.dark-mode .drag-handle {
-  color: #aaa;
-}
-
-.dark-mode .weight-wrapper .weight {
-  background: transparent !important;
-  color: #ddd;
-}
-
-.dark-mode .weight-wrapper .weight-input {
-  background: #444;
-  color: #f0f0f0;
-  border: 1px solid #666;
-}
-
-/* === タグ内構造 === */
-.tag-label-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-}
-
-.tag input[type="text"] {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: inherit;
-  border: none;
-  background: transparent;
-  outline: none;
-  min-height: 1.8em;
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-/* === 重み表示エリア === */
-.weight-wrapper {
-  width: 4em;
-  height: 2.2em;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.weight-wrapper .weight {
-  font-size: 0.9em;
+/* summary 部分 */
+details > summary {
   font-weight: bold;
-  background: transparent;
-  color: #444;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  z-index: 0;
-}
-
-.weight-wrapper .weight.editing {
-  display: none !important;
-}
-
-.weight-wrapper .weight-input {
-  display: none;
-  font-size: 0.9em;
-  padding: 0;
-  background: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  text-align: left;
-  height: 100%;
-  z-index: 1;
-  outline: none;
-}
-
-.weight-wrapper .weight-input.editing {
-  display: block;
-}
-
-/* === タグ下部UI（重み＋ボタン） === */
-.tag-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4em;
-  margin-top: 0.4em;
-  min-height: 2.2em;
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0;
-}
-
-/* === 削除ボタン === */
-.tag button {
-  padding: 0.4em 0.6em;
-  font-size: 1em;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.tag button:hover {
-  background: #c53030;
-}
-
-/* === ドラッグハンドル === */
-.drag-handle {
-  cursor: grab;
-  margin-bottom: 0.4em;
-  font-size: 1.1em;
-  color: #666;
-}
-
-/* =============================
-   補完スペース
-============================= */
-
-.extra-section {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  overflow: hidden;
-  max-height: calc(100vh - 120px); /* ヘッダー・ボタンを除いた高さ調整 */
-  box-sizing: border-box;
-}
-
-.extra-controls {
-  flex: 0 0 auto;
-  margin-bottom: 0.5em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-.extra-bulk-category {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
   margin-bottom: 0.5em;
 }
 
-.extra-scroll-wrapper {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 0;
-  max-height: 100%;
-  padding-right: 6px;
-  box-sizing: border-box;
+/* 見出し右のボタン群をまとめる */
+.header-buttons > button {
+  margin-left: 0.5em;
 }
 
-.extra-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-/* 各タグブロック */
-.extra-item {
-  background: #eef2ff;
-  border-radius: 12px;
-  padding: 0.75em;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  margin-bottom: 0.75em;
-  font-size: 0.9em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-  transition: background 0.2s;
-}
-
-.extra-item:hover {
-  background: #e0e7ff;
-  cursor: pointer;
-}
-
-.extra-info {
-  font-size: 0.75em;
-  color: #666;
-}
-
-/* 💡 ダークモード対応 */
-.dark-mode .extra-section {
-  background: #2a2a3a;
-  color: #e5e5e5;
-}
-
-.dark-mode .extra-scroll-wrapper {
-  background: #1e1e2e;
-}
-
-.dark-mode .extra-item {
-  background: #2e334e;
-  border-color: #475569;
-}
-
-.dark-mode .extra-info {
-  color: #ccc;
-}
-
-.dark-mode .extra-item span {
-  color: #e5e5e5;
-}
-
-.dark-mode .extra-bulk-category,
-.dark-mode .extra-controls {
-  background-color: transparent;
-  color: inherit;
-}
-
-/* =============================
-   テンプレート・出力
-============================= */
-
+/* ── テンプレート管理用コントロール ───────────────────────────────────── */
 .template-controls {
   display: flex;
   gap: 0.5em;
@@ -530,41 +106,16 @@ body.dark-mode {
   border: 1px solid #ccc;
 }
 
-.prompt-output-box {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+/* ── タグ検索入力欄 ───────────────────────────────────────── */
+#tag-search-input {
   padding: 0.5em;
-  margin-top: 0.5em;
-  max-height: 100px;
-  overflow-y: auto;
-  font-size: 0.85em;
-
-  /* 🔧 表示崩れ対策 */
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: hidden;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #f9f9ff;
+  color: #000;
 }
 
-/* ダークモード：出力ボックス */
-.dark-mode .prompt-output-box {
-  background-color: #111;
-  border-color: #444;
-}
-
-.template-section .section-header span {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-/* =============================
-   フィルター・辞書
-============================= */
-
+/* ── カテゴリ管理エリア（縦並び） ───────────────────────────────────────── */
 #category-management {
   margin-top: 1em;
   padding: 1em;
@@ -592,22 +143,459 @@ body.dark-mode {
   background-color: #286090;
 }
 
-/* 💡 ダークモード対応 */
-.dark-mode #category-management {
+/* ── タグ読み込みセクション ─────────────────────────────────────────── */
+.tag-loading {
+  display: flex;
+  flex-direction: column;
+}
+
+.tag-loading input,
+.tag-loading select,
+.tag-loading button {
+  flex: 1;
+}
+
+.tag-loading input,
+.tag-loading select {
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* ── 補完スペース用スタイル ───────────────────────────────────────── */
+.extra-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.extra-controls {
+  flex: 0 0 auto;
+  margin-bottom: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.extra-select {
+  padding: 0.4em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: #000000;
+}
+
+.load-extra-button,
+.delete-extra-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.4em;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.delete-extra-button {
+  background-color: #ef4444;
+}
+
+.load-extra-button:hover {
+  background-color: #1d4ed8;
+}
+
+.delete-extra-button:hover {
+  background-color: #c53030;
+}
+
+/* ── 一括カテゴリ設定 UI ───────────────────────────────────────── */
+.extra-bulk-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#bulk-category-select {
+  padding: 0.4em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 0.95em;
+  width: auto;
+}
+
+.extra-bulk-category button {
+  font-size: 0.95em;
+  padding: 0.4em 0.8em;
+  border: none;
+  border-radius: 6px;
+  background-color: #337ab7;
+  color: white;
+  cursor: pointer;
+}
+
+.extra-bulk-category button:hover {
+  background-color: #286090;
+}
+
+.extra-bulk-category label {
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.extra-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0; /* Firefox対応 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+/* ── タグ表示領域（ベース／キャラ／ネガティブ） ─────────────────────────── */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0.5em;
+  background: #f9f9ff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+/* 個々のタグ */
+.tag {
+  display: flex;
+  align-items: center;
+  background: #e0e7ff;
+  padding: 0.3em 0.6em;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+/* 括弧強調（positive） */
+.tag.positive {
+  background: #c7eaff;
+  border-color: #3b82f6;
+}
+
+/* 括弧抑制（negative） */
+.tag.negative {
+  background: #ffe0e0;
+  border-color: #dc2626;
+}
+
+/* コロン形式 */
+.tag.colon {
+  background: #e6ffcc;
+  border-color: #84cc16;
+  color: #000000;
+}
+
+/* plain（通常タグ）はデフォルトの青系背景 */
+.tag.plain {
+  background: #e0e7ff;
+  border-color: transparent;
+}
+
+/* タグ内の入力フィールド */
+.tag input {
+  border: none;
+  background: transparent;
+  font-size: 1em;
+  max-width: 150px;
+  color: inherit;
+}
+
+/* weight 数値表示（表示モードと編集モード） */
+.tag .weight {
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  color: #444;
+  cursor: pointer;
+}
+
+.tag .weight.editing {
+  display: none;
+}
+
+.tag .weight-input {
+  width: 3em;
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  display: none;
+}
+
+/* タグ内のボタン（+ - ×） */
+.tag button {
+  margin-left: 0.3em;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tag button:hover {
+  background: #c53030;
+}
+
+/* ── ドラッグハンドル用スタイル ───────────────────────────────────────── */
+.drag-handle {
+  cursor: grab;
+  margin-right: 0.4em;
+  font-size: 1em;
+  color: #666;
+}
+
+body.dark-mode .drag-handle {
+  color: #aaa;
+}
+
+/* コロン形式タグ：ダークモードでも濃い緑背景＋明るい文字色 */
+body.dark-mode .tag.colon {
+  background: #335533 !important;
+  border-color: #84cc16 !important;
+  color: #eaffea !important;
+}
+
+/* ── 共通ボタン／入力欄スタイル ───────────────────────────────────────── */
+button,
+select,
+input[type="text"],
+input[type="file"] {
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: #000000;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+button:hover {
+  background: #e2e8f0;
+}
+
+/* キャラクタープロンプト追加ボタン */
+.add-button {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  margin-top: 0.5em;
+}
+
+.add-button:hover {
+  background-color: #16a34a;
+}
+
+/* キャラクタープロンプト削除ボタン */
+.remove-button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  margin-left: 1em;
+}
+
+.remove-button:hover {
+  background-color: #c53030;
+}
+
+/* ── 各プロンプト欄内の「最終プロンプト」表示ボックス ───────────────────────── */
+.prompt-output-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 0.85em;
+}
+
+body.dark-mode .prompt-output-box {
+  background: #2a2a3a;
+  border-color: #555;
+}
+
+/* ============================= */
+/* ======== ダークモード ========= */
+/* ============================= */
+body.dark-mode {
+  background: #1e1e2e;
+  color: #e5e5e5;
+}
+
+body.dark-mode h1,
+body.dark-mode button,
+body.dark-mode select,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"] {
+  color: #e5e5e5;
+}
+
+body.dark-mode .section {
+  background: #2a2a3a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .tag-container {
+  background: #2b2b3b;
+  border-color: #444;
+}
+
+body.dark-mode .tag {
+  background: #3a3f5f;
+  border-color: transparent;
+}
+
+body.dark-mode .tag.positive {
+  background: #2b6cb0;
+  border-color: #90cdf4;
+}
+
+body.dark-mode .tag.negative {
+  background: #a94442;
+  border-color: #fc8181;
+}
+
+body.dark-mode .tag input {
+  color: #e5e5e5;
+}
+
+body.dark-mode .tag .weight {
+  color: #ddd;
+}
+
+body.dark-mode .tag button {
+  background: #9b2c2c;
+}
+
+body.dark-mode .tag button:hover {
+  background: #822727;
+}
+
+body.dark-mode button,
+body.dark-mode select,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="file"] {
+  background: #3a3a4a;
+  border-color: #555;
+  color: #e5e5e5;
+}
+
+body.dark-mode button:hover {
+  background: #4b4b5b;
+}
+
+body.dark-mode .add-button {
+  background-color: #2f855a;
+}
+
+body.dark-mode .add-button:hover {
+  background-color: #276846;
+}
+
+body.dark-mode .remove-button {
+  background-color: #9b2c2c;
+}
+
+body.dark-mode .remove-button:hover {
+  background: #822727;
+}
+
+body.dark-mode .extra-section {
+  background: #2a2a3a;
+  color: #e5e5e5;
+}
+
+/* プレースホルダーの色調整 */
+body.dark-mode input::placeholder,
+body.dark-mode input[type="file"]::placeholder {
+  color: #aaa;
+}
+
+/* チェックボックスのアクセントカラー */
+body.dark-mode input[type="checkbox"] {
+  accent-color: #90cdf4;
+}
+
+/* スクロールバー（Chrome系） */
+body.dark-mode ::-webkit-scrollbar {
+  background: #444;
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* ─── ダークテーマ対応追加 ───────────────────────────────────────── */
+
+/* タグ検索欄 */
+body.dark-mode #tag-search-input {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
+}
+body.dark-mode #tag-search-input::placeholder {
+  color: #aaa;
+}
+
+/* カテゴリ管理UI */
+body.dark-mode #category-management {
   background: #2a2a3a;
   border-color: #444;
 }
 
-.dark-mode #category-management button {
+body.dark-mode #new-category-input,
+body.dark-mode #category-select {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
+}
+
+body.dark-mode #category-management button {
   background-color: #2563eb;
   color: white;
 }
 
-.dark-mode #category-management button:hover {
+body.dark-mode #category-management button:hover {
   background-color: #1d4ed8;
 }
 
-/* 📥 辞書インポートUI */
+/* カテゴリ表示ラベル（未分類／カテゴリ名）の色切替 */
+.category-label {
+  color: #0066cc;
+}
+
+body.dark-mode .category-label {
+  color: #ffffff; /* ダークテーマ時は白 */
+  font-weight: bold;
+}
+
+/* ダークテーマ時の補完スペース下のカテゴリセレクト対応 */
+body.dark-mode #bulk-category-select {
+  background: #3a3a4a;
+  color: #e5e5e5;
+  border-color: #666;
+}
+
+
+/* ── 辞書インポート用スタイル ─────────────────────── */
 .dictionary-import-section input,
 .dictionary-import-section button {
   margin-top: 0.5em;
@@ -616,21 +604,25 @@ body.dark-mode {
   border: 1px solid #ccc;
 }
 
-/* =============================
-   共通UI・ヘッダーなど
-============================= */
 
-.section {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 1em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-right: 1px solid #ccc;
-  height: auto;
-  max-height: none;
-  transition: background 0.3s, box-shadow 0.3s;
+/* ダークモード時の和訳表示（descSpan） */
+body.dark-mode .extra-item span {
+  color: #e5e5e5;
 }
 
+
+/* ダークモードでも和訳が白文字で見えるように強制指定 */
+body.dark-mode .description-text {
+  color: #e5e5e5 !important;
+}
+
+
+/* タグの下にある補足テキストも白っぽく */
+body.dark-mode .description-meta {
+  color: #dddddd !important;
+}
+
+/* === 3カラム用ヘッダー === */
 .header {
   display: flex;
   justify-content: space-between;
@@ -639,241 +631,311 @@ body.dark-mode {
   padding: 0.5em 1em;
 }
 
-.header-buttons > button {
-  margin-left: 0.5em;
+/* === 3カラムレイアウト拡張 === */
+#sidebar {
+  width: 220px;
+  overflow-y: auto;
+}
+#main-content {
+  flex: 1;
+  padding: 1em;
+}
+#search-extra-panel {
+  width: 300px;
 }
 
-/* 入力・検索・共通UI部品 */
-#tag-search-input,
-#new-category-input {
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #f9f9ff;
-  color: #000;
+.layout {
+  display: flex;
+  height: calc(100vh - 60px); /* ヘッダー除外 */
+  gap: 16px;
 }
 
-/* ボタン類 */
-.load-extra-button,
-.delete-extra-button,
-.add-button,
-.remove-button {
-  padding: 0.4em;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  border: none;
-  color: white;
+/* 区切り線 */
+.section {
+  border-right: 1px solid #ccc;
 }
 
-.load-extra-button {
-  background-color: #2563eb;
-}
-.load-extra-button:hover {
-  background-color: #1d4ed8;
-}
-
-.delete-extra-button,
-.remove-button {
-  background-color: #ef4444;
-}
-.delete-extra-button:hover,
-.remove-button:hover {
-  background-color: #c53030;
-}
-
-.add-button {
-  background-color: #22c55e;
-  margin-top: 0.5em;
-}
-.add-button:hover {
-  background-color: #16a34a;
-}
-
-.remove-button {
-  margin-left: 1em;
+/* === モバイル対応 === */
+@media (max-width: 1024px) {
+  html, body {
+    overflow-x: hidden;
+  }
+  .layout {
+    overflow-x: hidden;
+  }
+  #main-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+  .layout {
+    flex-direction: column;
+  }
+  #sidebar,
+  #search-extra-panel {
+    display: none;
+  }
+  .sidebar-open #sidebar,
+  .search-extra-open #search-extra-panel {
+    display: block;
+  }
 }
 
-/* ダークモード */
-body.dark-mode,
-.dark-mode {
-  color: #e5e5e5;
-}
-
-.dark-mode .section {
-  background-color: #222;
+/* === ダークモード強化 === */
+body.dark-mode {
+  background-color: #121212;
   color: #eee;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-.dark-mode .header {
-  background-color: #1a1a1a;
+body.dark-mode .section,
+body.dark-mode .template-section,
+body.dark-mode .extra-section {
+  background-color: #1e1e1e;
   color: #eee;
-  border-bottom: 1px solid #444;
+  border-color: #444;
 }
 
-.dark-mode input,
-.dark-mode select,
-.dark-mode textarea,
-body.dark-mode input[type="text"],
-body.dark-mode input[type="file"],
+body.dark-mode input,
 body.dark-mode select,
+body.dark-mode button,
 body.dark-mode textarea {
-  background-color: #333;
-  color: #eee;
-  border: 1px solid #666;
-}
-
-.dark-mode button,
-.dark-mode .add-button,
-.dark-mode .remove-button {
-  background-color: #444;
-  color: #eee;
-  border: 1px solid #888;
-}
-
-.dark-mode .add-button {
-  background-color: #2f855a;
-}
-.dark-mode .add-button:hover {
-  background-color: #276846;
-}
-
-.dark-mode .remove-button {
-  background-color: #9b2c2c;
-}
-.dark-mode .remove-button:hover {
-  background-color: #822727;
-}
-
-.dark-mode .load-extra-button {
-  background-color: #2563eb;
-}
-.dark-mode .load-extra-button:hover {
-  background-color: #1d4ed8;
-}
-
-.dark-mode .delete-extra-button {
-  background-color: #9b2c2c;
-}
-.dark-mode .delete-extra-button:hover {
-  background-color: #822727;
-}
-
-.dark-mode input::placeholder,
-body.dark-mode input[type="file"]::placeholder {
-  color: #aaa;
-}
-
-.dark-mode input[type="checkbox"] {
-  accent-color: #90cdf4;
-}
-
-.dark-mode #tag-search-input {
-  background: #3a3a4a;
-  color: #e5e5e5;
-  border-color: #666;
-}
-.dark-mode #tag-search-input::placeholder {
-  color: #aaa;
-}
-
-.dark-mode #new-category-input,
-body.dark-mode #category-select {
-  background: #3a3a4a;
-  color: #e5e5e5;
-  border-color: #666;
-}
-
-/* 小型チェックボックス */
-.checkbox-small input[type="checkbox"] {
-  transform: scale(0.85);
-}
-
-/* 閉じるボタン初期状態 */
-.close-button-container {
-  visibility: hidden;
-}
-
-/* =============================
-   ダークモード全般
-============================= */
-
-.dark-mode {
-  background: #1e1e2e;
-  color: #e5e5e5;
-}
-
-/* スクロールバー調整 */
-.dark-mode ::-webkit-scrollbar {
-  background: #444;
-}
-
-.dark-mode ::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* テキスト系色調整 */
-.dark-mode .description-text {
-  color: #e5e5e5;
-}
-
-.dark-mode .description-meta {
-  color: #dddddd;
-}
-
-.dark-mode .category-label {
-  color: #ffffff;
-  font-weight: bold;
-}
-
-/* テーマ切り替えボタン */
-.dark-mode #theme-toggle {
   background-color: #2a2a2a;
   color: #fff;
   border: 1px solid #555;
 }
 
-/* =============================
-   その他
-============================= */
+body.dark-mode .prompt-output-box,
+body.dark-mode .tag-container {
+  background-color: #1a1a1a;
+}
 
-/* detailsタグの三角マークを非表示にする */
+.extra-bulk-category {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+body.dark-mode .header {
+  background-color: #1a1a1a;
+  color: #eee;
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode #theme-toggle {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+/* === スライド式モバイルメニュー追加 === */
+
+@media (max-width: 1024px) {
+  #sidebar, #search-extra-panel {
+    position: fixed;
+    top: 60px; /* ヘッダーの下 */
+    bottom: 0;
+    width: 80%;
+    max-width: 300px;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  #search-extra-panel {
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+  }
+
+  body.sidebar-open #sidebar {
+    transform: translateX(0);
+  }
+
+  body.search-extra-open #search-extra-panel {
+    transform: translateX(0);
+  }
+
+  .layout {
+    flex-direction: column;
+  }
+}
+
+
+/* === モバイル時 main-content 幅調整 === */
+
+@media (max-width: 1024px) {
+  }
+}
+
+
+/* === モバイル時 main-content を中央寄せ・半分幅に制限 === */
+
+@media (max-width: 1024px) {
+  }
+}
+
+
+
+/* === サイドメニュー非表示時、main-content を全幅に広げる === */
+@media (max-width: 1024px) {
+  body.sidebar-open #main-content,
+  
+
+  }
+}
+
+
+
+/* === summaryの三角マークを非表示にする === */
 details > summary {
   list-style: none;
-  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }
 
-/* ヘッダー */
-h1 {
-  font-size: 1.5em;
-  margin-bottom: 1em;
+
+/* === main-content を常に100%幅にする === */
+
+@media (max-width: 1024px) {
+  }
+}
+
+
+/* === モバイル表示制御 === */
+
+@media (max-width: 1024px) {
+  #sidebar-toggle,
+  #search-extra-toggle {
+    display: inline-block;
+  }
+
+  .close-button-container {
+    visibility: hidden;
+  }
+
+  #sidebar.open .close-button-container,
+  #search-extra-panel.open .close-button-container {
+    visibility: visible;
+  }
+}
+
+@media (min-width: 1025px) {
+  #sidebar-toggle,
+  #search-extra-toggle,
+  .close-button-container {
+    display: none !important;
+  }
+}
+
+
+
+/* === ダークモード対応スタイル追加 === */
+.dark-mode .section {
+  background-color: #222;
+  color: #eee;
+}
+
+.dark-mode .template-controls,
+.dark-mode .extra-controls,
+.dark-mode .extra-bulk-category {
+  background-color: transparent;
+  color: inherit;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #666;
+}
+
+.dark-mode button {
+  background-color: #444;
+  color: #eee;
+  border: 1px solid #888;
+}
+
+.dark-mode .prompt-output-box {
+  background-color: #111;
+  border-color: #444;
+}
+
+
+
+/* === ダークモード補完: 内部セクションの背景・枠色・余白など調整 === */
+.dark-mode .template-section,
+.dark-mode .search-section,
+.dark-mode .extra-section {
+  background-color: #222;
+  color: #eee;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.dark-mode .template-controls,
+.dark-mode .extra-controls,
+.dark-mode .extra-bulk-category,
+.dark-mode .template-description {
+  background-color: transparent;
+  color: inherit;
+}
+
+.dark-mode select,
+.dark-mode input,
+.dark-mode button {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #666;
+}
+
+.dark-mode .tag-container,
+.dark-mode .prompt-output-box {
+  background-color: #181818;
+  border-color: #444;
+}
+
+
+
+/* === ダークモード補完（折りたたみ時のパネル背景に反映） === */
+.dark-mode #sidebar,
+.dark-mode #search-extra-panel {
+  background-color: #222;
+  color: #eee;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1024px) {
+  #sidebar,
+  #search-extra-panel {
+    top: 100px !important;
+  }
+}
+/* ☰ サイドメニューのヘッダースタイル強調 */
+.template-section .section-header span {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+
+
+/* === 補完スペース：コンパクトレイアウト === */
+.extra-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-/* テーマ切替ボタン */
-.theme-toggle {
-  background: transparent;
-  border: none;
-  font-size: 1em;
-  cursor: pointer;
-  padding: 0.3em;
+.extra-row select,
+.extra-row button {
+  flex: 1;
+  padding: 0.4em 0.6em;
+  font-size: 0.9em;
 }
 
-/* 補足テキスト */
-.description-text {
-  font-size: 0.75em;
-  color: #666;
-}
-
-.category-label {
-  color: #0066cc;
-  font-weight: bold;
-}
-
-/* チェックボックス縮小用 */
 .checkbox-small label {
   font-size: 0.8em;
   display: flex;
@@ -886,32 +948,188 @@ h1 {
   transform: scale(0.85);
 }
 
-/* モバイル時のメインコンテンツ全幅化 */
-body.sidebar-open #main-content,
-body.search-extra-open #main-content {
-  width: 100%;
+
+.extra-scroll-wrapper {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
 }
 
-/* メディアクエリ：モバイル対応 */
-@media (max-width: 1024px) {
-  .header {
-    flex-direction: column;
-    gap: 0.5em;
-    align-items: flex-start;
-  }
+.extra-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
 
-  h1 {
-    font-size: 1.2em;
+@media (max-width: 1024px) {
+  #search-extra-panel {
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
   }
 }
 
 @media (max-width: 768px) {
-  .prompt-output-box {
-    font-size: 0.8em;
+  #main-content {
+    width: 100%;
+    max-width: 100vw;
+    padding: 0 1em;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+  }
+}
+
+@media (max-width: 1024px) {
+  #search-extra-panel {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    right: 0;
+    width: 80%;
+    max-width: 300px;
+    background: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  body.search-extra-open #search-extra-panel {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+  }
+}
+
+/* === main-content 縦スクロール無効化（最終優先） === */
+@media (max-width: 1024px) {
+  }
+}
+
+/* === 最終統一スタイル: main-content の固定＆スクロール除去 === */
+@media (max-width: 1024px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 1em !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    box-sizing: border-box;
+  }
+}
+
+/* === 中央縦スクロール完全除去（1400px以下） === */
+@media (max-width: 1400px) {
+  .layout {
+    height: auto !important;
+  }
+  #main-content {
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+}
+
+/* === フルサイズ時に補完スペースのタグ一覧だけ縦スクロール === */
+@media (min-width: 1401px) {
+  .extra-scroll-wrapper {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+  }
+}
+
+
+/* === 修正追加: 折りたたみサイズ対応で中央崩れを防ぐ === */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+
+  #main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 1em !important;
+    box-sizing: border-box !important;
+    overflow-y: visible !important;
+    height: auto !important;
+  }
+
+  #sidebar,
+  #search-extra-panel {
+    display: none !important;
+  }
+
+  body.sidebar-open #sidebar,
+  body.search-extra-open #search-extra-panel {
+    display: block !important;
+    position: fixed;
+    z-index: 1000;
+  }
+}
+
+
+/* === 補完スペース：画面に収まるよう縦スクロール制限を常時有効化 === */
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); /* ヘッダーやボタンを除いた高さ分 */
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+
+/* === 補完スペース全体を高さ480pxに固定 === */
+.extra-section {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 480px;
+  overflow: hidden;
+}
+
+.extra-scroll-wrapper {
+  overflow-y: auto;
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+
+/* === タグ編集エリアのスマホ横スクロール防止対応 === */
+@media (max-width: 768px) {
+  .tag-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .tag {
-    padding: 0.75em;
-    font-size: 0.9em;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tag input {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 auto;
   }
 }
