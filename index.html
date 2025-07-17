@@ -84,17 +84,17 @@
 <!-- ✏️ タグ名編集のテキスト入力フィールド -->
 <main id="main-content">
 
-<!-- 📥 タグ読み込みフォーム（入力欄とセクション選択） -->
+<!-- 📥 タグ読み込みフォーム -->
 <div class="section tag-loading">
   <div class="section-header">
     <span>タグ読み込み</span>
   </div>
-  <input autocomplete="off" id="tag-input" placeholder="カンマ区切りのタグを入力" type="text"/>
+  <input autocomplete="off" id="tag-input" placeholder="カンマ区切りのタグを入力" type="text" />
   <select id="target-section"></select>
   <button onclick="loadTags()">読み込む</button>
 </div>
 
-<!-- 🧩 ベースプロンプト欄：メインのプロンプトタグを編集 -->
+<!-- 🧩 ベースプロンプト欄 -->
 <div class="section">
   <div class="section-header">
     <span>ベースプロンプト</span>
@@ -102,32 +102,34 @@
       <button onclick="clearPrompt('base')">🗑️ 全削除</button>
     </div>
   </div>
+
+  <!-- 🔳 編集欄 -->
   <div class="tag-container" id="base"></div>
 
-<!-- 💡 形式切替とコピー -->
-<div class="output-header">
-  <label for="format-toggle">形式：</label>
-  <select id="format-toggle">
-    <option value="novelai">NovelAI形式</option>
-    <option value="stable">Stable Diffusion形式</option>
-  </select>
-  <button id="copy-output-btn" onclick="copyCurrentOutput()">📋 コピー</button>
+  <!-- 💬 出力欄 -->
+  <div class="output-header">
+    <label for="format-toggle">形式：</label>
+    <select id="format-toggle">
+      <option value="novelai">NovelAI形式</option>
+      <option value="stable">Stable Diffusion形式</option>
+    </select>
+    <button id="copy-output-btn" onclick="copyCurrentOutput()">📋 コピー</button>
+  </div>
+
+  <div class="prompt-output-box">
+    <p id="output-base-novelai" class="format-output format-novelai"></p>
+    <p id="output-base-stable" class="format-output format-stable" style="display: none;"></p>
+  </div>
 </div>
 
-<div class="prompt-output-box">
-  <p id="output-base-novelai" class="format-output format-novelai"></p>
-  <p id="output-base-stable" class="format-output format-stable" style="display: none;"></p>
-</div>
-</div> <!-- 🧩 ベースプロンプト欄をここで閉じる -->
-
-<!-- 👤 キャラクタープロンプト：複数キャラ対応（動的生成） -->
+<!-- 👤 キャラクタープロンプト欄（動的に .tag-container を追加） -->
 <div id="character-sections"></div>
 <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
 
-<!-- キャラクタープロンプト出力欄（JSが追加） -->
+<!-- 🔽 キャラクタープロンプト出力欄 -->
 <div id="character-output-sections"></div>
 
-<!-- 🚫 ネガティブプロンプト：除外するタグ -->
+<!-- 🚫 ネガティブプロンプト欄 -->
 <div class="section">
   <div class="section-header">
     <span>ネガティブプロンプト</span>
@@ -136,7 +138,11 @@
       <button onclick="clearPrompt('negative')">🗑️ 全削除</button>
     </div>
   </div>
+
+  <!-- 🔳 編集欄 -->
   <div class="tag-container" id="negative"></div>
+
+  <!-- 💬 出力欄 -->
   <div class="prompt-output-box">
     <p id="output-negative-novelai" class="format-output format-novelai"></p>
     <p id="output-negative-stable" class="format-output format-stable" style="display: none;"></p>
