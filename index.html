@@ -1,68 +1,146 @@
 /* =============================
    構造・レイアウト
 ============================= */
+
+/* === ベース初期化 === */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main, aside {
+  box-sizing: border-box;
+}
+
+/* === 中央列で2列分使うグリッド要素用（未使用なら削除可） === */
 .main-content .span-two-columns {
   grid-column: 1 / span 2;
 }
 
+/* === レイアウト構造（3カラム対応） === */
+.layout {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 60px); /* ヘッダー除外 */
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* === 中央メインカラム === */
+#main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1em;
+  box-sizing: border-box;
+  min-width: 300px;
+  max-width: 100%;
+}
+
+/* === サイドバー === */
 #sidebar {
   width: 220px;
   overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: block;
+  z-index: 100;
+  background-color: #fff;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
 }
 
-#sidebar,
-  
-  .sidebar-open #sidebar,
-  .search-extra-open 
+/* === 右パネル（補完スペース） === */
+#search-extra-panel {
+  width: 280px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: block;
+  z-index: 100;
+  background-color: #fff;
+  box-shadow: -2px 0 4px rgba(0,0,0,0.1);
 }
 
+/* === サイドパネル表示時にスライドイン === */
+body.sidebar-open #sidebar {
+  transform: translateX(0);
+}
+
+body.search-extra-open #search-extra-panel {
+  transform: translateX(0);
+}
+
+/* === トグルボタン（PC表示時は常に表示） === */
+#sidebar-toggle,
+#search-extra-toggle {
+  display: inline-block;
+}
+
+/* === 閉じるボタン表示制御 === */
+#sidebar.open .close-button-container,
+#search-extra-panel.open .close-button-container {
+  visibility: visible;
+}
+
+/* === モバイル非表示デフォルト設定 === */
+#sidebar-toggle,
+#search-extra-toggle,
+.close-button-container {
+  display: none !important;
+}
+
+/* === ダークモード背景など === */
 body.dark-mode {
   background-color: #121212;
   color: #eee;
 }
 
-#sidebar, 
-  
-  body.sidebar-open #sidebar {
-    transform: translateX(0);
+.dark-mode #sidebar,
+.dark-mode #search-extra-panel {
+  background-color: #1e1e2e;
+  color: #eee;
+}
+
+/* === モバイル対応レイアウト === */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
   }
 
-#sidebar-toggle,
+  #main-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+  }
+
+  #sidebar,
+  #search-extra-panel {
+    display: none;
+  }
+
+  body.sidebar-open #sidebar,
+  body.search-extra-open #search-extra-panel {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+  }
+
+  #sidebar-toggle,
   #search-extra-toggle {
     display: inline-block;
   }
-
-#sidebar.open .close-button-container,
-  #search-extra-panel.open .close-button-container {
-    visibility: visible;
-  }
-
-#sidebar-toggle,
-  #search-extra-toggle,
-  .close-button-container {
-    display: none !important;
-  }
-
-.dark-mode #sidebar,
-.dark-mode 
-
-@media (max-width: 1024px) {
-  #sidebar,
-  
 }
 
-#sidebar,
-  
-  body.sidebar-open #sidebar,
-  body.search-extra-open 
-}
+/* === 補完スクロール領域の高さ調整 === */
 .extra-scroll-wrapper {
   overflow-y: auto;
-  max-height: calc(100vh - 200px); 
+  max-height: calc(100vh - 200px);
   min-height: 0;
   box-sizing: border-box;
 }
-
 
 /* =============================
    タグUI（入力・操作）
@@ -371,6 +449,55 @@ body.dark-mode {
   border-color: #444;
 }
 
+/* =============================
+   レイアウト基礎（3カラム構成）
+============================= */
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 60px); /* ヘッダー除外分 */
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* 中央のメインコンテンツ */
+#main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1em;
+  box-sizing: border-box;
+  min-width: 300px;
+  max-width: 100%;
+}
+
+/* モバイル対応：縦積みに変更 */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #main-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+    overflow-y: auto;
+  }
+
+  #sidebar,
+  #search-extra-panel {
+    display: none;
+  }
+
+  body.sidebar-open #sidebar,
+  body.search-extra-open #search-extra-panel {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+  }
+}
 
 /* =============================
    補完スペース
@@ -378,8 +505,10 @@ body.dark-mode {
 .extra-section {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
   overflow: hidden;
+  max-height: calc(100vh - 120px); /* ヘッダー・ボタンを除いた高さ調整 */
+  box-sizing: border-box;
 }
 
 .extra-controls {
@@ -390,159 +519,31 @@ body.dark-mode {
   gap: 0.5em;
 }
 
-.extra-select {
-  padding: 0.4em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #ffffff;
-  color: #000000;
-}
-
-.extra-bulk-category {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-#bulk-category-select {
-  padding: 0.4em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: #ffffff;
-  color: #000000;
-  font-size: 0.95em;
-  width: auto;
-}
-
-.extra-bulk-category button {
-  font-size: 0.95em;
-  padding: 0.4em 0.8em;
-  border: none;
-  border-radius: 6px;
-  background-color: #337ab7;
-  color: white;
-  cursor: pointer;
-}
-
-.extra-bulk-category button:hover {
-  background-color: #286090;
-}
-
-.extra-bulk-category label {
-  font-size: 0.9em;
-  white-space: nowrap;
-}
-
-.extra-list {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 0; 
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-.dark-mode .extra-section {
-  background: #2a2a3a;
-  color: #e5e5e5;
-}
-
-.dark-mode #bulk-category-select {
-  background: #3a3a4a;
-  color: #e5e5e5;
-  border-color: #666;
-}
-
-.dark-mode .extra-item span {
-  color: #e5e5e5;
-}
-
-.dark-mode .section,
-body.dark-mode .template-section,
-body.dark-mode .extra-section {
-  background-color: #1e1e1e;
-  color: #eee;
-  border-color: #444;
-}
-
 .extra-bulk-category {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-}
-
-.dark-mode .template-controls,
-.dark-mode .extra-controls,
-.dark-mode .extra-bulk-category {
-  background-color: transparent;
-  color: inherit;
-}
-
-.dark-mode .template-section,
-.dark-mode .search-section,
-.dark-mode .extra-section {
-  background-color: #222;
-  color: #eee;
-  border-radius: 8px;
-  box-shadow: none;
-}
-
-.dark-mode .template-controls,
-.dark-mode .extra-controls,
-.dark-mode .extra-bulk-category,
-.dark-mode .template-description {
-  background-color: transparent;
-  color: inherit;
-}
-
-.extra-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5em;
   margin-bottom: 0.5em;
-}
-
-.extra-row select,
-.extra-row button {
-  flex: 1;
-  padding: 0.4em 0.6em;
-  font-size: 0.9em;
 }
 
 .extra-scroll-wrapper {
   flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
-}
-
-.extra-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-.extra-scroll-wrapper {
-    overflow-y: auto;
-    max-height: calc(100vh - 100px);
-  }
-
-.extra-section {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  max-height: 480px;
-  overflow: hidden;
-}
-
-.extra-scroll-wrapper {
-  overflow-y: auto;
-  height: 100%;
-  max-height: none;
-  min-height: 0;
+  max-height: 100%;
+  padding-right: 6px;
   box-sizing: border-box;
 }
 
+.extra-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* 各タグブロック */
 .extra-item {
   background: #eef2ff;
   border-radius: 12px;
@@ -562,26 +563,39 @@ body.dark-mode .extra-section {
   cursor: pointer;
 }
 
-.dark-mode .extra-item {
-  background: #2e334e;
-  border-color: #475569;
-}
-
 .extra-info {
   font-size: 0.75em;
   color: #666;
+}
+
+/* 💡 ダークモード対応 */
+.dark-mode .extra-section {
+  background: #2a2a3a;
+  color: #e5e5e5;
+}
+
+.dark-mode .extra-scroll-wrapper {
+  background: #1e1e2e;
+}
+
+.dark-mode .extra-item {
+  background: #2e334e;
+  border-color: #475569;
 }
 
 .dark-mode .extra-info {
   color: #ccc;
 }
 
-.extra-scroll-wrapper {
-  max-height: 600px;
-  overflow-y: auto;
-  padding-right: 6px;
+.dark-mode .extra-item span {
+  color: #e5e5e5;
 }
 
+.dark-mode .extra-bulk-category,
+.dark-mode .extra-controls {
+  background-color: transparent;
+  color: inherit;
+}
 
 /* =============================
    テンプレート・出力
@@ -944,19 +958,14 @@ body.dark-mode textarea {
 /* =============================
    その他
 ============================= */
-.sidebar-open #main-content,
-  }
-}
+
+/* detailsタグの三角マークを非表示にする */
 details > summary {
   list-style: none;
+  cursor: pointer;
 }
 
-#f0f0f5;
-  color: #000000;
-  padding: 20px;
-  margin: 0;
-  transition: background 0.3s, color 0.3s;
-}
+/* h1 ヘッダー用のスタイル */
 h1 {
   font-size: 1.5em;
   margin-bottom: 1em;
@@ -965,6 +974,7 @@ h1 {
   align-items: center;
 }
 
+/* テーマ切替ボタン */
 .theme-toggle {
   background: transparent;
   border: none;
@@ -973,6 +983,7 @@ h1 {
   padding: 0.3em;
 }
 
+/* 補足テキストなど */
 .description-text {
   font-size: 0.75em;
   color: #666;
@@ -980,8 +991,10 @@ h1 {
 
 .category-label {
   color: #0066cc;
+  font-weight: bold;
 }
 
+/* チェックボックス小サイズ用 */
 .checkbox-small label {
   font-size: 0.8em;
   display: flex;
@@ -990,18 +1003,36 @@ h1 {
   margin-left: 0.25em;
 }
 
-.search-extra-open 
-
-  
+.checkbox-small input[type="checkbox"] {
+  transform: scale(0.85);
 }
 
+/* モバイル時に #main-content を全幅に広げる */
+body.sidebar-open #main-content,
+body.search-extra-open #main-content {
+  width: 100%;
+}
+
+/* メディアクエリ：モバイル画面での表示調整 */
 @media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: flex-start;
   }
 
-.search-extra-open 
+  h1 {
+    font-size: 1.2em;
+  }
 }
-@media (max-width: 768px) {
 
-  
-  
+@media (max-width: 768px) {
+  .prompt-output-box {
+    font-size: 0.8em;
+  }
+
+  .tag {
+    padding: 0.75em;
+    font-size: 0.9em;
+  }
 }
