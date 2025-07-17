@@ -1148,6 +1148,8 @@ document.addEventListener('DOMContentLoaded', () => {
       updateOutputBoxes();
     });
   }
+
+  renderAll(); // ←❗ これを追加
 });
 
 // ♻️ キャラクタープロンプト欄を指定数で初期化（出力欄は末尾に配置）
