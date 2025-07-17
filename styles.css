@@ -216,7 +216,7 @@ body.dark-mode {
   border-radius: 14px;
   border: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  width: 100%;
+  width: auto;
   max-width: 100%;
   box-sizing: border-box;
   transition: background 0.2s ease, box-shadow 0.2s ease;
