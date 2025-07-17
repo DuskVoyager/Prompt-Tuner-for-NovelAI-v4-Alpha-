@@ -26,12 +26,16 @@ main, aside {
   height: calc(100vh - 60px); /* ヘッダー除外 */
   gap: 16px;
   overflow: hidden;
-  min-height: 0;
+  min-height: 0;              /* 🔧 高さ潰れ防止 */
+  width: 100%;                /* 🔧 横方向の圧縮防止（特にSafari対策） */
+  box-sizing: border-box;     /* 🔧 パディング考慮した幅計算 */
 }
 
 .layout > * {
   min-height: 0;
-  flex-shrink: 0; /* 🔧 中央列の潰れ防止 */
+  min-width: 0;               /* 🔧 横幅潰れ防止 */
+  flex-shrink: 0;             /* 🔧 中央列の圧縮回避 */
+  box-sizing: border-box;
 }
 
 /* === 中央メインカラム === */
@@ -40,8 +44,10 @@ main, aside {
   overflow-y: auto;
   padding: 1em;
   box-sizing: border-box;
-  min-width: 0; /* 🔧 横圧縮防止 */
+  min-width: 0;            /* 🔧 横圧縮防止 */
   max-width: 100%;
+  overflow-wrap: break-word; /* 🔧 長文によるはみ出し防止 */
+  word-break: break-word;    /* 🔧 日本語・長単語にも対応 */
 }
 
 /* === サイドバー === */
@@ -152,6 +158,7 @@ body.dark-mode {
 /* =============================
    タグUI（入力・操作）
 ============================= */
+
 .tag-loading {
   display: flex;
   flex-direction: column;
@@ -171,6 +178,7 @@ body.dark-mode {
   border: 1px solid #ccc;
 }
 
+/* === タグコンテナ === */
 .tag-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -182,16 +190,22 @@ body.dark-mode {
   border-radius: 8px;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
   transition: background 0.3s, border-color 0.3s;
 }
 
+/* === ダークモード対応 === */
 .dark-mode .tag-container {
   background: #2b2b3b;
   border-color: #444;
 }
 
+/* === 各タグブロック === */
 .tag {
   display: flex;
   flex-direction: column;
@@ -203,7 +217,7 @@ body.dark-mode {
   border: 1px solid #ddd;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 280px;
+  max-width: 100%;
   box-sizing: border-box;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
@@ -213,43 +227,7 @@ body.dark-mode {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.dark-mode .tag {
-  background: #3a3f5f;
-  border: 1px solid #50588e;
-  color: #f0f0f0;
-}
-
-.dark-mode .tag:hover {
-  background: #4a4f73;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.tag-label-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3em;
-}
-
-.tag-container {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-
-.tag {
-    width: 100%;
-    max-width: 100%;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-  }
-
-.tag input {
-    min-width: 0;
-    max-width: 100%;
-    flex: 1 1 auto;
-  }
-
+/* === タグ状態バリエーション === */
 .tag.positive {
   background: #d1f4ff;
   border-color: #3b82f6;
@@ -266,140 +244,27 @@ body.dark-mode {
   color: #000000;
 }
 
-.dark-mode .tag.colon {
-  background: #335533 !important;
-  border-color: #84cc16 !important;
-  color: #eaffea !important;
-}
-
 .tag.plain {
   background: #e0e7ff;
   border-color: transparent;
 }
 
-.tag input[type="text"] {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: inherit;
-  border: none;
-  background: transparent;
-  width: 100%;
-  outline: none;
-  min-height: 1.8em;
-}
-
-.weight-wrapper {
-  width: 4em;
-  height: 2.2em;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.weight-wrapper .weight {
-  font-size: 0.9em;
-  font-weight: bold;
-  padding: 0;
-  background: transparent;
-  color: #444;
-  border-radius: 0;
-  cursor: pointer;
-  line-height: 1.2;
-  box-sizing: border-box;
-  text-align: left;
-  z-index: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.weight-wrapper .weight.editing {
-  display: none !important;
-}
-
-.weight-wrapper .weight-input {
-  display: none;
-  font-size: 0.9em;
-  padding: 0;
-  background: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  line-height: 1.2;
-  box-sizing: border-box;
-  text-align: left;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  box-shadow: none;
-  outline: none;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.weight-wrapper .weight-input.editing {
-  display: block;
-}
-
-.tag-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4em;
-  margin-top: 0.4em;
-  min-height: 2.2em;
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end; 
-  align-items: center;
-  gap: 0;                    
-}
-
-.tag button {
-  padding: 0.4em 0.6em;
-  font-size: 1em;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.tag button:hover {
-  background: #c53030;
-}
-
-.drag-handle {
-  cursor: grab;
-  margin-bottom: 0.4em;
-  font-size: 1.1em;
-  color: #666;
-}
-
-.dark-mode .drag-handle {
-  color: #aaa;
-}
-
-.dark-mode .weight-wrapper .weight {
-  background: transparent !important;
-  color: #ddd;
-  border-radius: 0;
-  z-index: 0;
-}
-
-.dark-mode .weight-wrapper .weight-input {
-  background: #444;
+/* === ダークモードの状態色 === */
+.dark-mode .tag {
+  background: #3a3f5f;
+  border: 1px solid #50588e;
   color: #f0f0f0;
-  border: 1px solid #666;
-  z-index: 1;
+}
+
+.dark-mode .tag:hover {
+  background: #4a4f73;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .tag.colon {
+  background: #335533 !important;
+  border-color: #84cc16 !important;
+  color: #eaffea !important;
 }
 
 .dark-mode .tag.positive {
@@ -428,32 +293,131 @@ body.dark-mode {
   background: #822727;
 }
 
-.dark-mode .tag-container,
-.dark-mode .prompt-output-box {
-  background-color: #181818;
-  border-color: #444;
-}
-
-.tag-container {
+/* === タグラベル構造 === */
+.tag-label-group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6em;
-  min-height: 360px;
-  padding: 0.75em;
-  background: #f9f9ff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
-  transition: background 0.3s, border-color 0.3s;
+  flex-direction: column;
+  gap: 0.3em;
 }
 
-.dark-mode .tag-container {
-  background: #2b2b3b;
-  border-color: #444;
+/* === タグ内の入力欄 === */
+.tag input[type="text"] {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: inherit;
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  min-height: 1.8em;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+/* === 重み表示エリア === */
+.weight-wrapper {
+  width: 4em;
+  height: 2.2em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.weight-wrapper .weight {
+  font-size: 0.9em;
+  font-weight: bold;
+  background: transparent;
+  color: #444;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 0;
+}
+
+.weight-wrapper .weight.editing {
+  display: none !important;
+}
+
+.weight-wrapper .weight-input {
+  display: none;
+  font-size: 0.9em;
+  padding: 0;
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  text-align: left;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  outline: none;
+}
+
+.weight-wrapper .weight-input.editing {
+  display: block;
+}
+
+/* === タグ下部（削除・重みなど） === */
+.tag-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  margin-top: 0.4em;
+  min-height: 2.2em;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0;
+}
+
+/* === 削除ボタン === */
+.tag button {
+  padding: 0.4em 0.6em;
+  font-size: 1em;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tag button:hover {
+  background: #c53030;
+}
+
+/* === ドラッグハンドル === */
+.drag-handle {
+  cursor: grab;
+  margin-bottom: 0.4em;
+  font-size: 1.1em;
+  color: #666;
+}
+
+.dark-mode .drag-handle {
+  color: #aaa;
+}
+
+.dark-mode .weight-wrapper .weight {
+  background: transparent !important;
+  color: #ddd;
+}
+
+.dark-mode .weight-wrapper .weight-input {
+  background: #444;
+  color: #f0f0f0;
+  border: 1px solid #666;
 }
 
 /* =============================
@@ -469,13 +433,13 @@ body.dark-mode {
 }
 
 /* 中央のメインコンテンツ */
-#main-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1em;
-  box-sizing: border-box;
-  min-width: 300px;
+/* 中央欄の各セクション崩れ防止 */
+#main-content > .section {
+  min-width: 0;
   max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex-shrink: 0;
 }
 
 /* モバイル対応：縦積みに変更 */
@@ -630,6 +594,15 @@ body.dark-mode {
   max-height: 100px;
   overflow-y: auto;
   font-size: 0.85em;
+
+  /* 🔧 表示崩れ対策 */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .dark-mode .prompt-output-box {
