@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌟 NovelAI v4 プロンプト調整器(α)</title>
 
-  
+  <!-- OGP / Twitter Card タグ -->
   <meta property="og:title" content="Prompt Tuner for NovelAI v4 (Alpha)" />
   <meta property="og:description" content="プロンプトをもっと自由に、もっと楽しく。" />
   <meta property="og:image" content="https://raw.githubusercontent.com/DuskVoyager/Prompt-Tuner-for-NovelAI-v4-Alpha-/main/BUG_samne.png" />
@@ -13,7 +13,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://prompt-tuner-for-novel-ai-v4-alpha.vercel.app/BUG_samne.png" />
 
-  
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GSYBTLY6V0"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -27,22 +27,13 @@
 
 </head>
 <body>
-<!-- 🔝 ヘッダー：タイトルと切替ボタン -->
 <header class="header">
 <button id="sidebar-toggle">☰</button>
 <h1>🌟 NovelAI v4 プロンプト調整器(α)</h1>
 <button id="theme-toggle">🌙 ダークモード</button>
 <button id="search-extra-toggle">🔍</button>
 </header>
-
-
-
-<!-- 🧱 レイアウト全体：3カラム構成（サイドバー／メイン／補完） -->
 <div class="layout">
-
-
-
-<!-- 📁 左カラム：テンプレートや辞書の操作パネル -->
 <aside class="section" id="sidebar">
 <div class="section template-section">
 <div class="section-header"><span>☰ サイドメニュー</span></div>
@@ -80,81 +71,45 @@
 </div>
 </div>
 </aside>
-
-<!-- ✏️ タグ名編集のテキスト入力フィールド -->
 <main id="main-content">
-
-<!-- 📥 タグ読み込みフォーム -->
 <div class="section tag-loading">
-  <div class="section-header">
-    <span>タグ読み込み</span>
-  </div>
-  <input autocomplete="off" id="tag-input" placeholder="カンマ区切りのタグを入力" type="text" />
-  <select id="target-section"></select>
-  <button onclick="loadTags()">読み込む</button>
+<div class="section-header">
+<span>タグ読み込み</span>
 </div>
-
-<!-- 🧩 ベースプロンプト欄 -->
+<input autocomplete="off" id="tag-input" placeholder="カンマ区切りのタグを入力" type="text"/>
+<select id="target-section"></select>
+<button onclick="loadTags()">読み込む</button>
+</div>
 <div class="section">
-  <div class="section-header">
-    <span>ベースプロンプト</span>
-    <div class="header-buttons">
-      <button onclick="clearPrompt('base')">🗑️ 全削除</button>
-    </div>
-  </div>
-
-  <!-- 🔳 編集欄 -->
-  <div class="tag-container" id="base"></div>
-
-  <!-- 💬 出力欄 -->
-  <div class="output-header">
-    <label for="format-toggle">形式：</label>
-    <select id="format-toggle">
-      <option value="novelai">NovelAI形式</option>
-      <option value="stable">Stable Diffusion形式</option>
-    </select>
-    <button id="copy-output-btn" onclick="copyCurrentOutput()">📋 コピー</button>
-  </div>
-
-  <div class="prompt-output-box">
-    <p id="output-base-novelai" class="format-output format-novelai"></p>
-    <p id="output-base-stable" class="format-output format-stable" style="display: none;"></p>
-  </div>
+<div class="section-header">
+<span>ベースプロンプト</span>
+<div class="header-buttons">
+<button onclick="copyPrompt('output-base', this)">📋 コピー</button>
+<button onclick="clearPrompt('base')">🗑️ 全削除</button>
 </div>
-
-<!-- 👤 キャラクタープロンプト欄（動的に .tag-container を追加） -->
+</div>
+<div class="tag-container" id="base"></div>
+<div class="prompt-output-box">
+<p id="output-base"></p>
+</div>
+</div>
 <div id="character-sections"></div>
 <button class="add-button" onclick="addCharacterPrompt()">＋キャラクタープロンプト追加</button>
-
-<!-- 🔽 キャラクタープロンプト出力欄 -->
-<div id="character-output-sections"></div>
-
-<!-- 🚫 ネガティブプロンプト欄 -->
 <div class="section">
-  <div class="section-header">
-    <span>ネガティブプロンプト</span>
-    <div class="header-buttons">
-      <button onclick="copyPrompt('output-negative', this)">📋 コピー</button>
-      <button onclick="clearPrompt('negative')">🗑️ 全削除</button>
-    </div>
-  </div>
-
-  <!-- 🔳 編集欄 -->
-  <div class="tag-container" id="negative"></div>
-
-  <!-- 💬 出力欄 -->
-  <div class="prompt-output-box">
-    <p id="output-negative-novelai" class="format-output format-novelai"></p>
-    <p id="output-negative-stable" class="format-output format-stable" style="display: none;"></p>
-  </div>
+<div class="section-header">
+<span>ネガティブプロンプト</span>
+<div class="header-buttons">
+<button onclick="copyPrompt('output-negative', this)">📋 コピー</button>
+<button onclick="clearPrompt('negative')">🗑️ 全削除</button>
 </div>
-
-<!-- 🔍 右カラム：検索／補完スペース -->
+</div>
+<div class="tag-container" id="negative"></div>
+<div class="prompt-output-box">
+<p id="output-negative"></p>
+</div>
+</div>
+</main>
 <aside class="section" id="search-extra-panel">
-
-
-
-<!-- 🔎 タグ検索ボックス：辞書から検索フィルター -->
 <div class="section search-section">
 <div class="section-header"><span>🔍 タグ検索</span></div>
 <div class="close-button-container"><button class="close-panel-btn" onclick="document.body.classList.remove('search-extra-open')">✖</button></div>
@@ -162,10 +117,6 @@
 <input autocomplete="off" id="tag-search-input" oninput="searchTags()" placeholder="タグを検索" style="flex: 1;" type="text"/>
 </div>
 </div>
-
-
-
-<!-- 📌 補完スペース：辞書のタグを一覧し操作 -->
 <div class="section extra-section">
 <div class="section-header">
 <span>📌 補完スペース</span>
@@ -203,8 +154,6 @@
     window.addEventListener('load', autoTogglePanels);
     window.addEventListener('resize', autoTogglePanels);
   </script>
-<!-- 📜 メインスクリプト：動的UI機能を制御 -->
-<script src="Sortable.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
