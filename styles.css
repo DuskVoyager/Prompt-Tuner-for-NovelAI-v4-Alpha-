@@ -26,20 +26,21 @@ main, aside {
   height: calc(100vh - 60px); /* ヘッダー除外 */
   gap: 16px;
   overflow: hidden;
-  min-height: 0; /* 🔧 子のスクロール用に必要 */
+  min-height: 0;
 }
 
 .layout > * {
-  min-height: 0; /* 🔧 子要素が高さ0になるのを防ぐ */
+  min-height: 0;
+  flex-shrink: 0; /* 🔧 中央列の潰れ防止 */
 }
 
 /* === 中央メインカラム === */
 #main-content {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
   padding: 1em;
   box-sizing: border-box;
-  min-width: 300px;
+  min-width: 0; /* 🔧 横圧縮防止 */
   max-width: 100%;
 }
 
@@ -145,7 +146,7 @@ body.dark-mode {
   max-height: calc(100vh - 200px);
   min-height: 0;
   box-sizing: border-box;
-  flex: 1 1 auto; /* 🔧 親の高さに応じて拡張 */
+  flex: 1 1 auto;
 }
 
 /* =============================
