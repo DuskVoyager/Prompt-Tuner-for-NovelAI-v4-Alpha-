@@ -254,17 +254,18 @@ function renderTags(id, targetArray) {
   });
 
   new Sortable(container, {
-    animation: 150,
-    handle: '.drag-handle',
-    onEnd: function (evt) {
-      const oldIndex = evt.oldIndex;
-      const newIndex = evt.newIndex;
-      if (oldIndex === newIndex) return;
-      const movedItem = targetArray.splice(oldIndex, 1)[0];
-      targetArray.splice(newIndex, 0, movedItem);
-      renderAll();
-    }
-  });
+  animation: 150,
+  handle: '.drag-handle',
+  onEnd: function (evt) {
+    const oldIndex = evt.oldIndex;
+    const newIndex = evt.newIndex;
+    if (oldIndex === newIndex) return;
+
+    const movedItem = targetArray.splice(oldIndex, 1)[0];
+    targetArray.splice(newIndex, 0, movedItem);
+    renderAll();
+  }
+});
 }
 
 // ─── 補完スペース用：チェックボックス付きリストを描画 ─────────────────────────
@@ -495,7 +496,7 @@ function updateOutputBoxes() {
   });
 }
 
-// ─── 全セクションを再描画し、出力更新 ─────────────────────────────────────
+// ─── 全セクションを再描画し、出力更新 ────────────────────────────────────
 function renderAll() {
   renderTags('base', state.base);
   renderTags('negative', state.negative);
@@ -511,7 +512,7 @@ function renderAll() {
   renderBulkCategorySelect();
 }
 
-// ─── タグ読み込み：テキスト入力を各配列に振り分けし、括弧やコロンを数値形式に変換 ─────────────────
+// ─── タグ読み込み：テキスト入力を各配列に振り分けし、括弧やコロンを数値形式に変換 ──────────────
 function loadTags() {
   const input = document.getElementById('tag-input').value;
   const target = document.getElementById('target-section').value;
@@ -648,7 +649,7 @@ function loadSelectedExtras() {
   renderAll();
 }
 
-// ─── 補完スペースから選択したタグを削除（辞書からも完全削除） ────────────────────────────────
+// ─── 補完スペースから選択したタグを削除（辞書からも完全削除） ────────────────────────
 function deleteSelectedExtras() {
   const items = document.querySelectorAll('#extra-list input[type="checkbox"]:checked');
   if (items.length === 0) {
@@ -698,7 +699,7 @@ function searchTags() {
   renderExtraList();
 }
 
-// ─── カテゴリ一覧を再集計 ───────────────────────────────────────────────
+// ─── カテゴリ一覧を再集計 ──────────────────────────────────────────
 function updateCategories() {
   extraCategories = [...new Set(
     Object.values(extraDictionary)
@@ -707,7 +708,7 @@ function updateCategories() {
   )];
 }
 
-// ─── 新規カテゴリ作成 ─────────────────────────────────────────────────────
+// ─── 新規カテゴリ作成 ────────────────────────────────────────────
 function createCategory() {
   const input = document.getElementById('new-category-input');
   const name = input.value.trim();
@@ -736,7 +737,7 @@ function createCategory() {
   renderAll();
 }
 
-// ─── カテゴリ削除（使用中でも未分類にして削除） ─────────────────────────────────
+// ─── カテゴリ削除（使用中でも未分類にして削除） ───────────────────────────────
 function deleteCategory() {
   const select = document.getElementById('category-select');
   const target = select.value;
@@ -763,7 +764,7 @@ function deleteCategory() {
   alert(`カテゴリ「${target}」を削除し、関連タグは未分類に変更されました。`);
 }
 
-// ─── Bulk一括カテゴリ設定 ─────────────────────────────────────────────────
+// ─── Bulk一括カテゴリ設定 ──────────────────────────────────────────
 function applyBulkCategory() {
   const selected = document.getElementById('bulk-category-select').value;
   if (!selected) {
@@ -792,7 +793,7 @@ function applyBulkCategory() {
   renderAll();
 }
 
-// ─── 一括チェックトグル ───────────────────────────────────────────────
+// ─── 一括チェックトグル ───────────────────────────────────────────
 function toggleBulkCheck() {
   const checked = document.getElementById('bulk-check-toggle').checked;
   const checkboxes = document.querySelectorAll('#extra-list input[type="checkbox"]');
@@ -836,7 +837,7 @@ window.onload = () => {
   renderAll();
 };
 
-// ─── テンプレート管理ロジック ───────────────────────────────────────────
+// ─── テンプレート管理ロジック ────────────────────────────────────────
 
 // 保存キー名
 const TEMPLATE_STORAGE_KEY = 'promptTemplates';
@@ -989,7 +990,7 @@ function removeCharacterPrompt(index) {
   renderAll();
 }
 
-// ─── 各セクションを一括クリア ───────────────────────────────────────────────
+// ─── 各セクションを一括クリア ────────────────────────────────────────
 function clearPrompt(type) {
   if (type === 'extra') {
     state.extra = [];
@@ -1014,7 +1015,7 @@ function addCharacterPrompt() {
 }
 
 
-// ─── 📁 辞書インポート機能 ─────────────────────────────────────────────
+// ─── 📁 辞書インポート機能 ─────────────────────────────────────────
 
 function importDictionaryFromFile() {
   const input = document.getElementById('dict-file-input');
@@ -1084,27 +1085,31 @@ function enterDescriptionEdit(tagName, spanEl) {
 
 // 📤 表示中の辞書タグを整形してテキストファイルとしてエクスポートする
 function exportVisibleDictionaryAligned() {
-  const header = "タグ名               和訳                     カテゴリ";
+  const header = "タグ名\t和訳\tカテゴリ";
   const lines = [header];
 
-  for (const tag of state.extra) {
+  const visibleTags = state.extra;
+
+  for (const tag of visibleTags) {
     const info = extraDictionary[tag] || {};
     const desc = info.description || "";
     const cat = info.category || "";
-    const line = `${tag.padEnd(20)}${desc.padEnd(25)}${cat}`;
+    const line = `${tag}\t${desc}\t${cat}`;
     lines.push(line);
   }
 
-  const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+  const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
+
+  const link = document.createElement("a");
   link.href = url;
-  link.download = "辞書ファイル.txt";
+  link.download = "dictionary.txt";
   link.click();
+
   URL.revokeObjectURL(url);
 }
 
-// モバイル用の開閉トグル機能
+// 📱 モバイル用の開閉トグル機能
 const sbToggle = document.getElementById("sidebar-toggle");
 const seToggle = document.getElementById("search-extra-toggle");
 
